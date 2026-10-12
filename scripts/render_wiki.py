@@ -65,6 +65,9 @@ def linkify(text: str, link_map: dict, self_name: str, min_len: int = 2,
             once: set | None = None) -> str:
     if not text:
         return ""
+    # 本页自己的目标文件名：要拿**解析后的目标**去比，不能只比「命中的字面」。
+    # 否则别名会漏网——例如苏茜页上的「雷霆」（雷霆是苏茜的别名）会被链回苏茜页本身。
+    self_tid = link_map.get(self_name)
     names = sorted((n for n in link_map if len(n) >= min_len), key=len, reverse=True)
     pattern = re.compile("|".join(re.escape(n) for n in names)) if names else None
     out, pos = [], 0
@@ -73,7 +76,7 @@ def linkify(text: str, link_map: dict, self_name: str, min_len: int = 2,
             out.append(html.escape(text[pos:m.start()]))
             name = m.group(0)
             tid = link_map[name]
-            if name == self_name or (once is not None and tid in once):
+            if name == self_name or tid == self_tid or (once is not None and tid in once):
                 out.append(html.escape(name))
             else:
                 if once is not None:
@@ -194,7 +197,14 @@ def entry_page(e: dict, link_map: dict, work: str, site: str) -> str:
                            % (label, linkify(str(rec[k]), link_map, name, once=once)))
 
     if src_list:
-        mid.append("<h2>考据</h2>")
+        # 考据默认折叠：条目一多，这一块比正文还长。
+        # 不用 <details> 是因为要照顾正文里的上标跳转——[3] 跳到 #ref3 时，
+        # 若那一块是折叠的，读者会「跳到空白」。这里用 checkbox + :has(.refrow:target)：
+        # 平时收起，一旦有上标被点中（:target 命中），自动展开。零脚本。
+        mid.append('<div class="refsblock">')
+        mid.append('<input type="checkbox" id="refstoggle" class="refstoggle">')
+        mid.append('<label for="refstoggle" class="refslabel">考据（%d 条）</label>'
+                   % len(src_list))
         mid.append('<div class="refs">')
         for i, s in enumerate(src_list, 1):
             cite = s.get("cite") or chapter_label(s.get("chapter", "?"))
@@ -205,14 +215,17 @@ def entry_page(e: dict, link_map: dict, work: str, site: str) -> str:
                 mid.append('<div class="refrow" style="border-left-color:#e3ded4">'
                            '<span class="num" style="visibility:hidden"></span>'
                            '<span class="quote">%s</span></div>' % html.escape(str(s["note"])))
-        mid.append("</div>")
+        mid.append("</div></div>")
 
     if e.get("note"):
         mid.append('<div class="note"><b>备注</b>　%s</div>'
                    % link_urls(linkify(str(e["note"]), link_map, name, once=once)))
 
-    body = ('<div id="layout"><div id="left">%s</div><div id="mid">%s</div>'
-            '<div id="right">%s</div></div>' % (left, "\n".join(mid), right))
+    # 没有正文章节时（例如只有「考据」一节的 stub），左栏会是空的。
+    # 空的左栏不该还占着一整列——加 notoc，由样式把第一轨去掉。
+    body = ('<div id="layout"%s><div id="left">%s</div><div id="mid">%s</div>'
+            '<div id="right">%s</div></div>'
+            % (' class="notoc"' if not left else "", left, "\n".join(mid), right))
     crumbs = [(site, "index.html"), (work, "index.html"), (name, "")]
     return page(site, work, crumbs, tabs_for("条目"), "%s - %s" % (name, site), body)
 

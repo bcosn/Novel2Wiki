@@ -53,6 +53,10 @@ RE_QUOTE_MARK = re.compile(r"[「『“\"][^」』”\"]{2,}[」』”\"]")
 # 明令禁止的标点与句式
 RE_FORBIDDEN_PUNCT = re.compile(r"[:：]|——|--|—")
 RE_NOT_BUT = re.compile(r"不是.{0,20}而是|并非.{0,20}而是|不在于.{0,20}而在于")
+# 规范第一节明列的「推断词」：编者替读者下结论的口吻。
+# 这类词本身不算错，但出现在叙述里就是在替读者归纳，规范要求删掉或改成原文说法。
+RE_INFERENCE = re.compile(r"可见|由此|由此可见|实际上|本质上|意味着|反映了|构成了|"
+                          r"说明了|足以说明|不难看出|恰恰说明")
 
 
 def texts_of(e):
@@ -116,6 +120,11 @@ def main() -> int:
                 for m in RE_CLASSICAL.finditer(stripped):
                     add("照搬原文腔调", "%s/%s" % (name, tag),
                         "…%s…（原文用词需改现代汉语或加引号）"
+                        % stripped[max(0, m.start() - 8):m.end() + 8].replace("\n", " "))
+                # 推断词：引文里的不算（那是原文的口吻），叙述里出现就是编者在下结论
+                for m in RE_INFERENCE.finditer(stripped):
+                    add("推断词（编者替读者下结论）", "%s/%s" % (name, tag),
+                        "…%s…（规范第一节明列，应删掉或改成原文说法）"
                         % stripped[max(0, m.start() - 8):m.end() + 8].replace("\n", " "))
         # 标题中避免链接（条目数据层：heading 不应含 markdown 链接）
         for s in e.get("sections", []):
