@@ -56,20 +56,29 @@ blockquote.ref .cite{color:#a2a9b1;margin-right:.4rem}
 sup.ref{font-size:.72em;line-height:0;margin-left:.1rem;white-space:nowrap}
 sup.ref a{color:#3366cc;padding:0 .1rem}
 
-/* 考据列表（带编号，与正文标记对应） */
-.refs{counter-reset:ref;font-size:.9rem;margin:.3rem 0}
-/* 考据默认折叠：条目一多，这一块比正文还长。
-   点正文里的上标 [3] 跳到 #ref3 时，:has(.refrow:target) 命中，自动展开。 */
+/* 考据列表（带编号，与正文标记对应）
+   默认折叠：条目一多，这一块比正文还长。
+   展开有两个来源——点标题（.refs 自身成为 :target），或点正文里的上标 [3]
+   （某个 .refrow 成为 :target）。
+   :target 只能置位、不能切换，所以不用 checkbox 做开关：那会与 :target 打架，
+   点了上标之后取消勾选也收不回去。改用两个互斥的链接——
+   收起态显示「考据（N 条）」指向 .refs，展开态显示「收起考据」指向 .refsblock，
+   把 :target 移开即收起。纯 CSS，无脚本。 */
+.refs{counter-reset:ref;font-size:.9rem;margin:.3rem 0;display:none}
 .refsblock{margin:.6rem 0 0}
-.refstoggle{position:absolute;width:1px;height:1px;opacity:0}
+.refsblock:has(.refs:target) .refs,
+.refsblock:has(.refrow:target) .refs{display:block}
 .refslabel{display:block;cursor:pointer;user-select:none;
  border:2px solid #a2a9b1;background:#f8f9fa;color:#202122;
  font-weight:600;font-size:.9rem;padding:.4rem .7rem;margin-bottom:.5rem}
 .refslabel::before{content:"▸　";color:#54595d}
-.refstoggle:checked ~ .refslabel::before{content:"▾　"}
-.refstoggle:focus-visible ~ .refslabel{outline:2px solid #3366cc;outline-offset:1px}
-.refstoggle:not(:checked) ~ .refs{display:none}
-.refsblock:has(.refrow:target) .refs{display:block}
+.refsshut{display:none}
+.refsblock:has(.refs:target) .refsopen,
+.refsblock:has(.refrow:target) .refsopen{display:none}
+.refsblock:has(.refs:target) .refsshut,
+.refsblock:has(.refrow:target) .refsshut{display:block}
+.refsblock:has(.refs:target) .refsshut::before,
+.refsblock:has(.refrow:target) .refsshut::before{content:"▾　"}
 .refs .refrow{display:flex;gap:.6rem;padding:.4rem .6rem;margin:.35rem 0;
  border-left:3px solid #a2a9b1;background:#f8f9fa}
 .refs .num{color:#3366cc;font-weight:600;min-width:1.8rem}

@@ -198,14 +198,16 @@ def entry_page(e: dict, link_map: dict, work: str, site: str) -> str:
 
     if src_list:
         # 考据默认折叠：条目一多，这一块比正文还长。
-        # 不用 <details> 是因为要照顾正文里的上标跳转——[3] 跳到 #ref3 时，
-        # 若那一块是折叠的，读者会「跳到空白」。这里用 checkbox + :has(.refrow:target)：
-        # 平时收起，一旦有上标被点中（:target 命中），自动展开。零脚本。
-        mid.append('<div class="refsblock">')
-        mid.append('<input type="checkbox" id="refstoggle" class="refstoggle">')
-        mid.append('<label for="refstoggle" class="refslabel">考据（%d 条）</label>'
+        # 展开有两个来源：点标题（.refs 成为 :target），或点正文里的上标 [3]
+        # （某个 .refrow 成为 :target）。:target 只能置位、不能切换，
+        # 所以不用 checkbox 当开关——那会与 :target 打架，点了上标就收不回去。
+        # 改用两个互斥的链接：收起态显示「考据（N 条）」指向 .refs，
+        # 展开态显示「收起考据」指向 .refsblock，把 :target 移开即收起。零脚本。
+        mid.append('<div class="refsblock" id="refs-closed">')
+        mid.append('<a class="refslabel refsopen" href="#refs-open">考据（%d 条）</a>'
                    % len(src_list))
-        mid.append('<div class="refs">')
+        mid.append('<a class="refslabel refsshut" href="#refs-closed">收起考据</a>')
+        mid.append('<div class="refs" id="refs-open">')
         for i, s in enumerate(src_list, 1):
             cite = s.get("cite") or chapter_label(s.get("chapter", "?"))
             mid.append('<div class="refrow" id="ref%d"><span class="num"></span>'
