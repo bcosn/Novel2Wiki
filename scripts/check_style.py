@@ -13,7 +13,7 @@
   * refs 挂了考据却整节没用上（粗查：该节 body 的归一化文本与 refs 指向的 quote 无任何重合）
 
 用法：
-    python tools/check_style.py <entries.json> [--report r.md]
+    python scripts/check_style.py <entries.json> [--report r.md]
 """
 from __future__ import annotations
 
@@ -30,14 +30,24 @@ for _s in (sys.stdout, sys.stderr):
         pass
 
 RE_SENT = re.compile(r"[^。！？…]+[。！？…]+|[^。！？…]+$")
-RE_CHAPTER = re.compile(r"第\s*\d+\s*章")
+RE_CHAPTER = re.compile(r"第\s*\d+\s*(?:章|回|节|卷)")
 # 节首就用章号起句（如「第21章写……」）
-RE_CHAPTER_HEAD = re.compile(r"^第\s*\d+\s*(?:章|与第\s*\d+\s*章)")
+RE_CHAPTER_HEAD = re.compile(r"^第\s*\d+\s*(?:章|回|节|卷)")
+# 引号内的内容：引文按设计就该是原文，查体例时不算编者的话
+RE_QUOTED = re.compile(r"「[^」]*」|『[^』]*』|“[^”]*”|‘[^’]*’")
 CJK = re.compile(r"[^\u3400-\u4dbf\u4e00-\u9fffA-Za-z0-9]")
+# 句首若是引号、标点或数字，这一句就不该参与「句首单调」的比对——
+# 以对话起句不是「同一个主体连着起头」。
+RE_NOT_A_HEAD = re.compile(r"^[「『“‘」』”’（()）【】\[\]]|\d")
 
 
 def norm(s):
     return CJK.sub("", s or "")
+
+
+def strip_quoted(s):
+    """去掉引号内内容，只留编者自己的话。"""
+    return RE_QUOTED.sub("", s or "")
 
 
 def main() -> int:
@@ -55,23 +65,24 @@ def main() -> int:
 
         # 节首用章号起句
         #
-        # 第一轮已由人拍板「章号从正文句首挪进 refs」，但**旧节**（第1-20章期间写的）
-        # 本来就带章号起句，不在整改范围，所以这里只查**新增节**——
-        # 判据是该节 refs 引到的考据过半落在第21章之后（没有扩写前快照，只能这样反推）。
+        # 章号是考据的坐标，不是叙述的一部分（规范第 8 条）。这一项**全量查**，
+        # 不区分新旧节——曾经按「refs 是否落在第21章之后」来反推新增节，
+        # 那个判据把范围写死在 21 章上，对只做前 20 回的作品一条也查不出来。
         src = e.get("sources") or []
         for i, s in enumerate(e.get("sections") or [], 1):
             body = (s.get("body") or "").strip()
             if not body:
                 continue
-            refs = [r for r in (s.get("refs") or []) if isinstance(r, int) and 0 < r <= len(src)]
-            chs = [src[r - 1].get("chapter") for r in refs]
-            chs = [c for c in chs if isinstance(c, int)]
-            if not chs or sum(1 for c in chs if c > 20) * 2 <= len(chs):
-                continue
-            if RE_CHAPTER_HEAD.match(body):
-                issues.append(("节首用章号起句", "%s/%s sections[%d]" % (eid, name, i),
-                               "body=%r…。整句重写，从物、动作或时间起头，章号只留 refs 与考据块"
-                               % body[:28]))
+            # 按**段落**逐段匹配，不是只看整个 body 的第一个字符。
+            # body 里用空行分段时，后面某段以「第N回」开头的同样违规——
+            # 早先只 match(body) 会整片漏掉（实测漏了 124 处）。
+            for pi, para in enumerate((p.strip() for p in body.split("\n")), 1):
+                if para and RE_CHAPTER_HEAD.match(para):
+                    issues.append(("节首用章号起句",
+                                   "%s/%s sections[%d] 段%d" % (eid, name, i, pi),
+                                   "%r…。整句重写，从物、动作或时间起头，章号只留 refs 与考据块"
+                                   % para[:28]))
+                    break
 
         # 节标题
         for i, s in enumerate(e.get("sections") or [], 1):
@@ -88,23 +99,30 @@ def main() -> int:
             sents = [x.strip() for x in RE_SENT.findall(s.get("body") or "") if x.strip()]
             heads = []
             for x in sents:
+                # 以引号/标点/数字起句的不参与比对：那是对话或列举，不是「同一主体连着起头」
+                if RE_NOT_A_HEAD.match(x):
+                    heads.append(None)
+                    continue
                 m = RE_CHAPTER.match(x)
                 heads.append("第N章" if m else x[:2])
             run, best = 1, 1
             for a, b in zip(heads, heads[1:]):
-                run = run + 1 if a == b else 1
+                run = run + 1 if (a is not None and a == b) else 1
                 best = max(best, run)
             if best >= 3:
+                cand = [h for h in heads if h]
                 issues.append(("句首单调", "%s/%s sections[%d]" % (eid, name, i),
-                               "连续 %d 句以「%s」起头" % (best, heads[0] if len(set(heads)) == 1 else
-                                                          Counter(heads).most_common(1)[0][0])))
+                               "连续 %d 句以「%s」起头"
+                               % (best, Counter(cand).most_common(1)[0][0] if cand else "?")))
 
-        # 一句里重复主体名
+        # 一句里重复主体名（引号内的不算：那是原文的说法，不是编者写结巴了）
         for i, s in enumerate(e.get("sections") or [], 1):
             for sent in RE_SENT.findall(s.get("body") or ""):
-                if len(name) >= 2 and sent.count(name) >= 2:
+                plain = strip_quoted(sent)
+                if len(name) >= 2 and plain.count(name) >= 2:
                     issues.append(("一句重复主体名", "%s/%s sections[%d]" % (eid, name, i),
-                                   "「%s」在一句里出现 %d 次：%s" % (name, sent.count(name), sent.strip()[:40])))
+                                   "「%s」在一句里出现 %d 次：%s"
+                                   % (name, plain.count(name), plain.strip()[:40])))
                     break
 
         # 首句同语反复

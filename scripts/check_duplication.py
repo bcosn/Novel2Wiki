@@ -3,8 +3,7 @@
 """跨条目重复检查（含跨批次）。
 
 `check_style.py` 只查**同一条目文件内**的 lead 重复，而第二批是分批并行写的，
-同一段原文材料可能被两批各自写成条目（第二批的 K 批就报告过：诺诺在拉面馆那段自述
-同时出现在四条条目里）。本工具在**合并后**的条目上查两件事：
+同一段原文材料可能被两批各自写成条目（实测中同一段人物自述曾同时出现在四条条目里）。本工具在**合并后**的条目上查两件事：
 
   1. 不同条目的正文之间，有没有较长（默认 ≥20 字）的同形片段
   2. 有没有两条的 lead 高度相似
@@ -13,7 +12,7 @@
 剩下来的重合才是编者叙述的重复。
 
 用法：
-    python tools/check_duplication.py data/龙族5.entries.json [--min 20]
+    python scripts/check_duplication.py example1/红楼梦.entries.json [--min 40]
 """
 from __future__ import annotations
 

@@ -260,7 +260,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="追加产物的审查与矛盾研判校验")
     ap.add_argument("append", help="第四步产出的 append.json，或互动表 *.interactions.json")
     ap.add_argument("--base-dir", required=True, help="既有四表与时间线所在目录")
-    ap.add_argument("--prefix", default="红楼梦", help="既有表文件名前缀，如「龙族5」")
+    ap.add_argument("--prefix", default="红楼梦", help="既有表文件名前缀，如「红楼梦」")
     ap.add_argument("--report", default="", help="报告输出路径（.md）")
     args = ap.parse_args()
 
