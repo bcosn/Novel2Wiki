@@ -1,0 +1,147 @@
+{
+  "meta": {
+    "book": "孔乙己",
+    "author": "鲁迅",
+    "scope": "全文",
+    "source": "孔乙己.chapters.json",
+    "generated_at": "2026-10-12T05:30:00Z"
+  },
+  "items": [
+    {
+      "name": "孔乙己",
+      "race": "人类",
+      "importance": "main",
+      "gender": "male",
+      "age": null,
+      "age_note": "原文未明说年龄。以「花白的胡子」推为中年以上；叙述跨度约二十余年，末年更老",
+      "aliases": ["孔乙己", "站着喝酒而穿长衫的唯一的人"],
+      "attributes": [
+        "落魄读书人，读过书但终于没有进学（未中秀才）",
+        "写得一笔好字，替人家钞书换饭吃，但好吃懒做，连人和书籍纸张笔砚一齐失踪",
+        "不会营生，愈过愈穷，弄到将要讨饭",
+        "身材很高大，青白脸色，皱纹间时常夹些伤痕，一部乱蓬蓬的花白的胡子",
+        "穿的长衫又脏又破，似乎十多年没有补也没有洗",
+        "满口之乎者也，教人半懂不懂",
+        "绰号取自描红纸上的「上大人孔乙己」"
+      ],
+      "first_chapter": 1,
+      "note": "姓氏为孔，原文未交代本名；「孔乙己」是绰号。末期被打折腿，穿破夹袄，用蒲包垫身、以手走路；结局据叙述者推测已死"
+    },
+    {
+      "name": "我",
+      "race": "人类",
+      "importance": "major",
+      "gender": "male",
+      "age": 12,
+      "age_note": "自述「从十二岁起」在咸亨酒店当伙计；叙述时已过二十余年，为成年后追述",
+      "aliases": ["我", "伙计"],
+      "attributes": [
+        "咸亨酒店的伙计，由荐头荐来",
+        "因样子太傻，先做外场，后改为专管温酒",
+        "是全文的叙述者"
+      ],
+      "first_chapter": 1,
+      "note": ""
+    },
+    {
+      "name": "掌柜",
+      "race": "人类",
+      "importance": "major",
+      "gender": "male",
+      "age": null,
+      "age_note": "原文未明说",
+      "aliases": ["掌柜"],
+      "attributes": [
+        "咸亨酒店掌柜，一副凶脸孔",
+        "每每故意问孔乙己，引人发笑",
+        "始终记着孔乙己欠的十九个钱，年关、端午反复提起"
+      ],
+      "first_chapter": 1,
+      "note": ""
+    },
+    {
+      "name": "丁举人",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": null,
+      "age_note": "原文未明说",
+      "aliases": ["丁举人"],
+      "attributes": ["举人，当地有权势的人家"],
+      "first_chapter": 1,
+      "note": "未出场，仅在酒客叙述中提及：孔乙己偷到他家，先写服辩，后被打大半夜、打折了腿"
+    },
+    {
+      "name": "何家",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "unknown",
+      "age": null,
+      "age_note": "",
+      "aliases": ["何家"],
+      "attributes": [],
+      "first_chapter": 1,
+      "note": "未出场。酒客说亲眼见孔乙己偷了何家的书、被吊着打。「何家」是家户，原文未指明具体人物"
+    },
+    {
+      "name": "荐头",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "unknown",
+      "age": null,
+      "age_note": "",
+      "aliases": ["荐头"],
+      "attributes": ["情面大，为「我」作保荐入咸亨酒店"],
+      "first_chapter": 1,
+      "note": "未出场，仅一句提及"
+    },
+    {
+      "name": "短衣帮",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "unknown",
+      "age": null,
+      "age_note": "",
+      "aliases": ["短衣帮", "短衣主顾", "做工的人"],
+      "attributes": ["靠柜外站着喝酒，买一碟盐煮笋或茴香豆做下酒物", "大抵没有穿长衫的那样阔绰"],
+      "first_chapter": 1,
+      "note": "群体，非具体人物"
+    },
+    {
+      "name": "长衫主顾",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "unknown",
+      "age": null,
+      "age_note": "",
+      "aliases": ["穿长衫的", "长衫主顾"],
+      "attributes": ["踱进店面隔壁的房子里，要酒要菜，慢慢地坐喝"],
+      "first_chapter": 1,
+      "note": "群体，非具体人物"
+    },
+    {
+      "name": "邻居孩子",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "unknown",
+      "age": null,
+      "age_note": "孩子",
+      "aliases": ["邻居孩子", "一群孩子"],
+      "attributes": ["围住孔乙己要茴香豆吃，一人一颗"],
+      "first_chapter": 1,
+      "note": "群体，非具体人物"
+    },
+    {
+      "name": "酒客",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "unknown",
+      "age": null,
+      "age_note": "",
+      "aliases": ["一个喝酒的人", "旁人", "所有喝酒的人"],
+      "attributes": ["取笑孔乙己脸上新伤疤、问他当真认识字么、叙述孔乙己被打折腿的经过"],
+      "first_chapter": 1,
+      "note": "群体，其中「一个喝酒的人」交代了丁举人家打折腿一事"
+    }
+  ]
+}

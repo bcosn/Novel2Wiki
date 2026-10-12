@@ -13,7 +13,7 @@ Fact-first & polish-later architecture to systematically reduce LLM hallucinatio
 压缩包内含 `SKILL.md`、`scripts/`、`schema/`、`example1/`（两组走完全流程的示例）。
 规范与流程也可以直接在仓库里读，不必下载：
 
-- [维基风格规范.md](维基风格规范.md) —— 条目语言与站点界面的硬约束
+- [schema/维基风格规范.md](schema/维基风格规范.md) —— 条目语言与站点界面的硬约束
 - [SKILL.md](SKILL.md) —— 六步流程与迭代跑法
 
 📖 项目介绍 | Introduction
@@ -54,7 +54,7 @@ For demonstration & research only, not production-ready.
 
 ```
 SKILL.md              六步流程、迭代跑法、目录说明
-维基风格规范.md         条目语言 + 站点界面，改稿改版式都照这份
+schema/维基风格规范.md  条目语言 + 站点界面，改稿改版式都照这份
 assets/wiki.css       站点样式，渲染时复制到站点目录
 scripts/              15 个脚本（解析、审查、抽取校验、渲染）
 schema/               各步的字段规范

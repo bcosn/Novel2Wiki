@@ -53,15 +53,13 @@
 | `id` | 稳定标识，形如 `e-0001` |
 | `kind` | `character` / `place` / `object` / `event` |
 | `name` | 条目名 |
-| `aliases` | 别名，用于跳转重定向。**只填称呼类异名**（字、号、昵称），职务、身份不是别称 |
+| `aliases` | 别名，用于跳转重定向 |
 | `lead` | 首段。一两句说清这是谁/什么、在故事里的位置 |
 | `sections` | 正文，`[{"heading": "...", "body": "..."}]` |
-| `sources` | 考据：`[{"chapter": N, "cite": "第N回", "quote": "原文"}]` |
+| `sources` | 考据：`[{"chapter": N, "quote": "原文"}]` |
 | `reception` | 评价，见上 |
 | `links` | 指向其它条目的 `id`，用于跳转 |
 | `stub` | 布尔。材料不足时标记为待补，**不要硬凑** |
-
-`lead_refs` 与各节 `refs` 记该处对应的 `sources` 序号（从 1 开始），渲染成上标注脚。
 
 ## 事件条目
 

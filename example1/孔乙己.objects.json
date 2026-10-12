@@ -1,0 +1,254 @@
+{
+  "meta": {
+    "book": "孔乙己",
+    "author": "鲁迅",
+    "scope": "全文",
+    "source": "孔乙己.chapters.json",
+    "generated_at": "2026-10-12T05:30:00Z"
+  },
+  "items": [
+    {
+      "name": "万物",
+      "level": 0,
+      "parent": "",
+      "type": "最大范围",
+      "owner": "",
+      "first_chapter": 1,
+      "note": "层级根节点"
+    },
+    {
+      "name": "长衫",
+      "level": 1,
+      "parent": "万物",
+      "type": "服饰",
+      "owner": "",
+      "first_chapter": 1,
+      "note": "身份标记：穿长衫的才踱进店面隔壁坐喝。孔乙己是站着喝酒而穿长衫的唯一的人"
+    },
+    {
+      "name": "孔乙己的长衫",
+      "level": 2,
+      "parent": "长衫",
+      "type": "具体衣物",
+      "owner": "孔乙己",
+      "first_chapter": 1,
+      "note": "又脏又破，似乎十多年没有补，也没有洗"
+    },
+    {
+      "name": "短衣",
+      "level": 1,
+      "parent": "万物",
+      "type": "服饰",
+      "owner": "",
+      "first_chapter": 1,
+      "note": "「短衣帮」的衣着，与长衫相对，指做工的人"
+    },
+    {
+      "name": "破夹袄",
+      "level": 2,
+      "parent": "短衣",
+      "type": "具体衣物",
+      "owner": "孔乙己",
+      "first_chapter": 1,
+      "note": "末年孔乙己所穿，已换下长衫"
+    },
+    {
+      "name": "棉袄",
+      "level": 2,
+      "parent": "短衣",
+      "type": "具体衣物",
+      "owner": "我",
+      "first_chapter": 1,
+      "note": "将近初冬，「我」也须穿上棉袄了"
+    },
+    {
+      "name": "酒菜",
+      "level": 1,
+      "parent": "万物",
+      "type": "食物",
+      "owner": "",
+      "first_chapter": 1,
+      "note": "下酒物的统称"
+    },
+    {
+      "name": "茴香豆",
+      "level": 2,
+      "parent": "酒菜",
+      "type": "下酒物",
+      "owner": "",
+      "first_chapter": 1,
+      "note": "一文可买一碟。孔乙己要一碟，并分给邻居孩子一人一颗；掌柜从不将茴香豆上账"
+    },
+    {
+      "name": "盐煮笋",
+      "level": 2,
+      "parent": "酒菜",
+      "type": "下酒物",
+      "owner": "",
+      "first_chapter": 1,
+      "note": "多花一文可以买一碟"
+    },
+    {
+      "name": "荤菜",
+      "level": 2,
+      "parent": "酒菜",
+      "type": "菜肴",
+      "owner": "",
+      "first_chapter": 1,
+      "note": "出到十几文才能买一样"
+    },
+    {
+      "name": "酒",
+      "level": 1,
+      "parent": "万物",
+      "type": "饮品",
+      "owner": "",
+      "first_chapter": 1,
+      "note": "全文的核心消费品"
+    },
+    {
+      "name": "黄酒",
+      "level": 2,
+      "parent": "酒",
+      "type": "酒类",
+      "owner": "",
+      "first_chapter": 1,
+      "note": "从坛子里舀出。短衣主顾要亲眼看着舀、看壶底有没有水、亲看壶子放在热水里才放心"
+    },
+    {
+      "name": "酒坛",
+      "level": 3,
+      "parent": "黄酒",
+      "type": "容器",
+      "owner": "咸亨酒店",
+      "first_chapter": 1,
+      "note": "黄酒从坛子里舀出"
+    },
+    {
+      "name": "酒壶",
+      "level": 3,
+      "parent": "黄酒",
+      "type": "容器",
+      "owner": "咸亨酒店",
+      "first_chapter": 1,
+      "note": "「壶子底里有水没有」，温酒时放在热水里"
+    },
+    {
+      "name": "热水",
+      "level": 2,
+      "parent": "万物",
+      "type": "物料",
+      "owner": "咸亨酒店",
+      "first_chapter": 1,
+      "note": "柜里预备，可随时温酒；壶子放在热水里温"
+    },
+    {
+      "name": "钱",
+      "level": 1,
+      "parent": "万物",
+      "type": "货币",
+      "owner": "",
+      "first_chapter": 1,
+      "note": ""
+    },
+    {
+      "name": "铜钱",
+      "level": 2,
+      "parent": "钱",
+      "type": "货币",
+      "owner": "",
+      "first_chapter": 1,
+      "note": "四文一碗酒；二十多年前的事，现涨到十文"
+    },
+    {
+      "name": "大钱",
+      "level": 2,
+      "parent": "钱",
+      "type": "货币",
+      "owner": "",
+      "first_chapter": 1,
+      "note": "孔乙己排出九文大钱；末年从破衣袋里摸出四文大钱"
+    },
+    {
+      "name": "十九个钱",
+      "level": 3,
+      "parent": "钱",
+      "type": "欠账",
+      "owner": "孔乙己",
+      "first_chapter": 1,
+      "note": "孔乙己欠咸亨酒店的酒钱，记在粉板上。掌柜年关、端午反复提起，始终未还"
+    },
+    {
+      "name": "书",
+      "level": 1,
+      "parent": "万物",
+      "type": "书籍",
+      "owner": "",
+      "first_chapter": 1,
+      "note": "孔乙己替人钞书；也曾偷何家的书、偷到丁举人家里"
+    },
+    {
+      "name": "纸张笔砚",
+      "level": 2,
+      "parent": "书",
+      "type": "文具",
+      "owner": "",
+      "first_chapter": 1,
+      "note": "孔乙己钞书时「连人和书籍纸张笔砚，一齐失踪」"
+    },
+    {
+      "name": "描红纸",
+      "level": 2,
+      "parent": "书",
+      "type": "字帖",
+      "owner": "",
+      "first_chapter": 1,
+      "note": "印有红色楷字供儿童摹写。孔乙己的绰号即取自描红纸上的「上大人孔乙己」"
+    },
+    {
+      "name": "粉板",
+      "level": 1,
+      "parent": "万物",
+      "type": "账簿用具",
+      "owner": "咸亨酒店",
+      "first_chapter": 1,
+      "note": "赊账记名用。孔乙己欠账记在粉板上，还清后拭去名字；掌柜结账时取下粉板"
+    },
+    {
+      "name": "服辩",
+      "level": 1,
+      "parent": "万物",
+      "type": "文书",
+      "owner": "",
+      "first_chapter": 1,
+      "note": "又作伏辩，即认罪书。孔乙己偷丁举人家后「先写服辩」"
+    },
+    {
+      "name": "蒲包",
+      "level": 2,
+      "parent": "万物",
+      "type": "器物",
+      "owner": "孔乙己",
+      "first_chapter": 1,
+      "note": "末年孔乙己盘着两腿，下面垫一个蒲包，用草绳在肩上挂住"
+    },
+    {
+      "name": "草绳",
+      "level": 2,
+      "parent": "万物",
+      "type": "器物",
+      "owner": "孔乙己",
+      "first_chapter": 1,
+      "note": "用来把蒲包挂在肩上"
+    },
+    {
+      "name": "火",
+      "level": 1,
+      "parent": "万物",
+      "type": "热源",
+      "owner": "咸亨酒店",
+      "first_chapter": 1,
+      "note": "将近初冬，「我」整天靠着火"
+    }
+  ]
+}

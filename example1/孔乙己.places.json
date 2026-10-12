@@ -1,0 +1,67 @@
+{
+  "meta": {
+    "book": "孔乙己",
+    "author": "鲁迅",
+    "scope": "全文",
+    "source": "孔乙己.chapters.json",
+    "generated_at": "2026-10-12T05:30:00Z"
+  },
+  "items": [
+    {
+      "name": "天下",
+      "level": 0,
+      "parent": "",
+      "type": "最大范围",
+      "first_chapter": 1,
+      "note": "原文未直接使用「天下」一词；此处为层级根节点，下列地名均属其下"
+    },
+    {
+      "name": "鲁镇",
+      "level": 2,
+      "parent": "天下",
+      "type": "镇",
+      "first_chapter": 1,
+      "note": "故事发生地。原文开篇「鲁镇的酒店的格局，是和别处不同的」"
+    },
+    {
+      "name": "咸亨酒店",
+      "level": 3,
+      "parent": "鲁镇",
+      "type": "酒店",
+      "first_chapter": 1,
+      "note": "在镇口。「我」自十二岁起在此当伙计"
+    },
+    {
+      "name": "曲尺形的大柜台",
+      "level": 4,
+      "parent": "咸亨酒店",
+      "type": "柜台",
+      "first_chapter": 1,
+      "note": "当街。柜里预备热水可随时温酒。孔乙己曾用指甲蘸酒想在柜上写字"
+    },
+    {
+      "name": "店面隔壁的房子",
+      "level": 4,
+      "parent": "咸亨酒店",
+      "type": "房间",
+      "first_chapter": 1,
+      "note": "穿长衫的主顾在此要酒要菜、慢慢地坐喝"
+    },
+    {
+      "name": "门槛",
+      "level": 4,
+      "parent": "咸亨酒店",
+      "type": "构件",
+      "first_chapter": 1,
+      "note": "末年孔乙己在柜台下对了门槛坐着，「我」温了酒放在门槛上"
+    },
+    {
+      "name": "丁举人家",
+      "level": 3,
+      "parent": "鲁镇",
+      "type": "宅邸",
+      "first_chapter": 1,
+      "note": "孔乙己偷到此家，先写服辩，后被打折腿。原文未明说是否在鲁镇，按故事范围归此，属推断"
+    }
+  ]
+}

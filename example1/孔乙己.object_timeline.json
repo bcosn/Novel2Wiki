@@ -1,0 +1,56 @@
+{
+  "meta": {
+    "book": "孔乙己",
+    "author": "鲁迅",
+    "scope": "全文",
+    "source": "孔乙己.chapters.json",
+    "generated_at": "2026-10-12T06:00:00Z"
+  },
+  "items": [
+    {
+      "name": "孔乙己的长衫",
+      "field": "state",
+      "from_chapter": 1,
+      "to_chapter": null,
+      "from": "又脏又破，似乎十多年没有补，也没有洗",
+      "to": "已不再穿；末段改穿破夹袄",
+      "note": "前段「穿的虽然是长衫，可是又脏又破，似乎十多年没有补，也没有洗」；末段「穿一件破夹袄」"
+    },
+    {
+      "name": "破夹袄",
+      "field": "state",
+      "from_chapter": null,
+      "to_chapter": null,
+      "from": "未出现",
+      "to": "孔乙己末段所穿，取代长衫",
+      "note": "「穿一件破夹袄，盘着两腿」。首次出现，此前孔乙己穿长衫"
+    },
+    {
+      "name": "蒲包",
+      "field": "state",
+      "from_chapter": null,
+      "to_chapter": null,
+      "from": "未出现",
+      "to": "孔乙己盘腿坐垫，用草绳挂在肩上",
+      "note": "「下面垫一个蒲包，用草绳在肩上挂住」，随断腿后的行头首次出现"
+    },
+    {
+      "name": "十九个钱",
+      "field": "state",
+      "from_chapter": 1,
+      "to_chapter": null,
+      "from": "赊欠记账，记在粉板上",
+      "to": "始终未还；年关、端午掌柜反复提起，中秋起不再提",
+      "note": "「还欠十九个钱呢！」先后出现于中秋前、年关、第二年端午；「到中秋可是没有说」"
+    },
+    {
+      "name": "粉板",
+      "field": "state",
+      "from_chapter": 1,
+      "to_chapter": null,
+      "from": "记有孔乙己的名字，还清即拭去",
+      "to": "留着孔乙己的欠账，再未拭去",
+      "note": "前段「从粉板上拭去了孔乙己的名字」；后段掌柜取下粉板仍记着这十九个钱"
+    }
+  ]
+}

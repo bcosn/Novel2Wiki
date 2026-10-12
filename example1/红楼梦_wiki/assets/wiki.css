@@ -1,0 +1,110 @@
+/* 维基式版式：白灰配色、少圆角、无外部依赖 */
+*{box-sizing:border-box}
+html{font-size:100%}
+body{margin:0;background:#fff;color:#202122;
+ font-family:sans-serif,"Segoe UI","Noto Sans CJK SC","Source Han Sans SC","Microsoft YaHei";
+ font-size:.9375rem;line-height:1.65}
+a{color:#3366cc;text-decoration:none}
+a:hover{text-decoration:underline}
+a.ext::after{content:"\2197";font-size:.7em;margin-left:.15em}
+
+/* 顶栏 */
+#top{padding:.7rem 1.2rem .3rem}
+#top .site{font-size:1.7rem;line-height:1.2;font-family:Georgia,"Songti SC",serif}
+#top .site a{color:#202122}
+#top .tagline{color:#54595d;font-size:.9rem;margin-top:.15rem}
+
+/* 面包屑与标签页 */
+#crumbs{padding:.4rem 1.2rem;font-size:.85rem;color:#54595d;border-bottom:2px solid #a2a9b1}
+#tabs{padding:0 1.2rem;font-size:.85rem;border-bottom:2px solid #a2a9b1;display:flex;gap:.15rem}
+#tabs span{padding:.35rem .8rem;border:2px solid #a2a9b1;border-bottom:none;
+ background:#f8f9fa;color:#54595d;margin-bottom:-2px}
+#tabs span.cur{background:#fff;color:#202122;font-weight:600}
+#tabs span.disabled{color:#a2a9b1}
+
+/* 三栏：左目录 中正文 右信息框 */
+#layout{display:grid;grid-template-columns:13rem minmax(0,1fr) 19rem;
+ gap:1.4rem;max-width:76rem;margin:0 auto;padding:1.2rem 1.2rem 3rem;align-items:start}
+#left{font-size:.85rem}
+#left .tocbox{border:2px solid #a2a9b1;background:#f8f9fa;padding:.5rem .7rem}
+#left .tocbox .t{font-weight:600;text-align:center;padding-bottom:.3rem;margin-bottom:.3rem;
+ border-bottom:2px solid #c8ccd1}
+#left ol{margin:0;padding-left:1.3rem}
+#left li{margin:.15rem 0}
+#mid{min-width:0}
+#right{font-size:.85rem}
+
+/* 正文 */
+h1.firstHeading{font-family:Georgia,"Songti SC",serif;font-size:1.9rem;font-weight:400;
+ margin:.1rem 0 .3rem;padding-bottom:.35rem;border-bottom:3px solid #a2a9b1}
+h2{font-family:Georgia,"Songti SC",serif;font-size:1.35rem;font-weight:400;
+ margin:1.5rem 0 .5rem;padding-bottom:.2rem;border-bottom:2px solid #c8ccd1}
+h3{font-size:1.05rem;font-weight:600;margin:1.1rem 0 .35rem}
+p{margin:.55rem 0}
+.subtitle{color:#54595d;font-size:.88rem;margin:0 0 .7rem}
+ul{margin:.4rem 0 .8rem;padding-left:1.4rem}
+li{margin:.15rem 0}
+
+/* 灰色原文引用 */
+blockquote.ref{margin:.5rem 0 .9rem;padding:.35rem .8rem;border-left:3px solid #c8ccd1;
+ background:#f8f9fa;color:#72777d;font-size:.88rem;line-height:1.6}
+blockquote.ref .cite{color:#a2a9b1;margin-right:.4rem}
+
+/* 正文内联注脚标记 */
+sup.ref{font-size:.72em;line-height:0;margin-left:.1rem;white-space:nowrap}
+sup.ref a{color:#3366cc;padding:0 .1rem}
+
+/* 考据列表（带编号，与正文标记对应） */
+.refs{counter-reset:ref;font-size:.9rem;margin:.3rem 0}
+.refs .refrow{display:flex;gap:.6rem;padding:.4rem .6rem;margin:.35rem 0;
+ border-left:3px solid #a2a9b1;background:#f8f9fa}
+.refs .num{color:#3366cc;font-weight:600;min-width:1.8rem}
+.refs .num::before{content:"[" counter(ref) "]";counter-increment:ref}
+.refs .quote{color:#54595d}
+.refs .ch{color:#202122;margin-right:.4rem}
+
+/* 信息框 */
+.infobox{border:2px solid #a2a9b1;background:#f8f9fa;width:100%;margin:0 0 1rem}
+.infobox caption{background:#eaecf0;font-weight:600;padding:.45rem .6rem;
+ border-bottom:2px solid #a2a9b1;text-align:left;font-size:.95rem}
+.infobox th{text-align:left;vertical-align:top;padding:.3rem .6rem;width:6rem;
+ border-top:1px solid #c8ccd1}
+.infobox td{padding:.3rem .6rem;border-top:1px solid #c8ccd1}
+.infobox tr:first-child th,.infobox tr:first-child td{border-top:none}
+
+/* 相关条目（右栏长标签卡） */
+.relbox{border:2px solid #a2a9b1;background:#f8f9fa;margin:0 0 1rem}
+.relbox .t{background:#eaecf0;font-weight:600;padding:.45rem .6rem;
+ border-bottom:2px solid #a2a9b1;font-size:.95rem}
+.relbox ul{list-style:none;margin:0;padding:.4rem .6rem}
+.relbox li{margin:0 0 .35rem}
+.relbox a{display:block;padding:.25rem .5rem;border:1px solid #c8ccd1;background:#fff;
+ font-size:.85rem}
+.relbox a:hover{background:#eaecf0;text-decoration:none}
+
+/* 考据 */
+.refs{font-size:.85rem}
+.refs ol{padding-left:1.6rem;margin:.3rem 0}
+.refs li{margin:.2rem 0}
+.refs .ch{color:#54595d}
+.note{border:2px solid #a2a9b1;background:#f8f9fa;font-size:.82rem;color:#54595d;
+ padding:.5rem .7rem;margin:.8rem 0}
+.note b{color:#202122}
+
+/* 评价 */
+.rec{margin:.5rem 0;font-size:.92rem}
+.rec b{font-weight:600}
+
+/* 首页 */
+.home{max-width:56rem;margin:0 auto;padding:1.2rem 1.2rem 3rem}
+.boxes{display:grid;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));gap:.8rem;
+ margin:1rem 0 1.5rem}
+.box{border:2px solid #a2a9b1;background:#f8f9fa;padding:.6rem .8rem}
+.box h3{margin:0 0 .4rem;font-size:.95rem;font-weight:600;background:#eaecf0;
+ margin:-.6rem -.8rem .5rem;padding:.4rem .8rem;border-bottom:2px solid #a2a9b1}
+.box ul{margin:0;padding-left:1.1rem;columns:2;column-gap:1rem;font-size:.85rem}
+
+#foot{border-top:2px solid #a2a9b1;margin-top:2rem;padding:.7rem 1.2rem;
+ font-size:.8rem;color:#54595d}
+@media (max-width:64rem){#layout{grid-template-columns:1fr}
+ #right{order:-1}#left .tocbox{margin-bottom:1rem}}

@@ -1,0 +1,3737 @@
+{
+  "meta": {
+    "book": "红楼梦",
+    "author": "曹雪芹",
+    "scope": "第1-20回",
+    "source": "红楼梦.chapters.json",
+    "generated_at": "2026-10-11T20:24:37Z"
+  },
+  "items": [
+    {
+      "name": "甄士隐",
+      "race": "人类",
+      "importance": "major",
+      "gender": "male",
+      "age": "≈50",
+      "age_note": "第1回『年已半百』，膝下无儿，只有一女英莲",
+      "aliases": [
+        "甄费",
+        "士隐",
+        "甄老爷"
+      ],
+      "attributes": [
+        "姓甄名费，字士隐",
+        "姑苏阊门外十里街仁清巷乡宦，葫芦庙旁居住",
+        "禀性恬淡，不以功名为念，观花修竹、酌酒吟诗",
+        "英莲之父，封氏之夫",
+        "第1回末随疯跛道人出家"
+      ],
+      "first_chapter": 1,
+      "note": "『甄士隐』谐『真事隐』"
+    },
+    {
+      "name": "封氏",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "封氏孺人",
+        "甄家娘子"
+      ],
+      "attributes": [
+        "甄士隐嫡妻",
+        "情性贤淑，深明礼义",
+        "英莲之母",
+        "封肃之女",
+        "失女后又遭火焚家业，依靠父亲度日"
+      ],
+      "first_chapter": 1,
+      "note": ""
+    },
+    {
+      "name": "英莲",
+      "race": "人类",
+      "importance": "major",
+      "gender": "female",
+      "age": 3,
+      "age_note": "第1回『年方三岁』；第4回门子云『如今十二三岁的光景』",
+      "aliases": [
+        "香菱",
+        "甄英莲"
+      ],
+      "attributes": [
+        "甄士隐与封氏之女",
+        "第1回元宵节被家人霍启弄丢",
+        "眉心中原有米粒大小一点胭脂记",
+        "被拐子养大后转卖，第4回被薛蟠买去",
+        "第7回已是薛姨妈房中的丫鬟，周瑞家的、金钏儿皆称其『香菱』"
+      ],
+      "first_chapter": 1,
+      "note": "第7回以后原文以『香菱』称呼，本表归入同一人",
+      "age_timeline": [
+        {
+          "chapter": 1,
+          "age": 3,
+          "note": "第1回『年方三岁』"
+        },
+        {
+          "chapter": 4,
+          "age": "12-13",
+          "note": "第4回门子云『如今十二三岁的光景』"
+        }
+      ]
+    },
+    {
+      "name": "霍启",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "甄家家人",
+        "第1回元宵夜抱英莲去看社火花灯，因小解而将英莲弄丢",
+        "寻了半夜不见，逃往他乡"
+      ],
+      "first_chapter": 1,
+      "note": ""
+    },
+    {
+      "name": "封肃",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "甄士隐的岳丈",
+        "本贯大如州人氏，务农，家中殷实",
+        "半哄半赚甄士隐折变田地的银子",
+        "第2回因公差传唤被带去见贾雨村"
+      ],
+      "first_chapter": 1,
+      "note": ""
+    },
+    {
+      "name": "贾雨村",
+      "race": "人类",
+      "importance": "main",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "贾化",
+        "时飞",
+        "雨村",
+        "贾爷"
+      ],
+      "attributes": [
+        "姓贾名化，表字时飞，别号雨村",
+        "胡州人氏，诗书仕宦之族，父母祖宗根基已尽",
+        "曾寄居葫芦庙，卖字作文为生",
+        "得甄士隐赠银入都，中进士、选入外班，升本府知府后被参革职",
+        "做林黛玉的西宾",
+        "第4回补授应天府，徇情枉法乱判葫芦案"
+      ],
+      "first_chapter": 1,
+      "note": "第3回经林如海荐书、贾政竭力协助而复职"
+    },
+    {
+      "name": "娇杏",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "甄家丫鬟",
+        "娇杏那丫头"
+      ],
+      "attributes": [
+        "甄士隐家丫鬟",
+        "第1回撷花时回顾贾雨村两次，被雨村视为风尘知己",
+        "第2回被雨村娶作二房，一年生一子",
+        "雨村嫡妻死后被扶作正室夫人"
+      ],
+      "first_chapter": 1,
+      "note": "第1回只作『甄家丫鬟』，第2回方出名字"
+    },
+    {
+      "name": "癞头和尚",
+      "race": "方外仙人",
+      "importance": "minor",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "那僧",
+        "茫茫大士",
+        "秃头和尚"
+      ],
+      "attributes": [
+        "携顽石入红尘之僧",
+        "癞头跣脚，疯疯癫癫",
+        "念咒书符，将大石变成鲜明莹洁的美玉并镌上字",
+        "第7回授薛宝钗冷香丸的海上方",
+        "第8回赠宝钗八字吉谶，须錾在金器上"
+      ],
+      "first_chapter": 1,
+      "note": "第1回『蒙茫茫大士渺渺真人携入红尘』，茫茫大士即此僧；第3回作『癞头和尚』，第7回作『秃头和尚』"
+    },
+    {
+      "name": "跛足道人",
+      "race": "方外仙人",
+      "importance": "minor",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "那道",
+        "渺渺真人",
+        "疯跛道人"
+      ],
+      "attributes": [
+        "与癞头和尚同行之道人",
+        "跛足蓬头，麻屣鹑衣，疯癫落脱",
+        "唱《好了歌》，度脱甄士隐出家",
+        "与僧约定三劫后在北邙山会齐，同往太虚幻境销号"
+      ],
+      "first_chapter": 1,
+      "note": "第1回『渺渺真人』与茫茫大士并提"
+    },
+    {
+      "name": "女娲氏",
+      "race": "神",
+      "importance": "mention",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "娲皇氏"
+      ],
+      "attributes": [
+        "炼石补天之神",
+        "于大荒山无稽崖炼成顽石三万六千五百零一块，只用了三万六千五百块",
+        "弃所剩一石于青埂峰下"
+      ],
+      "first_chapter": 1,
+      "note": "开篇神话人物，仅第1回提及"
+    },
+    {
+      "name": "空空道人",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "情僧"
+      ],
+      "attributes": [
+        "访道求仙，从大荒山无稽崖青埂峰下经过",
+        "从头至尾抄录《石头记》问世传奇",
+        "因空见色，由色生情，传情入色，自色悟空，遂易名为情僧",
+        "改《石头记》为《情僧录》"
+      ],
+      "first_chapter": 1,
+      "note": ""
+    },
+    {
+      "name": "孔梅溪",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "东鲁孔梅溪"
+      ],
+      "attributes": [
+        "题《石头记》曰《风月宝鉴》"
+      ],
+      "first_chapter": 1,
+      "note": ""
+    },
+    {
+      "name": "曹雪芹",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "于悼红轩中披阅十载，增删五次，纂成目录，分出章回",
+        "题曰《金陵十二钗》"
+      ],
+      "first_chapter": 1,
+      "note": "作者在第1回自署其名"
+    },
+    {
+      "name": "警幻仙子",
+      "race": "仙",
+      "importance": "major",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "警幻仙姑",
+        "警幻",
+        "仙姑"
+      ],
+      "attributes": [
+        "居离恨天之上、灌愁海之中，放春山遣香洞太虚幻境之主",
+        "司人间之风情月债，掌尘世之女怨男痴",
+        "受宁荣二公之灵所嘱，以情欲声色警宝玉之痴顽",
+        "以妹『乳名兼美字可卿』者许配宝玉",
+        "引宝玉看金陵十二钗册、听《红楼梦》十二支曲"
+      ],
+      "first_chapter": 1,
+      "note": "第1回被提及（『已在警幻仙子案前挂了号』），第5回正式出场"
+    },
+    {
+      "name": "严老爷",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "第1回来拜甄士隐之客，使士隐出前厅相见"
+      ],
+      "first_chapter": 1,
+      "note": "原文未出名字"
+    },
+    {
+      "name": "贾宝玉",
+      "race": "人类",
+      "importance": "main",
+      "gender": "male",
+      "age": "7-8",
+      "age_note": "第2回冷子兴演说时『如今长了七八岁』；第3回黛玉闻母亲说这位哥哥比她大一岁",
+      "aliases": [
+        "宝玉",
+        "宝叔",
+        "宝兄弟",
+        "混世魔王",
+        "孽根祸胎"
+      ],
+      "attributes": [
+        "贾政与王夫人次子，贾母嫡孙",
+        "一落胎胞嘴里便衔下一块五彩晶莹的玉，故名宝玉",
+        "周岁抓取只把脂粉钗环抓来，贾政大不喜悦",
+        "说『女儿是水作的骨肉，男人是泥作的骨肉』",
+        "极恶读书，最喜在内帏厮混",
+        "第3回初见黛玉便摔玉",
+        "第8回自书『绛云轩』三字贴于门斗"
+      ],
+      "first_chapter": 2,
+      "note": "第1回灵河岸神瑛侍者下凡造历幻缘，与通灵宝玉同入红尘；『绛云轩主人』系第8回自题门斗而来，非原文称人的别名"
+    },
+    {
+      "name": "冷子兴",
+      "race": "人类",
+      "importance": "major",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "子兴"
+      ],
+      "attributes": [
+        "在都中古董行中贸易",
+        "与贾雨村旧日在都相识，说话投机",
+        "第2回在维扬村肆中演说荣国府",
+        "第7回揭出其妻即周瑞之女",
+        "近因卖古董和人打官司"
+      ],
+      "first_chapter": 2,
+      "note": ""
+    },
+    {
+      "name": "林如海",
+      "race": "人类",
+      "importance": "major",
+      "gender": "male",
+      "age": 40,
+      "age_note": "第2回『今如海年已四十』；第3回自称『汝父年将半百』",
+      "aliases": [
+        "林海",
+        "如海",
+        "林公"
+      ],
+      "attributes": [
+        "姓林名海，表字如海",
+        "前科的探花，升至兰台寺大夫",
+        "钦点出为巡盐御史，到任方一月有馀",
+        "本贯姑苏人氏，林家支庶不盛",
+        "嫡妻贾氏，生一女黛玉",
+        "修荐书转托内兄贾政为贾雨村周全"
+      ],
+      "first_chapter": 2,
+      "note": "",
+      "age_timeline": [
+        {
+          "chapter": 2,
+          "age": 40,
+          "note": "第2回『今如海年已四十』"
+        },
+        {
+          "chapter": 3,
+          "age": "≈50",
+          "note": "第3回自称『汝父年将半百』"
+        }
+      ]
+    },
+    {
+      "name": "贾敏",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "贾氏",
+        "贾夫人",
+        "林公之夫人"
+      ],
+      "attributes": [
+        "荣府贾赦、贾政之胞妹，在家时名唤贾敏",
+        "林如海之妻，林黛玉之母",
+        "一疾而终",
+        "其女读书遇『敏』字皆念作『密』，写字时减一二笔"
+      ],
+      "first_chapter": 2,
+      "note": ""
+    },
+    {
+      "name": "林黛玉",
+      "race": "人类",
+      "importance": "main",
+      "gender": "female",
+      "age": 5,
+      "age_note": "第2回『乳名黛玉，年方五岁』；第3回抛父进京都",
+      "aliases": [
+        "黛玉",
+        "颦颦",
+        "颦丫头",
+        "林姑娘",
+        "林妹妹",
+        "林姐儿",
+        "绛珠仙子",
+        "绛珠妹子"
+      ],
+      "attributes": [
+        "林如海与贾敏之女",
+        "自幼多病，从会吃饮食时便吃药，常服人参养荣丸",
+        "三岁时有癞头和尚要化她出家，父母不从",
+        "第3回抛父进京都，依傍外祖母",
+        "宝玉赠字『颦颦』",
+        "前世为灵河岸三生石畔绛珠草，下世为人以一生眼泪还神瑛侍者"
+      ],
+      "first_chapter": 2,
+      "note": "『绛珠仙子』为前世身份，原文以还泪之说关联，第5回众仙子称『绛珠妹子』"
+    },
+    {
+      "name": "贾代化",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "宁公之子，宁公死后袭了官",
+        "养了两个儿子：长子贾敷、次子贾敬"
+      ],
+      "first_chapter": 2,
+      "note": ""
+    },
+    {
+      "name": "贾敷",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "『至八九岁上便死了』",
+      "aliases": [],
+      "attributes": [
+        "贾代化长子",
+        "至八九岁上便死了"
+      ],
+      "first_chapter": 2,
+      "note": ""
+    },
+    {
+      "name": "贾敬",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "敬老爹",
+        "太爷"
+      ],
+      "attributes": [
+        "贾代化次子，袭了官",
+        "一味好道，只爱烧丹炼汞，余者一概不在心上",
+        "把官让给儿子贾珍袭了",
+        "不肯回原籍，只在都中城外和道士们胡羼",
+        "从前注过《阴骘文》"
+      ],
+      "first_chapter": 2,
+      "note": "第10回尤氏、贾珍所说的『太爷寿日』即指贾敬"
+    },
+    {
+      "name": "贾珍",
+      "race": "人类",
+      "importance": "major",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "珍爷",
+        "珍大哥哥"
+      ],
+      "attributes": [
+        "贾敬之子，宁府长孙，现袭职",
+        "现任贾氏族长，凡族中事由他掌管",
+        "不肯读书，只一味高乐，把宁国府竟翻了过来",
+        "贾蓉之父，尤氏之夫",
+        "第10回为儿媳秦氏之病请张友士"
+      ],
+      "first_chapter": 2,
+      "note": ""
+    },
+    {
+      "name": "贾蓉",
+      "race": "人类",
+      "importance": "major",
+      "gender": "male",
+      "age": 16,
+      "age_note": "第2回『今年才十六岁』；第6回出场已是『十七八岁的少年』",
+      "aliases": [
+        "蓉哥",
+        "蓉大爷",
+        "小蓉大爷"
+      ],
+      "attributes": [
+        "贾珍之子",
+        "秦可卿之夫",
+        "面目清秀，身材俊俏，轻裘宝带，美服华冠",
+        "第6回替父亲来借凤姐的玻璃炕屏",
+        "第10回陪张友士为秦氏诊脉"
+      ],
+      "first_chapter": 2,
+      "note": "",
+      "age_timeline": [
+        {
+          "chapter": 2,
+          "age": 16,
+          "note": "第2回『今年才十六岁』"
+        },
+        {
+          "chapter": 6,
+          "age": "17-18",
+          "note": "第6回已是『十七八岁的少年』"
+        }
+      ]
+    },
+    {
+      "name": "宁国公",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "宁公"
+      ],
+      "attributes": [
+        "与荣国公是一母同胞弟兄两个，宁公居长",
+        "生了四个儿子",
+        "宁国府始祖"
+      ],
+      "first_chapter": 2,
+      "note": "前10回未出其名讳；宁国府正门匾作『敕造宁国府』"
+    },
+    {
+      "name": "荣国公",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "荣公",
+        "贾源"
+      ],
+      "attributes": [
+        "宁国公之弟",
+        "荣国府始祖",
+        "第3回荣禧堂大匾后小字『某年月日，书赐荣国公贾源』"
+      ],
+      "first_chapter": 2,
+      "note": "名贾源见第3回荣禧堂匾上小字"
+    },
+    {
+      "name": "贾代善",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "代善"
+      ],
+      "attributes": [
+        "荣公长子，荣公死后袭了官",
+        "娶金陵世勋史侯家的小姐为妻（史太君）",
+        "生贾赦、贾政",
+        "临终时遗本一上，皇上恤先臣，额外赐贾政主事之衔"
+      ],
+      "first_chapter": 2,
+      "note": "出场时已去世"
+    },
+    {
+      "name": "贾赦",
+      "race": "人类",
+      "importance": "major",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "赦老爹",
+        "赦老",
+        "大舅",
+        "恩侯"
+      ],
+      "attributes": [
+        "荣府长子，字恩侯，现袭一等将军",
+        "贾代善与史太君长子，贾琏、迎春之父",
+        "第3回托辞连日身上不好，未与黛玉相见",
+        "第4回薛蟠进京后拜见过他"
+      ],
+      "first_chapter": 2,
+      "note": ""
+    },
+    {
+      "name": "贾政",
+      "race": "人类",
+      "importance": "major",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "政老爹",
+        "政老",
+        "二舅",
+        "存周",
+        "老爷"
+      ],
+      "attributes": [
+        "荣府次子，字存周",
+        "自幼酷喜读书，祖、父最疼",
+        "皇上额外赐主事之衔，令其入部习学，现已升工部员外郎",
+        "贾珠、元春、宝玉之父，探春之父",
+        "王夫人之夫",
+        "为人谦恭厚道，礼贤下士，济弱扶危",
+        "第9回冷笑宝玉上学『连我也羞死了』"
+      ],
+      "first_chapter": 2,
+      "note": ""
+    },
+    {
+      "name": "史太君",
+      "race": "人类",
+      "importance": "main",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "贾母",
+        "史氏太君",
+        "老太太",
+        "老祖宗",
+        "外祖母",
+        "太夫人"
+      ],
+      "attributes": [
+        "金陵世勋史侯家的小姐",
+        "贾代善之妻，贾赦、贾政、贾敏之母",
+        "鬓发如银",
+        "极爱孙女，迎、探、惜三个亲孙女倒且靠后",
+        "溺爱宝玉，视同命根",
+        "第3回安排黛玉住碧纱橱"
+      ],
+      "first_chapter": 2,
+      "note": "第2回冷子兴称『史氏太君』，第3回黛玉称『外祖母』"
+    },
+    {
+      "name": "贾珠",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": null,
+      "age_note": "『十四岁进学，不到二十岁就娶了妻生了子，一病死了』",
+      "aliases": [
+        "珠大哥"
+      ],
+      "attributes": [
+        "贾政长子，王夫人头胎所生",
+        "十四岁进学，不到二十岁娶妻生子，一病死了",
+        "李纨之夫，贾兰之父"
+      ],
+      "first_chapter": 2,
+      "note": "出场时已去世"
+    },
+    {
+      "name": "贾元春",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "元春",
+        "大小姐"
+      ],
+      "attributes": [
+        "贾政长女，王夫人第二胎所生",
+        "生在大年初一，故名元春",
+        "贤孝才德，选入宫作女史去了"
+      ],
+      "first_chapter": 2,
+      "note": "前10回未登场，仅由冷子兴叙出"
+    },
+    {
+      "name": "贾迎春",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "迎春",
+        "二小姐"
+      ],
+      "attributes": [
+        "贾赦之妾所出",
+        "史老夫人极爱孙女，跟在祖母这边一处读书",
+        "肌肤微丰，合中身材，温柔沉默，观之可亲",
+        "第7回周瑞家的送宫花时正与探春在窗下围棋"
+      ],
+      "first_chapter": 2,
+      "note": ""
+    },
+    {
+      "name": "贾探春",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "探春",
+        "三小姐"
+      ],
+      "attributes": [
+        "贾政之庶出",
+        "削肩细腰，长挑身材，鸭蛋脸面，俊眼修眉，顾盼神飞",
+        "第3回笑宝玉为黛玉取字是杜撰",
+        "第7回与迎春下围棋"
+      ],
+      "first_chapter": 2,
+      "note": ""
+    },
+    {
+      "name": "贾惜春",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "第3回『身量未足，形容尚小』",
+      "aliases": [
+        "惜春",
+        "四小姐",
+        "四姑娘"
+      ],
+      "attributes": [
+        "宁府贾珍之胞妹",
+        "身量未足，形容尚小",
+        "第7回与水月庵的小姑子智能儿一处顽耍，说『我明儿也剃了头同他作姑子去』"
+      ],
+      "first_chapter": 2,
+      "note": ""
+    },
+    {
+      "name": "王夫人",
+      "race": "人类",
+      "importance": "major",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "二舅母",
+        "太太",
+        "王氏",
+        "二太太",
+        "姑太太"
+      ],
+      "attributes": [
+        "贾政之妻",
+        "王子腾之妹，薛姨妈之姐",
+        "贾珠、元春、宝玉之母，探春之嫡母",
+        "第4回薛姨妈进京后接进荣府同住",
+        "第6回起不大管事，家务都交王熙凤",
+        "第3回叮嘱黛玉不要理睬宝玉"
+      ],
+      "first_chapter": 2,
+      "note": ""
+    },
+    {
+      "name": "贾琏",
+      "race": "人类",
+      "importance": "major",
+      "gender": "male",
+      "age": "≈20",
+      "age_note": "第2回『今已二十来往了』，娶王熙凤已二年",
+      "aliases": [
+        "琏爷"
+      ],
+      "attributes": [
+        "贾赦长子",
+        "身上现捐的是个同知",
+        "不肯读书，于世路上好机变，言谈去的",
+        "在叔叔贾政家住着，帮着料理些家务",
+        "王熙凤之夫，大姐儿之父",
+        "第4回引薛蟠拜见贾赦、贾珍"
+      ],
+      "first_chapter": 2,
+      "note": ""
+    },
+    {
+      "name": "王熙凤",
+      "race": "人类",
+      "importance": "main",
+      "gender": "female",
+      "age": "≈20",
+      "age_note": "第6回刘姥姥云『这凤姑娘今年大还不过二十岁罢了』",
+      "aliases": [
+        "凤姐",
+        "凤辣子",
+        "辣子",
+        "琏二奶奶",
+        "琏嫂子",
+        "琏二嫂子",
+        "凤姑娘",
+        "凤哥"
+      ],
+      "attributes": [
+        "王夫人之内侄女，贾琏之妻",
+        "自幼假充男儿教养的，学名王熙凤",
+        "模样极标致，言谈爽利，心机极深细，男人万不及一",
+        "南省俗谓作『辣子』，贾母戏称『凤辣子』",
+        "第6回起实际管家，接济刘姥姥二十两银子",
+        "第7回受尤氏之邀赴宁府，遇焦大醉骂"
+      ],
+      "first_chapter": 2,
+      "note": "第2回仅以『琏爷之妻』提及，第3回由众姊妹道出『琏嫂子』并出学名"
+    },
+    {
+      "name": "甄府公子",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "金陵城内钦差金陵省体仁院总裁甄家之子",
+        "贾雨村去岁曾在他家处馆",
+        "说必得两个女儿伴着他读书方能认得字",
+        "常对小厮说『女儿』二字极尊贵、极清净",
+        "暴虐浮躁，顽劣憨痴，每疼痛之极便连叫姐妹",
+        "其祖母溺爱不明，每因孙辱师责子"
+      ],
+      "first_chapter": 2,
+      "note": "原文未出名字，只称『一个学生』；与贾府是老亲世交"
+    },
+    {
+      "name": "智通寺老僧",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "维扬郭外智通寺中煮粥的老僧",
+        "既聋且昏，齿落舌钝，所答非所问"
+      ],
+      "first_chapter": 2,
+      "note": ""
+    },
+    {
+      "name": "贾复",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "东汉人",
+        "贾雨村称『自东汉贾复以来，支派繁盛，各省皆有』，即以他为贾氏远祖"
+      ],
+      "first_chapter": 2,
+      "note": "历史人物，原文仅作族源追溯，非小说登场人物"
+    },
+    {
+      "name": "张如圭",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "与贾雨村同僚一案参革者",
+        "本系此地人，革后家居",
+        "打听得都中奏准起复旧员之信，特来向雨村道喜"
+      ],
+      "first_chapter": 3,
+      "note": "原文作『号张如圭者』"
+    },
+    {
+      "name": "邢夫人",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "邢氏",
+        "大舅母",
+        "大太太"
+      ],
+      "attributes": [
+        "贾赦之妻",
+        "第3回带黛玉过荣府正门去见贾赦",
+        "第5回与贾母、王夫人同赴宁府赏梅",
+        "第7回赴宁府"
+      ],
+      "first_chapter": 3,
+      "note": ""
+    },
+    {
+      "name": "李纨",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "李氏",
+        "珠大嫂子",
+        "寡嫂李氏",
+        "宫裁"
+      ],
+      "attributes": [
+        "贾珠之妻，字宫裁",
+        "金陵名宦之女，父李守中曾为国子监祭酒",
+        "青春丧偶，居家处膏粱锦绣之中竟如槁木死灰",
+        "唯知侍亲养子，外则陪侍小姑等针黹诵读",
+        "贾兰之母",
+        "第7回奉贾母之命陪伴照管迎、探、惜三人"
+      ],
+      "first_chapter": 3,
+      "note": "第3回以『珠大嫂子』出场，第4回方出名字与身世"
+    },
+    {
+      "name": "薛蟠",
+      "race": "人类",
+      "importance": "major",
+      "gender": "male",
+      "age": null,
+      "age_note": "第4回只述其『五岁上就性情奢侈』，未明写当时年龄",
+      "aliases": [
+        "薛公子",
+        "薛大爷",
+        "呆霸王",
+        "文起"
+      ],
+      "attributes": [
+        "学名薛蟠，表字文起",
+        "金陵人氏，书香继世之家，幼年丧父",
+        "家中有百万之富，现领着内帑钱粮，采办杂料",
+        "五岁上就性情奢侈，言语傲慢，终日斗鸡走马、游山玩水",
+        "混名人称『呆霸王』",
+        "第4回打死冯渊、夺走英莲，视为儿戏",
+        "薛姨妈之子，薛宝钗之兄",
+        "第9回假来上学，只图结交契弟"
+      ],
+      "first_chapter": 3,
+      "note": "第3回末已提其倚财仗势打死人命，第4回正式出场"
+    },
+    {
+      "name": "薛姨妈",
+      "race": "人类",
+      "importance": "major",
+      "gender": "female",
+      "age": "≈40",
+      "age_note": "第4回『今年方四十上下年纪』",
+      "aliases": [
+        "姨太太",
+        "姨母",
+        "姨妈",
+        "薛家姨母"
+      ],
+      "attributes": [
+        "薛公之后，王子腾之妹，王夫人一母所生的妹妹",
+        "薛蟠、薛宝钗之母",
+        "寡母怜薛蟠是独根孤种，未免溺爱纵容",
+        "第4回带子女进京，先住荣国府梨香院",
+        "第7回托周瑞家的把十二支宫花分送诸姊妹",
+        "第8回留宝玉、黛玉吃茶吃酒"
+      ],
+      "first_chapter": 3,
+      "note": "第3回末以『薛家姨母』提及，第4回正式出场"
+    },
+    {
+      "name": "王子腾",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "现任京营节度使，后升了九省统制，奉旨出都查边",
+        "王夫人与薛姨妈之兄",
+        "第3回遣人来告诉薛蟠人命官司之事",
+        "第4回贾雨村断案后作书报知"
+      ],
+      "first_chapter": 3,
+      "note": ""
+    },
+    {
+      "name": "东安郡王穆莳",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "穆莳"
+      ],
+      "attributes": [
+        "勋袭东安郡王",
+        "第3回荣禧堂乌木联牌下小字『同乡世教弟勋袭东安郡王穆莳拜手书』"
+      ],
+      "first_chapter": 3,
+      "note": ""
+    },
+    {
+      "name": "袭人",
+      "race": "人类",
+      "importance": "major",
+      "gender": "female",
+      "age": null,
+      "age_note": "第6回『年纪本又比宝玉大两岁』，未明写具体岁数",
+      "aliases": [
+        "珍珠",
+        "花袭人",
+        "袭人姐姐"
+      ],
+      "attributes": [
+        "原是贾母之婢，本名珍珠，本姓花",
+        "宝玉因旧人诗句『花气袭人』之句，回明贾母更名袭人",
+        "心地纯良，克尽职任，服侍谁心中眼中就只有谁",
+        "第3回起陪侍宝玉在外间大床上",
+        "第6回与宝玉初试云雨情",
+        "第8回装睡试探宝玉，第9回宝玉上学前反复叮嘱"
+      ],
+      "first_chapter": 3,
+      "note": ""
+    },
+    {
+      "name": "雪雁",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": 10,
+      "age_note": "第3回『一个十岁的小丫头，亦是自幼随身的』",
+      "aliases": [],
+      "attributes": [
+        "林黛玉自幼随身的小丫头",
+        "贾母嫌其甚小、一团孩气",
+        "第8回奉紫鹃之命给黛玉送小手炉"
+      ],
+      "first_chapter": 3,
+      "note": ""
+    },
+    {
+      "name": "鹦哥",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "贾母身边的二等丫头，第3回给了黛玉",
+        "陪侍黛玉在碧纱橱内",
+        "第3回晚间与袭人同劝黛玉"
+      ],
+      "first_chapter": 3,
+      "note": "与第8回出现的『紫鹃』是否同一人（改名），原文前10回未明说，故分列"
+    },
+    {
+      "name": "王嬷嬷",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "林黛玉自幼的奶娘",
+        "随黛玉从姑苏进京",
+        "贾母见其极老，料黛玉不遂心省力"
+      ],
+      "first_chapter": 3,
+      "note": ""
+    },
+    {
+      "name": "李嬷嬷",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "李奶子",
+        "李奶奶"
+      ],
+      "attributes": [
+        "宝玉的乳母",
+        "第3回陪侍宝玉在外面大床上",
+        "第8回屡次拦宝玉吃酒，被宝玉厌弃",
+        "其子名唤李贵，跟宝玉上学",
+        "第8回拿走枫露茶与豆腐皮包子给孙子吃，引宝玉摔茶钟"
+      ],
+      "first_chapter": 3,
+      "note": ""
+    },
+    {
+      "name": "王老爷",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "第4回贾雨村在应天府看护官符时来拜之客",
+        "雨村忙具衣冠出去迎接，有顿饭工夫方回来"
+      ],
+      "first_chapter": 4,
+      "note": "原文未出名字；是否即王子腾，前10回不能确定"
+    },
+    {
+      "name": "冯渊",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": "18-19",
+      "age_note": "第4回『长到十八九岁上』",
+      "aliases": [
+        "冯公子",
+        "死鬼买主"
+      ],
+      "attributes": [
+        "本地一个小乡绅之子",
+        "自幼父母早亡，又无兄弟，守着些薄产过日子",
+        "长到十八九岁上，酷爱男风，不喜女色",
+        "一眼看上英莲，立意买来作妾，立誓再不交结男子",
+        "被薛蟠喝令手下豪奴打了个稀烂，抬回家去三日死了"
+      ],
+      "first_chapter": 4,
+      "note": ""
+    },
+    {
+      "name": "门子",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "葫芦庙小沙弥",
+        "故人"
+      ],
+      "attributes": [
+        "原是葫芦庙内一个小沙弥，被火后蓄发充了门子",
+        "第4回向雨村出示本省『护官符』",
+        "献『扶鸾请仙』之计了结葫芦案",
+        "后被雨村寻了个不是，远远的充发了"
+      ],
+      "first_chapter": 4,
+      "note": ""
+    },
+    {
+      "name": "拐子",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "unknown",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "单管偷拐五六岁的儿女，养在僻静之处，到十一二岁度其容貌带至他乡转卖",
+        "先卖英莲与冯家，又偷卖与薛家",
+        "租了门子的房舍居住"
+      ],
+      "first_chapter": 4,
+      "note": "原文未出名字，亦未明写性别"
+    },
+    {
+      "name": "贾兰",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": 5,
+      "age_note": "第4回『取名贾兰，今方五岁，已入学攻书』",
+      "aliases": [],
+      "attributes": [
+        "贾珠与李纨之子",
+        "贾政长子所遗的弱孙",
+        "今方五岁，已入学攻书",
+        "第9回学堂混战时按住砚台，劝贾菌『不与咱们相干』"
+      ],
+      "first_chapter": 4,
+      "note": ""
+    },
+    {
+      "name": "薛宝钗",
+      "race": "人类",
+      "importance": "main",
+      "gender": "female",
+      "age": null,
+      "age_note": "第4回称比薛蟠小两岁，薛蟠年龄原文未明写",
+      "aliases": [
+        "宝钗",
+        "宝姐姐",
+        "宝丫头"
+      ],
+      "attributes": [
+        "薛姨妈之女，薛蟠之妹",
+        "肌骨莹润，举止娴雅",
+        "读书识字，较之乃兄竟高过十倍",
+        "父亲死后留心针黹家计，好为母亲分忧解劳",
+        "从胎里带来一股热毒，服癞头和尚所传冷香丸",
+        "项上璎珞錾『不离不弃，芳龄永继』八字",
+        "罕言寡语，人谓藏愚，安分随时，自云守拙",
+        "第4回进京备选才人赞善之职"
+      ],
+      "first_chapter": 4,
+      "note": "第5回起与黛玉并称，人多谓黛玉所不及"
+    },
+    {
+      "name": "李守中",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "李纨之父",
+        "曾为国子监祭酒",
+        "继承以来便说『女子无才便有德』，不十分令李纨读书"
+      ],
+      "first_chapter": 4,
+      "note": ""
+    },
+    {
+      "name": "秦可卿",
+      "race": "人类",
+      "importance": "major",
+      "gender": "female",
+      "age": null,
+      "age_note": "第10回已卧病，原文未明写年龄",
+      "aliases": [
+        "秦氏",
+        "可卿",
+        "可儿",
+        "蓉大奶奶",
+        "小蓉大奶奶"
+      ],
+      "attributes": [
+        "贾蓉之妻",
+        "秦业当年从养生堂抱养的女儿，小名唤可儿",
+        "生得袅娜纤巧，行事又温柔和平",
+        "乃重孙媳中第一个得意之人",
+        "第5回引宝玉到自己房中午睡，宝玉梦中入太虚幻境",
+        "第10回经期两个多月没来，经张友士诊为水亏木旺"
+      ],
+      "first_chapter": 5,
+      "note": "第5回警幻之妹『乳名兼美字可卿』，与秦氏小名相同，原文以此相映"
+    },
+    {
+      "name": "尤氏",
+      "race": "人类",
+      "importance": "major",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "珍大奶奶",
+        "珍大嫂子"
+      ],
+      "attributes": [
+        "贾珍之妻，宁府当家奶奶",
+        "第5回治酒请贾母、邢夫人、王夫人等赏梅",
+        "被凤姐笑嘲软弱，纵的家里人无法无天",
+        "第10回为秦可卿之病心焦，与金氏叙话"
+      ],
+      "first_chapter": 5,
+      "note": "贾蓉之母为谁，前10回未明写"
+    },
+    {
+      "name": "痴梦仙姑",
+      "race": "仙",
+      "importance": "mention",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "太虚幻境中的仙子",
+        "与钟情大士、引愁金女、度恨菩提同列，各各道号不一",
+        "第5回随警幻迎接宝玉"
+      ],
+      "first_chapter": 5,
+      "note": "原文作『众仙子』『众姊妹』"
+    },
+    {
+      "name": "钟情大士",
+      "race": "仙",
+      "importance": "mention",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "太虚幻境中的仙子",
+        "与痴梦仙姑、引愁金女、度恨菩提同列"
+      ],
+      "first_chapter": 5,
+      "note": "原文未明写性别，据第5回『众姊妹』之称作女性"
+    },
+    {
+      "name": "引愁金女",
+      "race": "仙",
+      "importance": "mention",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "太虚幻境中的仙子",
+        "与痴梦仙姑、钟情大士、度恨菩提同列"
+      ],
+      "first_chapter": 5,
+      "note": ""
+    },
+    {
+      "name": "度恨菩提",
+      "race": "仙",
+      "importance": "mention",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "太虚幻境中的仙子",
+        "与痴梦仙姑、钟情大士、引愁金女同列"
+      ],
+      "first_chapter": 5,
+      "note": "原文未明写性别，据第5回『众姊妹』之称作女性"
+    },
+    {
+      "name": "木居士",
+      "race": "未明",
+      "importance": "mention",
+      "gender": "unknown",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "迷津中唯一木筏的掌舵者",
+        "不受金银之谢，但遇有缘者渡之"
+      ],
+      "first_chapter": 5,
+      "note": "原文未言其族属与性别，故race记『未明』"
+    },
+    {
+      "name": "灰侍者",
+      "race": "未明",
+      "importance": "mention",
+      "gender": "unknown",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "迷津中木筏的撑篙者",
+        "与木居士同掌渡人之责"
+      ],
+      "first_chapter": 5,
+      "note": "原文未言其族属与性别，故race记『未明』"
+    },
+    {
+      "name": "晴雯",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "宝玉房中的丫鬟",
+        "第5回宝玉午睡时与袭人、媚人等守在廊檐下",
+        "第8回为宝玉研墨、亲自爬高上梯贴『绛云轩』三字",
+        "手冻僵冷，宝玉伸手替她渥着"
+      ],
+      "first_chapter": 5,
+      "note": ""
+    },
+    {
+      "name": "媚人",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "宝玉房中的丫鬟",
+        "第5回宝玉午睡时与袭人、晴雯一同伏侍"
+      ],
+      "first_chapter": 5,
+      "note": ""
+    },
+    {
+      "name": "刘姥姥",
+      "race": "人类",
+      "importance": "major",
+      "gender": "female",
+      "age": null,
+      "age_note": "只作『积年的老寡妇』，未明写岁数",
+      "aliases": [
+        "姥姥"
+      ],
+      "attributes": [
+        "积年的老寡妇，膝下又无儿女，只靠两亩薄田度日",
+        "狗儿的岳母，被女婿接来一处过活",
+        "第6回带外孙板儿一进荣国府",
+        "认得周瑞，经周瑞家的引见王熙凤",
+        "得凤姐赠二十两银子与一吊钱",
+        "善于奉承、见机，开口念佛"
+      ],
+      "first_chapter": 6,
+      "note": ""
+    },
+    {
+      "name": "狗儿",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "王狗儿"
+      ],
+      "attributes": [
+        "王成之子，姓王，小名狗儿",
+        "刘氏之夫，板儿、青儿之父",
+        "一家四口以务农为业",
+        "利名心最重，听刘姥姥一说便活动起来",
+        "祖上曾与王夫人之父连宗认作侄儿"
+      ],
+      "first_chapter": 6,
+      "note": ""
+    },
+    {
+      "name": "王成",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "狗儿之父",
+        "祖上曾作过小小的一个京官，与凤姐之祖王夫人之父连了宗",
+        "因家业萧条，仍搬出城外原乡中住",
+        "新近因病故"
+      ],
+      "first_chapter": 6,
+      "note": "叙述时已故，未登场"
+    },
+    {
+      "name": "刘氏",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "狗儿之妻，刘姥姥之女",
+        "板儿、青儿之母",
+        "操井臼等事",
+        "第6回与刘姥姥议论去荣府讨情的话"
+      ],
+      "first_chapter": 6,
+      "note": ""
+    },
+    {
+      "name": "板儿",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": "5-6",
+      "age_note": "第6回『那板儿才五六岁的孩子』",
+      "aliases": [],
+      "attributes": [
+        "狗儿与刘氏之子",
+        "随刘姥姥进城进荣国府",
+        "一见饭便吵着要肉吃",
+        "凤姐说那二十两银子暂且给他做件冬衣"
+      ],
+      "first_chapter": 6,
+      "note": ""
+    },
+    {
+      "name": "青儿",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "狗儿与刘氏之女",
+        "板儿之妹",
+        "与板儿姊妹两个无人看管，故接刘姥姥来照看"
+      ],
+      "first_chapter": 6,
+      "note": ""
+    },
+    {
+      "name": "周瑞",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "周大爷"
+      ],
+      "attributes": [
+        "王夫人的陪房",
+        "只管春秋两季地租子，闲时只带着小爷们出门",
+        "昔年争买田地一事多得狗儿之力",
+        "冷子兴的岳父"
+      ],
+      "first_chapter": 6,
+      "note": ""
+    },
+    {
+      "name": "周瑞家的",
+      "race": "人类",
+      "importance": "major",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "周嫂子",
+        "周大娘",
+        "周姐姐"
+      ],
+      "attributes": [
+        "周瑞之妻，王夫人的陪房",
+        "只管跟太太奶奶们出门的事",
+        "第6回引刘姥姥进荣府见王熙凤",
+        "第7回替薛姨妈把十二支宫花分送迎、探、惜、黛玉、凤姐",
+        "仗着主子的势利，替女婿冷子兴讨情分"
+      ],
+      "first_chapter": 6,
+      "note": ""
+    },
+    {
+      "name": "平儿",
+      "race": "人类",
+      "importance": "major",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "平姑娘"
+      ],
+      "attributes": [
+        "王熙凤的心腹通房大丫头",
+        "遍身绫罗，插金带银，花容玉貌",
+        "第6回自作主意叫刘姥姥主仆进来坐",
+        "第7回自作主意取一匹尺头、两个『状元及第』小金锞子送秦钟作表礼",
+        "第8回替凤姐吩咐人办事"
+      ],
+      "first_chapter": 6,
+      "note": ""
+    },
+    {
+      "name": "大姐儿",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "第6、7回尚在襁褓，由奶子拍着睡觉",
+      "aliases": [],
+      "attributes": [
+        "贾琏与王熙凤之女",
+        "第6回刘姥姥来时正在东边屋内睡觉",
+        "第7回奶子拍着她睡中觉"
+      ],
+      "first_chapter": 6,
+      "note": "原文未出正式名字"
+    },
+    {
+      "name": "周瑞之女",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "周瑞与周瑞家的之女，冷子兴之妻",
+        "第7回为丈夫吃官司、要递解还乡之事来求母亲讨情分"
+      ],
+      "first_chapter": 7,
+      "note": "原文未出名字"
+    },
+    {
+      "name": "焦大",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "焦大太爷"
+      ],
+      "attributes": [
+        "宁府老仆",
+        "从小儿跟着太爷们出过三四回兵，从死人堆里把太爷背了出来",
+        "自己挨饿却偷东西给主子吃，自己喝马溺",
+        "年老嗜酒，醉了无人不骂",
+        "第7回醉骂赖二、贾蓉，并嚷出『爬灰的爬灰』等语，被小厮用土和马粪填了一嘴"
+      ],
+      "first_chapter": 7,
+      "note": ""
+    },
+    {
+      "name": "赖二",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "大总管赖二"
+      ],
+      "attributes": [
+        "宁府大总管",
+        "被焦大醉骂『不公道，欺软怕硬』"
+      ],
+      "first_chapter": 7,
+      "note": ""
+    },
+    {
+      "name": "莺儿",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "薛宝钗的丫鬟",
+        "第7回与宝钗伏在小炕桌上描花样子",
+        "第8回听宝钗念通灵宝玉上八字，说『倒像和姑娘的项圈上的两句话是一对儿』",
+        "并说出八字是癞头和尚送的，须錾在金器上"
+      ],
+      "first_chapter": 7,
+      "note": ""
+    },
+    {
+      "name": "金钏儿",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "王夫人的丫鬟",
+        "第7回在梨香院院门前台阶上晒日阳儿",
+        "与周瑞家的议论香菱"
+      ],
+      "first_chapter": 7,
+      "note": ""
+    },
+    {
+      "name": "司棋",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "贾迎春的丫鬟",
+        "第7回与待书捧着茶钟掀帘出来"
+      ],
+      "first_chapter": 7,
+      "note": ""
+    },
+    {
+      "name": "待书",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "贾探春的丫鬟",
+        "第7回与司棋捧着茶钟掀帘出来",
+        "与迎春、探春在抱厦中一处坐着"
+      ],
+      "first_chapter": 7,
+      "note": ""
+    },
+    {
+      "name": "入画",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "贾惜春的丫鬟",
+        "第7回奉命收了周瑞家的送来的宫花"
+      ],
+      "first_chapter": 7,
+      "note": ""
+    },
+    {
+      "name": "丰儿",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "王熙凤的小丫头",
+        "第7回坐在凤姐房中门槛上，摆手叫周瑞家的往东屋里去",
+        "第7回奉命舀水"
+      ],
+      "first_chapter": 7,
+      "note": ""
+    },
+    {
+      "name": "彩明",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "王熙凤的丫鬟",
+        "第7回奉命把两枝宫花送到宁府给小蓉大奶奶戴"
+      ],
+      "first_chapter": 7,
+      "note": ""
+    },
+    {
+      "name": "余信",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "管各庙月例银子的人",
+        "第7回其妻（余信家的）与智能儿的师父咕唧了半日"
+      ],
+      "first_chapter": 7,
+      "note": ""
+    },
+    {
+      "name": "智能儿",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "水月庵的小姑子",
+        "第7回与惜春一处顽耍",
+        "其师父见了王夫人后往于老爷府内去了，叫她在荣府等候",
+        "摇头不知十五的月例香供银子可得没有"
+      ],
+      "first_chapter": 7,
+      "note": ""
+    },
+    {
+      "name": "于老爷",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "第7回水月庵智能儿的师父见过王夫人后，便往他府内去了",
+        "其府在都中"
+      ],
+      "first_chapter": 7,
+      "note": "原文未出名字"
+    },
+    {
+      "name": "临安伯老太太",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "第7回凤姐提起其生日的礼已经打点了，王夫人叫派四个女人送去"
+      ],
+      "first_chapter": 7,
+      "note": ""
+    },
+    {
+      "name": "秦钟",
+      "race": "人类",
+      "importance": "major",
+      "gender": "male",
+      "age": null,
+      "age_note": "第5、7回称与宝玉同年；宝玉第2回时七八岁，秦钟自身岁数原文未明写",
+      "aliases": [
+        "秦小爷",
+        "秦相公",
+        "鲸卿"
+      ],
+      "attributes": [
+        "秦业之子，秦可卿之弟",
+        "较宝玉略瘦些，眉清目秀，粉面朱唇，身材俊俏，举止风流，怯怯羞羞有女儿之态",
+        "表字鲸卿",
+        "第7回与宝玉一见如故，议定同入贾家家塾",
+        "第9回与宝玉同来同往，与香怜在后院说梯己话引发学堂混战",
+        "第9回头被金荣的板撞破一层油皮"
+      ],
+      "first_chapter": 7,
+      "note": "第5回秦氏已提及其兄弟要来，但未出名；第7回正式出场"
+    },
+    {
+      "name": "秦业",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": "≈70",
+      "age_note": "第8回『年近七十』",
+      "aliases": [],
+      "attributes": [
+        "现任营缮郎",
+        "年近七十，夫人早亡",
+        "当年无儿女，向养生堂抱了一个儿子并一个女儿，儿子又死，只剩女儿可儿",
+        "五旬之上方得了秦钟",
+        "东拼西凑封了二十四两贽见礼，亲自带秦钟来拜贾代儒"
+      ],
+      "first_chapter": 8,
+      "note": "『秦老爷』系随其官身与子而称，原文未以此呼之"
+    },
+    {
+      "name": "紫鹃",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "紫鹃姐姐"
+      ],
+      "attributes": [
+        "林黛玉的丫鬟",
+        "第8回怕黛玉冷，命雪雁送小手炉到梨香院"
+      ],
+      "first_chapter": 8,
+      "note": "与第3回贾母给黛玉的『鹦哥』是否同一人（改名），前10回原文未明说，故分列"
+    },
+    {
+      "name": "茜雪",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "贾宝玉的丫鬟",
+        "第7回末奉命去梨香院探望宝钗",
+        "第8回捧茶给宝玉，因枫露茶被李嬷嬷吃了，被宝玉顺手将茶杯掷地，泼了一裙子的茶"
+      ],
+      "first_chapter": 8,
+      "note": "第7回末只称『茜雪便答应去了』"
+    },
+    {
+      "name": "詹光",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "贾政门下清客相公",
+        "第8回与单聘仁同遇宝玉，一个抱住腰，一个携着手"
+      ],
+      "first_chapter": 8,
+      "note": ""
+    },
+    {
+      "name": "单聘仁",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "贾政门下清客相公",
+        "第8回与詹光同遇宝玉，极口奉承"
+      ],
+      "first_chapter": 8,
+      "note": ""
+    },
+    {
+      "name": "吴新登",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "荣府银库房的总领",
+        "第8回与戴良等七人从帐房出来，见了宝玉一齐垂手站住"
+      ],
+      "first_chapter": 8,
+      "note": ""
+    },
+    {
+      "name": "戴良",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "荣府仓上的头目",
+        "第8回与吴新登等一同见宝玉"
+      ],
+      "first_chapter": 8,
+      "note": ""
+    },
+    {
+      "name": "钱华",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "荣府买办",
+        "第8回因多日未见宝玉，忙上来打千儿请安",
+        "向宝玉讨字帖"
+      ],
+      "first_chapter": 8,
+      "note": ""
+    },
+    {
+      "name": "贾代儒",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "学里太爷",
+        "太爷"
+      ],
+      "attributes": [
+        "贾家义学的司塾，乃当今之老儒",
+        "秦钟入塾，秦业亲自带他来拜见",
+        "第9回有事回家，只留一句七言对联，命贾瑞暂管学中之事"
+      ],
+      "first_chapter": 8,
+      "note": ""
+    },
+    {
+      "name": "贾瑞",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "瑞大爷"
+      ],
+      "attributes": [
+        "最是个图便宜没行止的人",
+        "每在学中以公报私，勒索子弟们请他",
+        "附助薛蟠图些银钱酒肉，一任薛蟠横行霸道",
+        "第9回代贾代儒管理学堂，处置不公，闹出学堂之乱",
+        "最后只得央告秦钟、宝玉，又逼金荣赔不是磕头"
+      ],
+      "first_chapter": 9,
+      "note": ""
+    },
+    {
+      "name": "贾蔷",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": 16,
+      "age_note": "第9回『如今长了十六岁』",
+      "aliases": [],
+      "attributes": [
+        "宁府中之正派玄孙",
+        "父母早亡，从小儿跟着贾珍过活",
+        "比贾蓉生的还风流俊俏，弟兄二人最相亲厚",
+        "贾珍避嫌疑，分与房舍命他搬出宁府自立门户",
+        "外相既美，内性又聪明，应名上学却虚掩眼目",
+        "第9回悄悄调拨茗烟去闹金荣"
+      ],
+      "first_chapter": 9,
+      "note": ""
+    },
+    {
+      "name": "金荣",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "金相公"
+      ],
+      "attributes": [
+        "贾家义学中的学生，秦钟的窗友",
+        "东胡同子里璜大奶奶的侄儿",
+        "第9回撞见秦钟与香怜在后院说梯己话，出言挑事，引发学堂混战",
+        "最终被逼与秦钟作揖磕头赔不是",
+        "第10回回家后愤愤不平，被母亲胡氏劝住"
+      ],
+      "first_chapter": 9,
+      "note": ""
+    },
+    {
+      "name": "香怜",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "义学中的小学生，生得妩媚风流，满学中送他外号『香怜』",
+        "与玉爱同为薛蟠相知",
+        "第9回与秦钟在后院说梯己话，被金荣撞见",
+        "被贾瑞拿着作法，抢白了几句"
+      ],
+      "first_chapter": 9,
+      "note": "原文未出真名姓"
+    },
+    {
+      "name": "玉爱",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "义学中的小学生，外号『玉爱』，与香怜并称",
+        "第9回听了金荣许多闲话不忿，隔座与他角起口来"
+      ],
+      "first_chapter": 9,
+      "note": "原文未出真名姓"
+    },
+    {
+      "name": "茗烟",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": null,
+      "age_note": "只作『又年轻不谙世事』",
+      "aliases": [
+        "茗大爷"
+      ],
+      "attributes": [
+        "宝玉的书童，第一个得用的",
+        "年轻不谙世事，无故就要欺压人的",
+        "第9回受贾蔷调拨，一头进来找金荣厮打",
+        "并说出金荣是东胡同子里璜大奶奶的侄儿"
+      ],
+      "first_chapter": 9,
+      "note": ""
+    },
+    {
+      "name": "锄药",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "宝玉的小厮",
+        "第9回与扫红手持马鞭子，随茗烟蜂拥而上"
+      ],
+      "first_chapter": 9,
+      "note": ""
+    },
+    {
+      "name": "扫红",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "宝玉的小厮",
+        "第9回手持马鞭子参战"
+      ],
+      "first_chapter": 9,
+      "note": ""
+    },
+    {
+      "name": "墨雨",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "宝玉的小厮",
+        "第9回掇起一根门闩参战",
+        "嚷『小妇养的！动了兵器了！』"
+      ],
+      "first_chapter": 9,
+      "note": ""
+    },
+    {
+      "name": "贾菌",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "只作『年纪虽小』",
+      "aliases": [],
+      "attributes": [
+        "荣国府近派的重孙",
+        "其母亦少寡，独守着他",
+        "年纪虽小，志气最大，极是淘气不怕人的",
+        "与贾兰最好，二人同桌而坐",
+        "第9回被飞砚打碎磁砚水壶，便抱起书匣子照那边抡去，砸在宝玉秦钟桌案上"
+      ],
+      "first_chapter": 9,
+      "note": ""
+    },
+    {
+      "name": "麝月",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "贾宝玉的丫鬟",
+        "第9回宝玉上学前嘱咐了她与晴雯等几句"
+      ],
+      "first_chapter": 9,
+      "note": ""
+    },
+    {
+      "name": "李贵",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "宝玉的奶母之子，跟宝玉上学的大仆人",
+        "第9回被贾政叫去训斥，回说宝玉已念到第三本《诗经》",
+        "学堂混战时进来喝住众人，喝骂茗烟四个并撵了出去",
+        "劝宝玉不要为这点事去聒噪太爷"
+      ],
+      "first_chapter": 9,
+      "note": ""
+    },
+    {
+      "name": "璜大奶奶",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "金氏",
+        "璜嫂子"
+      ],
+      "attributes": [
+        "贾璜之妻",
+        "金荣的姑妈",
+        "第10回听了嫂子胡氏的话，一时怒从心上起，欲往宁府找秦氏理论",
+        "到宁府见尤氏，听说秦氏病重，不但不敢提，反转怒为喜",
+        "贾珍留她吃饭"
+      ],
+      "first_chapter": 9,
+      "note": "第9回茗烟口中作『璜大奶奶』『璜嫂子』，第10回原文称『金氏』"
+    },
+    {
+      "name": "贾璜",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "贾家玉字辈的嫡派",
+        "夫妻守着些小的产业",
+        "时常到宁荣二府请安，又会奉承凤姐儿并尤氏，故常得资助"
+      ],
+      "first_chapter": 10,
+      "note": ""
+    },
+    {
+      "name": "胡氏",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "金荣之母",
+        "第10回劝金荣忍气吞声，说这念书的地方来得不易",
+        "向小姑子璜大奶奶提起学房打架之事"
+      ],
+      "first_chapter": 10,
+      "note": ""
+    },
+    {
+      "name": "冯紫英",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "冯大爷"
+      ],
+      "attributes": [
+        "贾珍之友",
+        "第10回见贾珍有抑郁之色，问出秦氏病重",
+        "荐其幼时从学的先生张友士，并即刻回家亲自去求他来诊病"
+      ],
+      "first_chapter": 10,
+      "note": ""
+    },
+    {
+      "name": "张友士",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [
+        "张先生"
+      ],
+      "attributes": [
+        "姓张名友士，学问最渊博，更兼医理极深，且能断人的生死",
+        "今年上京给他儿子来捐官，住在冯紫英家",
+        "为秦可卿诊脉，断为水亏木旺、忧虑伤脾",
+        "开『益气养荣补脾和肝汤』，断言今年一冬不相干，过了春分可望全愈"
+      ],
+      "first_chapter": 10,
+      "note": "原文作『姓张名友士』，文中多称『张先生』"
+    },
+    {
+      "name": "来升",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": null,
+      "age_note": "",
+      "aliases": [],
+      "attributes": [
+        "宁府家人",
+        "第10回奉贾珍、尤氏之命照旧例预备两日的筵席"
+      ],
+      "first_chapter": 10,
+      "note": ""
+    },
+    {
+      "name": "尤老娘",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "尤氏之母",
+        "老娘",
+        "亲家太太"
+      ],
+      "attributes": "宁国府当家奶奶尤氏之母；尤氏姊妹（尤二姐、尤三姐）之母",
+      "first_chapter": 11,
+      "note": "第11回『尤氏的母亲已先在这里呢』『尤氏的母亲并邢夫人，王夫人，凤姐儿』，尤氏称之为『老娘』，邢王二夫人称之为『亲家太太』。原文第11-20回未出现『尤老娘』之名，本表取通行称呼，待后续回目核实"
+    },
+    {
+      "name": "南安郡王",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "四郡王之一",
+      "first_chapter": 11,
+      "note": "第11回『方才南安郡王，东平郡王，西宁郡王，北静郡王四家王爷……都差人持了名帖送寿礼来』；第14回设路祭棚，其孙送殡（未具名）"
+    },
+    {
+      "name": "东平郡王",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "四郡王之一",
+      "first_chapter": 11,
+      "note": "第11回四家王爷送寿礼；第14回『第一座是东平王府祭棚』"
+    },
+    {
+      "name": "西宁郡王",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "四郡王之一",
+      "first_chapter": 11,
+      "note": "第11回四家王爷送寿礼；第14回『第三座是西宁郡王』祭棚，其孙送殡（未具名）"
+    },
+    {
+      "name": "北静王水溶",
+      "race": "人类",
+      "importance": "major",
+      "gender": "male",
+      "age": "",
+      "age_note": "第14回『现今北静王水溶年未弱冠』，未给确数",
+      "aliases": [
+        "北静郡王",
+        "北静王",
+        "水溶",
+        "郡驾",
+        "小王"
+      ],
+      "attributes": "四郡王之一，当日惟北静王功高，子孙犹袭王爵；形容秀美，情性谦和，不以王位自居；海上众名士至都者多聚其府",
+      "first_chapter": 11,
+      "note": "第11回以『北静郡王』之名送寿礼（首次出现）；第14回明写『现今北静王水溶年未弱冠』并亲设路奠、召见宝玉；第15回赠宝玉鹡鸰香念珠"
+    },
+    {
+      "name": "来旺媳妇",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "旺儿媳妇",
+        "旺儿嫂子",
+        "来旺媳妇"
+      ],
+      "attributes": "凤姐陪房来旺（旺儿）之妻，经手凤姐梯己利钱",
+      "first_chapter": 11,
+      "note": "第11回『就是那三百银子的利银，旺儿媳妇送进来』；第14回『只见来旺媳妇拿了对牌来领取呈文京榜纸札』；第16回『旺儿嫂子越发连个承算也没了』并再送利钱。三处指同一人，判断依据见 conflicts"
+    },
+    {
+      "name": "杨提督",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "杨提督的太太"
+      ],
+      "attributes": "提督",
+      "first_chapter": 12,
+      "note": "第12回凤姐云『那整的太太又说留着送杨提督的太太配药』；原文未给名字，沿用第1-10回收录『临安伯老太太』『于老爷』一类过场人物的口径"
+    },
+    {
+      "name": "贾代儒之妻",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "代儒夫妇（并称）"
+      ],
+      "attributes": "贾代儒之妻，贾瑞之祖母",
+      "first_chapter": 12,
+      "note": "第12回贾瑞死后『代儒夫妇哭的死去活来』；原文未给名字"
+    },
+    {
+      "name": "戴权",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "大明宫掌宫内相",
+        "老内相"
+      ],
+      "attributes": "大明宫掌宫内相，掌龙禁尉缺额与奏请之权",
+      "first_chapter": 13,
+      "note": "第13回亲来上祭，受贾珍之托为贾蓉起五品龙禁尉的票，索银一千二百两"
+    },
+    {
+      "name": "史鼎",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "忠靖侯"
+      ],
+      "attributes": "忠靖侯；与贾府世交",
+      "first_chapter": 13,
+      "note": "第13回『原来是忠靖侯史鼎的夫人来了』；第14回送殡名单中有『忠靖侯史鼎』。第11回『忠靖侯史府等八家』只称府名，未及个人，故未在第11回单列"
+    },
+    {
+      "name": "史鼎夫人",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "忠靖侯史鼎之妻",
+      "first_chapter": 13,
+      "note": "第13回『原来是忠靖侯史鼎的夫人来了。王夫人，邢夫人，凤姐等刚迎入上房』"
+    },
+    {
+      "name": "瑞珠",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "秦可卿之丫鬟",
+      "first_chapter": 13,
+      "note": "第13回『因忽又听得秦氏之丫鬟名唤瑞珠者，见秦氏死了，他也触柱而亡』，贾珍以孙女之礼敛殡"
+    },
+    {
+      "name": "宝珠",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "小姐（第13回后被合族改称）"
+      ],
+      "attributes": "秦可卿之小丫鬟，自请为义女，任摔丧驾灵；后执意不肯回家，随灵寄住铁槛寺",
+      "first_chapter": 13,
+      "note": "第13回『小丫鬟名宝珠者，因见秦氏身无所出，乃甘心愿为义女，誓任摔丧驾灵之任……从此皆呼宝珠为小姐』；第14回『宝珠自行未嫁女之礼外，摔丧驾灵』；第15回『宝珠执意不肯回家，贾珍只得派妇女相伴』"
+    },
+    {
+      "name": "锦乡侯",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "侯爵，亲来秦可卿灵前上祭",
+      "first_chapter": 13,
+      "note": "第13回『又见锦乡侯，川宁侯，寿山伯三家祭礼摆在灵前。少时，三人下轿』。注意第14回作『锦乡伯公子韩奇』，爵称不一致，见 conflicts"
+    },
+    {
+      "name": "川宁侯",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "侯爵，亲来秦可卿灵前上祭",
+      "first_chapter": 13,
+      "note": "第13回『锦乡侯，川宁侯，寿山伯三家祭礼摆在灵前。少时，三人下轿』"
+    },
+    {
+      "name": "寿山伯",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "伯爵，亲来秦可卿灵前上祭",
+      "first_chapter": 13,
+      "note": "第13回『锦乡侯，川宁侯，寿山伯三家祭礼摆在灵前。少时，三人下轿』"
+    },
+    {
+      "name": "冯胖子",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "永兴节度使"
+      ],
+      "attributes": "永兴节度使",
+      "first_chapter": 13,
+      "note": "第13回戴权云『永兴节度使冯胖子来求，要与他孩子捐，我就没工夫应他』"
+    },
+    {
+      "name": "代修",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "贾代修"
+      ],
+      "attributes": "贾府族人，与贾代儒同辈",
+      "first_chapter": 13,
+      "note": "第13回吊问名单作『代修』，列于贾代儒之后。原文只作『代修』，『贾代修』为按辈分推定的写法，未作本表正名"
+    },
+    {
+      "name": "贾敕",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人",
+      "first_chapter": 13,
+      "note": "第13回吊问名单『贾代儒，代修，贾敕，贾效，贾敦……』"
+    },
+    {
+      "name": "贾效",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人",
+      "first_chapter": 13,
+      "note": "第13回吊问名单"
+    },
+    {
+      "name": "贾敦",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人",
+      "first_chapter": 13,
+      "note": "第13回吊问名单"
+    },
+    {
+      "name": "贾琮",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人",
+      "first_chapter": 13,
+      "note": "第13回吊问名单"
+    },
+    {
+      "name": "贾㻞",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人",
+      "first_chapter": 13,
+      "note": "第13回吊问名单，列于贾琮与贾珩之间。源文件该字为私用区拼字（U+E4C0＋『扁』），据字形与通行本作『贾㻞』"
+    },
+    {
+      "name": "贾珩",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人",
+      "first_chapter": 13,
+      "note": "第13回吊问名单"
+    },
+    {
+      "name": "贾珖",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人",
+      "first_chapter": 13,
+      "note": "第13回吊问名单"
+    },
+    {
+      "name": "贾琛",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人；第13回被派陪客",
+      "first_chapter": 13,
+      "note": "第13回吊问名单，又『贾珍便命贾琼，贾琛，贾璘，贾蔷四个人去陪客』"
+    },
+    {
+      "name": "贾琼",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人；第13回被派陪客",
+      "first_chapter": 13,
+      "note": "第13回吊问名单，又『命贾琼，贾琛，贾璘，贾蔷四个人去陪客』"
+    },
+    {
+      "name": "贾璘",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人；第13回被派陪客",
+      "first_chapter": 13,
+      "note": "第13回吊问名单，又『命贾琼，贾琛，贾璘，贾蔷四个人去陪客』"
+    },
+    {
+      "name": "贾菖",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人",
+      "first_chapter": 13,
+      "note": "第13回吊问名单"
+    },
+    {
+      "name": "贾菱",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人",
+      "first_chapter": 13,
+      "note": "第13回吊问名单"
+    },
+    {
+      "name": "贾芸",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人",
+      "first_chapter": 13,
+      "note": "第13回吊问名单"
+    },
+    {
+      "name": "贾芹",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人",
+      "first_chapter": 13,
+      "note": "第13回吊问名单"
+    },
+    {
+      "name": "贾蓁",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人",
+      "first_chapter": 13,
+      "note": "第13回吊问名单"
+    },
+    {
+      "name": "贾萍",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人",
+      "first_chapter": 13,
+      "note": "第13回吊问名单"
+    },
+    {
+      "name": "贾藻",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人",
+      "first_chapter": 13,
+      "note": "第13回吊问名单"
+    },
+    {
+      "name": "贾蘅",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人",
+      "first_chapter": 13,
+      "note": "第13回吊问名单"
+    },
+    {
+      "name": "贾芬",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人",
+      "first_chapter": 13,
+      "note": "第13回吊问名单"
+    },
+    {
+      "name": "贾芳",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人",
+      "first_chapter": 13,
+      "note": "第13回吊问名单"
+    },
+    {
+      "name": "贾芝",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府族人",
+      "first_chapter": 13,
+      "note": "第13回吊问名单"
+    },
+    {
+      "name": "来升媳妇",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "来升家的"
+      ],
+      "attributes": "宁国府都总管来升之妻；第14回凤姐协理宁国府时由其分派、每日揽总查看",
+      "first_chapter": 14,
+      "note": "第14回『即时传来升媳妇，兼要家口花名册来查看』『只见凤姐正与来升媳妇分派』『来升家的每日揽总查看』"
+    },
+    {
+      "name": "昭儿",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾琏的小厮；随贾琏、黛玉南下，奉遣回京报信",
+      "first_chapter": 14,
+      "note": "第14回『苏州去的人昭儿来了』，报『林姑老爷是九月初三日巳时没的』"
+    },
+    {
+      "name": "色空",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "住持色空"
+      ],
+      "attributes": "铁槛寺住持",
+      "first_chapter": 14,
+      "note": "第14回『一一嘱咐住持色空，好生预备新鲜陈设，多请名僧，以备接灵使用。色空忙看晚斋』"
+    },
+    {
+      "name": "王仁",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "王熙凤的胞兄，携家眷回南",
+      "first_chapter": 14,
+      "note": "第14回『又有胞兄王仁连家眷回南，一面写家信禀叩父母并带往之物』"
+    },
+    {
+      "name": "王兴媳妇",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "王兴家的"
+      ],
+      "attributes": "荣国府仆妇；第14回向凤姐领牌取线打车轿网络",
+      "first_chapter": 14,
+      "note": "第14回『只见荣国府中的王兴媳妇来了，在前探头』『领牌取线，打车轿网络』"
+    },
+    {
+      "name": "张材家的",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "荣国府仆妇；第14回向凤姐领取裁缝工银、并办宝玉外书房裱糊纸料",
+      "first_chapter": 14,
+      "note": "第14回『凤姐因见张材家的在旁』『就是方才车轿围作成，领取裁缝工银若干两』"
+    },
+    {
+      "name": "西安郡王妃",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "西安郡王之妃；华诞时贾府送寿礼",
+      "first_chapter": 14,
+      "note": "第14回『西安郡王妃华诞，送寿礼』。原文只称『西安郡王妃』，未另写西安郡王本人"
+    },
+    {
+      "name": "镇国公诰命",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "镇国公之妻（诰命夫人）",
+      "first_chapter": 14,
+      "note": "第14回『镇国公诰命生了长男，预备贺礼』。『诰命』指受诰封的命妇，本表按第1-10回收录『临安伯老太太』之例单列"
+    },
+    {
+      "name": "缮国公诰命",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "缮国公之妻（诰命夫人）；第14回亡故，其孙石光珠守孝",
+      "first_chapter": 14,
+      "note": "第14回『缮国公诰命亡故，故其孙石光珠守孝不曾来得』『又有缮国公诰命亡故，王邢二夫人又去打祭送殡』"
+    },
+    {
+      "name": "镇国公牛清",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "镇国公"
+      ],
+      "attributes": "八公之一；其孙牛继宗现袭一等伯",
+      "first_chapter": 14,
+      "note": "第14回『有镇国公牛清之孙现袭一等伯牛继宗』『这六家与宁荣二家，当日所称『八公』的便是』。第11回只作『镇国公牛府等六家』，未及个人，故未在第11回单列"
+    },
+    {
+      "name": "理国公柳彪",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "理国公"
+      ],
+      "attributes": "八公之一；其孙柳芳现袭一等子",
+      "first_chapter": 14,
+      "note": "第14回『理国公柳彪之孙现袭一等子柳芳』"
+    },
+    {
+      "name": "齐国公陈翼",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "齐国公"
+      ],
+      "attributes": "八公之一；其孙陈瑞文世袭三品威镇将军",
+      "first_chapter": 14,
+      "note": "第14回『齐国公陈翼之孙世袭三品威镇将军陈瑞文』"
+    },
+    {
+      "name": "治国公马魁",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "治国公"
+      ],
+      "attributes": "八公之一；其孙马尚世袭三品威远将军",
+      "first_chapter": 14,
+      "note": "第14回『治国公马魁之孙世袭三品威远将军马尚』"
+    },
+    {
+      "name": "修国公侯晓明",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "修国公"
+      ],
+      "attributes": "八公之一；其孙侯孝康世袭一等子",
+      "first_chapter": 14,
+      "note": "第14回『修国公侯晓明之孙世袭一等子侯孝康』"
+    },
+    {
+      "name": "牛继宗",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "镇国公牛清之孙，现袭一等伯；送殡官客",
+      "first_chapter": 14,
+      "note": "第14回送殡名单首位"
+    },
+    {
+      "name": "柳芳",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "理国公柳彪之孙，现袭一等子；送殡官客",
+      "first_chapter": 14,
+      "note": "第14回送殡名单"
+    },
+    {
+      "name": "陈瑞文",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "齐国公陈翼之孙，世袭三品威镇将军；送殡官客",
+      "first_chapter": 14,
+      "note": "第14回送殡名单"
+    },
+    {
+      "name": "马尚",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "治国公马魁之孙，世袭三品威远将军；送殡官客",
+      "first_chapter": 14,
+      "note": "第14回送殡名单"
+    },
+    {
+      "name": "侯孝康",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "修国公侯晓明之孙，世袭一等子；送殡官客",
+      "first_chapter": 14,
+      "note": "第14回送殡名单"
+    },
+    {
+      "name": "石光珠",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "缮国公之孙；因祖母亡故守孝，未送殡",
+      "first_chapter": 14,
+      "note": "第14回『缮国公诰命亡故，故其孙石光珠守孝不曾来得』"
+    },
+    {
+      "name": "蒋子宁",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "平原侯之孙，世袭二等男；送殡官客",
+      "first_chapter": 14,
+      "note": "第14回『平原侯之孙世袭二等男蒋子宁』"
+    },
+    {
+      "name": "谢鲸",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "定城侯之孙，世袭二等男兼京营游击；送殡官客",
+      "first_chapter": 14,
+      "note": "第14回『定城侯之孙世袭二等男兼京营游击谢鲸』"
+    },
+    {
+      "name": "戚建辉",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "襄阳侯之孙，世袭二等男；送殡官客",
+      "first_chapter": 14,
+      "note": "第14回『襄阳侯之孙世袭二等男戚建辉』"
+    },
+    {
+      "name": "裘良",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "景田侯之孙，五城兵马司；送殡官客",
+      "first_chapter": 14,
+      "note": "第14回『景田侯之孙五城兵马司裘良』"
+    },
+    {
+      "name": "韩奇",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "锦乡伯公子；送殡官客",
+      "first_chapter": 14,
+      "note": "第14回『余者锦乡伯公子韩奇』。第13回作『锦乡侯』，爵称不一致，见 conflicts"
+    },
+    {
+      "name": "陈也俊",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "诸王孙公子之一；送殡官客",
+      "first_chapter": 14,
+      "note": "第14回『陈也俊，卫若兰等诸王孙公子，不可枚数』"
+    },
+    {
+      "name": "卫若兰",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "诸王孙公子之一；送殡官客",
+      "first_chapter": 14,
+      "note": "第14回『陈也俊，卫若兰等诸王孙公子，不可枚数』"
+    },
+    {
+      "name": "净虚",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "老尼",
+        "馒头庵的姑子"
+      ],
+      "attributes": "馒头庵（即水月庵）老尼；先在长安县善才庵出家；能奔走公门、代人求情",
+      "first_chapter": 15,
+      "note": "第15回凤姐至水月庵歇息，『净虚带领智善，智能两个徒弟出来迎接』；净虚托凤姐致书长安节度使，了结张家退亲事"
+    },
+    {
+      "name": "智善",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "水月庵小尼，净虚的徒弟",
+      "first_chapter": 15,
+      "note": "第15回『净虚带领智善，智能两个徒弟出来迎接』『只见智善来叫智能去摆茶碟子』"
+    },
+    {
+      "name": "二丫头",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "17-18",
+      "age_note": "第15回『只见一个约有十七八岁的村庄丫头跑了来乱嚷』",
+      "aliases": [],
+      "attributes": "京郊村庄的农家女；会纺线，抱小兄弟",
+      "first_chapter": 15,
+      "note": "第15回宝玉、秦钟打尖处所见，『老婆子叫道：「二丫头，快过来！」』；宝玉以目相送"
+    },
+    {
+      "name": "金哥",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "张金哥（通行称呼，原文只作『小名金哥』）"
+      ],
+      "attributes": "张大财主之女；先受原任长安守备之子聘定，后父母欲退亲另许李衙内，自缢而死",
+      "first_chapter": 15,
+      "note": "第15回净虚述『他有个女儿小名金哥』；第16回『闻得父母退了前夫，他便一条麻绳悄悄的自缢了』"
+    },
+    {
+      "name": "张财主",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "施主姓张"
+      ],
+      "attributes": "长安县大财主，金哥之父；爱势贪财，退亲致女自缢",
+      "first_chapter": 15,
+      "note": "第15回净虚述『那时有个施主姓张，是大财主』。原文未给名字"
+    },
+    {
+      "name": "李衙内",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "李公子"
+      ],
+      "attributes": "长安府府太爷的小舅子；执意要娶金哥",
+      "first_chapter": 15,
+      "note": "第15回净虚述『不想遇见了长安府府太爷的小舅子李衙内。那李衙内一心看上，要娶金哥』"
+    },
+    {
+      "name": "长安守备",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "原任长安守备"
+      ],
+      "attributes": "原任长安守备；不肯退定礼，打官司告状",
+      "first_chapter": 15,
+      "note": "第15回净虚述『不想金哥已受了原任长安守备的公子的聘定』"
+    },
+    {
+      "name": "长安守备之子",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "守备之子"
+      ],
+      "attributes": "金哥的未婚夫；闻金哥自缢，投河而死",
+      "first_chapter": 15,
+      "note": "第15回净虚述其聘定金哥；第16回『那守备之子闻得金哥自缢，他也是个极多情的，遂也投河而死，不负妻义』"
+    },
+    {
+      "name": "云光",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "长安节度",
+        "云老爷"
+      ],
+      "attributes": "长安节度使；久受贾府之情，应凤姐之托压服长安守备退亲",
+      "first_chapter": 15,
+      "note": "第15回净虚云『如今长安节度云老爷与府上最契』；『那节度使名唤云光，久见贾府之情，这点小事，岂有不允之理，给了回书』"
+    },
+    {
+      "name": "胡老爷",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "胡老爷府"
+      ],
+      "attributes": "水月庵施主；府中产公子，太太送银请尼僧念《血盆经》",
+      "first_chapter": 15,
+      "note": "第15回净虚云『因胡老爷府里产了公子，太太送了十两银子来这里，叫请几位师父念三日《血盆经》』"
+    },
+    {
+      "name": "来旺",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "旺儿",
+        "来旺儿"
+      ],
+      "attributes": "凤姐的心腹家人；代凤姐奔走机要（送利银、往长安县送书）",
+      "first_chapter": 15,
+      "note": "第15回『外面旺儿预备下赏封』『凤姐便命悄悄将昨日老尼之事，说与来旺儿。来旺儿心中俱已明白，急忙进城找着主文的相公，假托贾琏所嘱，修书一封』；第16回『旺儿嫂子……奶奶的那利钱银子』。其妻先见于第11回，见来旺媳妇条"
+    },
+    {
+      "name": "夏守忠",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "六宫都太监夏老爷",
+        "夏太监"
+      ],
+      "attributes": "六宫都太监；传旨宣贾政入朝",
+      "first_chapter": 16,
+      "note": "第16回『有六宫都太监夏老爷来降旨……早见六宫都太监夏守忠乘马而至』"
+    },
+    {
+      "name": "赖大",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "赖爷爷"
+      ],
+      "attributes": "荣国府大管家；第16回率管家入内报喜，参与省亲别院工程安插摆布",
+      "first_chapter": 16,
+      "note": "第16回『忽见赖大等三四个管家喘吁吁跑进仪门报喜』；贾蔷云『赖爷爷说，不用从京里带下去，江南甄家还收着我们五万银子』"
+    },
+    {
+      "name": "林之孝",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "荣国府管家；参与省亲别院工程安插摆布",
+      "first_chapter": 16,
+      "note": "第16回『只凭贾赦，贾珍，贾琏，赖大，来升，林之孝，吴新登，詹光，程日兴等几人安插摆布』；其妻见林之孝家的条"
+    },
+    {
+      "name": "赵嬷嬷",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "贾琏的乳母"
+      ],
+      "attributes": "贾琏的乳母；有两个儿子赵天梁、赵天栋，求凤姐照看",
+      "first_chapter": 16,
+      "note": "第16回『一时贾琏的乳母赵嬷嬷走来』；诉『幸亏我从小儿奶了你这么大……有的是那两个儿子，你就另眼照看他们些』"
+    },
+    {
+      "name": "赵天梁",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "赵嬷嬷之子，贾琏的奶哥哥；随贾蔷下姑苏",
+      "first_chapter": 16,
+      "note": "第16回赵嬷嬷云『一个叫赵天梁，一个叫赵天栋』，凤姐命随贾蔷办买办"
+    },
+    {
+      "name": "赵天栋",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "赵嬷嬷之子，贾琏的奶哥哥；随贾蔷下姑苏",
+      "first_chapter": 16,
+      "note": "第16回赵嬷嬷云『一个叫赵天梁，一个叫赵天栋』"
+    },
+    {
+      "name": "卜固修",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府清客相公；随贾蔷下姑苏采买",
+      "first_chapter": 16,
+      "note": "第16回贾蔷云『还有单聘仁，卜固修两个清客相公，一同前往』"
+    },
+    {
+      "name": "程日兴",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾府清客相公；参与省亲别院工程安插摆布",
+      "first_chapter": 16,
+      "note": "第16回『贾赦，贾珍，贾琏，赖大，来升，林之孝，吴新登，詹光，程日兴等几人安插摆布』"
+    },
+    {
+      "name": "山子野",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "老明公号山子野"
+      ],
+      "attributes": "园林名家，号山子野；大观园堆山凿池、起楼竖阁、种竹栽花等点景皆由其筹画制度",
+      "first_chapter": 16,
+      "note": "第16回『全亏一个老明公号山子野者，一一筹画起造』『又有山子野制度』"
+    },
+    {
+      "name": "吴贵妃",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "宫中贵妃；其父吴天祐家在城外踏看地方，修省亲别院",
+      "first_chapter": 16,
+      "note": "第16回贾琏云『又有吴贵妃的父亲吴天祐家，也往城外踏看地方去了』"
+    },
+    {
+      "name": "吴天祐",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "吴贵妃之父；往城外踏看地方，预备省亲",
+      "first_chapter": 16,
+      "note": "第16回『又有吴贵妃的父亲吴天祐家，也往城外踏看地方去了』"
+    },
+    {
+      "name": "周贵人",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "宫中贵人；其父已在家动工修盖省亲别院",
+      "first_chapter": 16,
+      "note": "第16回『现今周贵人的父亲已在家里动了工了，修盖省亲别院呢』。原文未给其父姓名"
+    },
+    {
+      "name": "太上皇",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "在位皇帝之父；与皇太后同下旨意，许椒房贵戚启请内廷鸾舆入其私第省亲",
+      "first_chapter": 16,
+      "note": "第16回贾琏述『故启奏太上皇，皇太后……因此二位老圣人又下旨意』"
+    },
+    {
+      "name": "皇太后",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "老圣人"
+      ],
+      "attributes": "太上皇之妻；与太上皇同下省亲旨意",
+      "first_chapter": 16,
+      "note": "第16回『于是太上皇，皇太后大喜，深赞当今至孝纯仁』"
+    },
+    {
+      "name": "当今",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "圣上",
+        "皇帝"
+      ],
+      "attributes": "在位皇帝；启奏太上皇、皇太后准椒房眷属入宫请候，又准重宇别院之家启请省亲",
+      "first_chapter": 16,
+      "note": "第16回贾琏述『当今自为日夜侍奉太上皇，皇太后，尚不能略尽孝意』。第15回『此是前日圣上亲赐鹡鸰香念珠一串』亦指之"
+    },
+    {
+      "name": "都判官",
+      "race": "阴司鬼判",
+      "importance": "mention",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "都判"
+      ],
+      "attributes": "阴间判官，率鬼使持牌提索拘人魂魄；自称『阴间上下都是铁面无私的』，闻『宝玉』二字却先慌",
+      "first_chapter": 16,
+      "note": "第16回秦钟临终『正见许多鬼判持牌提索来捉他』，都判官与鬼使有对话，终将秦魂放回。原文只作群像『鬼判』，其中说话者称『都判官』"
+    },
+    {
+      "name": "妙玉",
+      "race": "人类",
+      "importance": "major",
+      "gender": "female",
+      "age": 18,
+      "age_note": "第18回林之孝家的回话『今年才十八岁，法名妙玉』",
+      "aliases": [
+        "妙玉",
+        "带发修行的"
+      ],
+      "attributes": "苏州人氏，祖上读书仕宦之家；自小多病，买了许多替身不中用，亲自入了空门，带发修行；文墨极通，模样极好；父母俱亡，只有两个老嬷嬷、一个小丫头伏侍；师父精演先天神数，去冬圆寂，遗言不许回乡",
+      "first_chapter": 18,
+      "note": "第18回林之孝家的回王夫人，王夫人命书启相公写请帖去请，『次日遣人备车轿去接等后话，暂且搁过，此时不能表白』，故搬入大观园的具体章号本轮未见"
+    },
+    {
+      "name": "林之孝家的",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "荣国府管家林之孝之妻；第18回回明采访聘买小尼姑小道姑及妙玉之事",
+      "first_chapter": 18,
+      "note": "第18回『又有林之孝家的来回：「采访聘买得十个小尼姑，小道姑都有了……外有一个带发修行的……法名妙玉」』"
+    },
+    {
+      "name": "龄官",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾蔷从姑苏采买的十二个女戏之一；元春极喜之，独赐之物；不肯作非本角之戏（《游园》《惊梦》），坚持作《相约》《相骂》",
+      "first_chapter": 18,
+      "note": "第18回『问：「谁是龄官？」……贵妃有谕，说『龄官极好，再作两出戏』……龄官自为此二出原非本角之戏，执意不作，定要作《相约》《相骂》二出』"
+    },
+    {
+      "name": "昭容",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "宫中女官；元春归省时引领下舆、殿上传谕",
+      "first_chapter": 18,
+      "note": "第18回『只有昭容、彩嫔等引领元春下舆』『殿上昭容传谕曰：「免。」』"
+    },
+    {
+      "name": "彩嫔",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "宫中女官；随侍元春归省",
+      "first_chapter": 18,
+      "note": "第18回『只有昭容、彩嫔等引领元春下舆』『执事太监及彩嫔，昭容各侍从人等』"
+    },
+    {
+      "name": "抱琴",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "元春的丫鬟，随元春入宫；归省时上来叩见",
+      "first_chapter": 18,
+      "note": "第18回『又有贾妃原带进宫去的丫鬟抱琴等上来叩见』"
+    },
+    {
+      "name": "贾环",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "环兄弟",
+        "环儿（第20回凤姐称）"
+      ],
+      "attributes": "贾政之子，庶出（赵姨娘所生）；宝玉之弟；素日怕凤姐比怕王夫人更甚",
+      "first_chapter": 18,
+      "note": "第18回『贾环从年内染病未痊，自有闲处调养，故亦无传』（首次出现）；第20回与莺儿赶围棋赖钱、被凤姐叫去"
+    },
+    {
+      "name": "秋纹",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "宝玉房中的丫鬟",
+      "first_chapter": 19,
+      "note": "第19回『只见秋纹走进来，说：「快三更了，该睡了」』；第20回与晴雯、绮霰、碧痕同去耍戏"
+    },
+    {
+      "name": "花自芳",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "male",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "花大哥"
+      ],
+      "attributes": "袭人之兄；家住京中，距贾府不过一半里路程；曾议赎袭人出府",
+      "first_chapter": 19,
+      "note": "第19回『茗烟先进去叫袭人之兄花自芳』；后『花自芳忙去雇了一顶小轿来』送宝玉回去"
+    },
+    {
+      "name": "袭人之母",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "袭人的娘"
+      ],
+      "attributes": "袭人之母；接袭人家去吃年茶，曾与花自芳商议赎袭人回去",
+      "first_chapter": 19,
+      "note": "第19回『袭人的母亲又亲来回过贾母，接袭人家去吃年茶』『原来袭人在家，听见他母兄要赎他回去』"
+    },
+    {
+      "name": "卍儿",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "16-17",
+      "age_note": "第19回茗烟云『大不过十六七岁了』",
+      "aliases": [],
+      "attributes": "宁国府丫鬟；母孕时梦得一匹锦，上有五色富贵不断头卍字花样，故名卍儿",
+      "first_chapter": 19,
+      "note": "第19回茗烟与她在小书房相会，被宝玉撞见；宝玉问其名字，茗烟述命名之由"
+    },
+    {
+      "name": "史湘云",
+      "race": "人类",
+      "importance": "major",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [
+        "史大姑娘",
+        "史大妹妹",
+        "湘云",
+        "云妹妹"
+      ],
+      "attributes": "贾母的侄孙女（史家）；咬舌，把『二』说成『爱』；爱说爱笑，大笑大说；自幼在贾府走动，袭人曾伏侍过她几年",
+      "first_chapter": 19,
+      "note": "第19回袭人云『先伏侍了史大姑娘几年』（首次提及）；第20回『忽见人说：「史大姑娘来了。」』『只见史湘云大笑大说的』并与黛玉互相取笑"
+    },
+    {
+      "name": "鸳鸯",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾母房中的大丫鬟",
+      "first_chapter": 20,
+      "note": "第20回『彼时晴雯，绮霰，秋纹，碧痕都寻热闹，找鸳鸯琥珀等耍戏去了』。已核第1-10回原文，仅第1回《好了歌注》『红灯帐底卧鸳鸯』为语词，非其人"
+    },
+    {
+      "name": "琥珀",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾母房中的大丫鬟",
+      "first_chapter": 20,
+      "note": "第20回『找鸳鸯琥珀等耍戏去了』。已核第1-10回原文，仅第5回『玉液浓斟琥珀杯』为器物，非其人"
+    },
+    {
+      "name": "绮霰",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "宝玉房中的丫鬟",
+      "first_chapter": 20,
+      "note": "第20回『晴雯，绮霰，秋纹，碧痕都寻热闹』"
+    },
+    {
+      "name": "碧痕",
+      "race": "人类",
+      "importance": "mention",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "宝玉房中的丫鬟",
+      "first_chapter": 20,
+      "note": "第20回『晴雯，绮霰，秋纹，碧痕都寻热闹』"
+    },
+    {
+      "name": "赵姨娘",
+      "race": "人类",
+      "importance": "minor",
+      "gender": "female",
+      "age": "",
+      "age_note": "",
+      "aliases": [],
+      "attributes": "贾政之妾，贾环、探春之生母；第20回啐骂贾环，被凤姐隔窗弹压而不敢则声",
+      "first_chapter": 20,
+      "note": "第20回『赵姨娘见他这般，因问：「又是那里垫了踹窝来了？」』『赵姨娘也不敢则声』。已核第1-10回原文，未出现"
+    }
+  ]
+}
