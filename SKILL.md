@@ -369,6 +369,8 @@ assets/wiki.css       共用样式
 | `mos_check.py` | 按维基百科格式手册检查条目与渲染产物 |
 | `original_overlap_check.py` | 条目正文与原文的重合片段检查（`--min` 阈值、`--allow` 专名豁免） |
 | `quote_source_check.py` | 正文引号是否都能在 `sources` 里查到 |
+| `check_style.py` | 条目体例检查：句首单调、节标题用章号、空节标题、一句重复主体名、首句同语反复、refs 挂空 |
+| `check_duplication.py` | 跨条目重复检查（含跨批次）；比对前去引号内内容，引文一致不算重复 |
 | `verify_example.py` | 一条命令校验示例目录的成品是否自洽 |
 | `convert.ps1` | PowerShell 入口 |
 
