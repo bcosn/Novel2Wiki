@@ -74,6 +74,8 @@ def check(append_path: str, base_dir: str, prefix: str = "红楼梦") -> tuple[l
         items = load(p)["items"]
         pools[kind] = {i["name"] for i in items}
         fields[kind] = set(items[0].keys()) if items else set()
+        if kind in ("character_timeline", "object_timeline"):
+            fields[kind].discard("track")  # Optional stream label, not a required core field.
 
     # ---- 顶层字段 ----
     for key in ("meta", "new_entities", "new_timeline", "range_advance"):
@@ -114,11 +116,11 @@ def check(append_path: str, base_dir: str, prefix: str = "红楼梦") -> tuple[l
             fc = it.get("from_chapter")
             if fc is not None and (not isinstance(fc, int) or not (lo <= fc <= hi)):
                 err("新时间线 %s/%s 的 from_chapter=%r 不在追加范围内" % (tl, name, fc))
-            seen[(name, field, fc)] += 1
+            seen[(tl, name, field, it.get("track") or "", fc)] += 1
 
     for k, c in seen.items():
         if c > 1:
-            err("时间线重复条目 (name=%s, field=%s, from_chapter=%s) 出现 %d 次，违反幂等" % (k[0], k[1], k[2], c))
+            err("时间线重复条目 (table=%s, name=%s, field=%s, track=%s, from_chapter=%s) 出现 %d 次，违反幂等" % (*k, c))
 
     # ---- 范围收口 ----
     for it in ap.get("range_advance", []):

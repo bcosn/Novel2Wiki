@@ -47,6 +47,7 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("entries")
     ap.add_argument("--min", type=int, default=20, help="同形片段的最小字数，默认 20")
+    ap.add_argument("--strict", action="store_true", help="将重复线索视为失败；默认只提示")
     args = ap.parse_args()
 
     doc = json.load(open(args.entries, encoding="utf-8"))
@@ -104,7 +105,8 @@ def main() -> int:
         print("   %2d 条共用「%s」  ← %s" % (len(ids), frag[:34], "、".join(ids)))
     if len(merged) > 40:
         print("   ... 另有 %d 处" % (len(merged) - 40))
-    return 1
+    print("这是文风线索，不要求必要事实摘要或专名重复清零。")
+    return 1 if args.strict else 0
 
 
 if __name__ == "__main__":

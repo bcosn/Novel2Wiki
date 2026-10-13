@@ -14,7 +14,6 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import shutil
 import sys
 from datetime import datetime, timezone
 
@@ -44,21 +43,27 @@ def load(p, default=None):
 
 
 def save(p, doc):
-    with open(p, "w", encoding="utf-8", newline="\n") as fh:
+    temp = p + ".tmp"
+    with open(temp, "w", encoding="utf-8", newline="\n") as fh:
         json.dump(doc, fh, ensure_ascii=False, indent=2)
+    os.replace(temp, p)
 
 
 def merge_list(base_items, new_items, key):
     """按 key 去重合并，返回 (合并后列表, 新增数, 跳过数)。"""
-    seen = {key(i) for i in base_items}
+    existing = {key(i): i for i in base_items}
+    seen = set(existing)
     added = skipped = 0
     for it in new_items:
         k = key(it)
         if k in seen:
+            if existing[k] != it:
+                raise ValueError("同一 key 出现不同内容，必须研判后合并: %r" % (k,))
             skipped += 1
             continue
         base_items.append(it)
         seen.add(k)
+        existing[k] = it
         added += 1
     return base_items, added, skipped
 
@@ -74,6 +79,7 @@ def main() -> int:
     doc = load(args.append)
     prefix = args.prefix
     report = []
+    prepared = []
 
     def path(kind):
         return os.path.join(args.base_dir, "%s.%s" % (prefix, TABLES[kind]))
@@ -86,7 +92,7 @@ def main() -> int:
             base["items"], doc.get("new_entities", {}).get(kind, []), lambda i: i["name"])
         if args.to_scope:
             base["meta"]["scope"] = args.to_scope
-        save(p, base)
+        prepared.append((p, base))
         report.append(("新实体 %s" % kind, added, skipped))
 
     # ---- 时间线 ----
@@ -95,20 +101,31 @@ def main() -> int:
         base = load(p, {"meta": {}, "items": []})
         base["items"], added, skipped = merge_list(
             base["items"], doc.get("new_timeline", {}).get(grp, []),
-            lambda i: (i["name"], i["field"], i.get("from_chapter")))
+            lambda i: (i["name"], i["field"], i.get("track") or "", i.get("from_chapter")))
         # 范围收口：把 old_to_chapter 为 null 的旧条目收口到 new_to_chapter
         for ra in doc.get("range_advance", []):
             want = "character_timeline" if ra.get("kind", "character") == "character" else "object_timeline"
             if want != kind:
                 continue
+            close = ra.get("new_to_chapter")
+            if type(close) is not int or close < 1:
+                raise ValueError("range_advance 的 new_to_chapter 必须是正整章号")
+            matched = False
             for it in base["items"]:
                 if (it["name"] == ra["name"] and it["field"] == ra["field"]
-                        and it.get("from_chapter") == ra.get("from_chapter")
-                        and it.get("to_chapter") is None):
-                    it["to_chapter"] = ra["new_to_chapter"]
+                        and (it.get("track") or "") == (ra.get("track") or "")
+                        and it.get("from_chapter") == ra.get("from_chapter")):
+                    matched = True
+                    if type(it.get("from_chapter")) is int and close < it["from_chapter"]:
+                        raise ValueError("range_advance 不能结束在开始章之前")
+                    if it.get("to_chapter") not in (None, close):
+                        raise ValueError("range_advance 与已收口范围冲突")
+                    it["to_chapter"] = close
+            if not matched:
+                raise ValueError("range_advance 找不到对应旧时间线: %s/%s" % (ra["name"], ra["field"]))
         if args.to_scope:
             base["meta"]["scope"] = args.to_scope
-        save(p, base)
+        prepared.append((p, base))
         report.append(("新时间线 %s" % kind, added, skipped))
 
     # ---- 互动 ----
@@ -118,7 +135,7 @@ def main() -> int:
         base["items"], doc.get("new_interactions", []), lambda i: i["id"])
     if args.to_scope:
         base["meta"]["scope"] = args.to_scope
-    save(p, base)
+    prepared.append((p, base))
     report.append(("新互动", added, skipped))
 
     # ---- 动态属性 ----
@@ -132,10 +149,10 @@ def main() -> int:
             have.add(d["name"])
     base["items"], added, skipped = merge_list(
         base.get("items", []), na.get("items", []),
-        lambda i: (i["name"], i["target"], i.get("chapter")))
+        lambda i: (i["name"], i["target_kind"], i["target"], i.get("chapter")))
     if args.to_scope:
         base["meta"]["scope"] = args.to_scope
-    save(p, base)
+    prepared.append((p, base))
     report.append(("新动态属性", added, skipped))
 
     # ---- 待人工处理：corrections / unresolved 只登记，不应用 ----
@@ -148,7 +165,22 @@ def main() -> int:
         "conflicts": doc.get("conflicts", []),
     }
     pp = os.path.join(args.base_dir, "%s._pending.json" % prefix)
-    save(pp, pending)
+    previous = load(pp, {})
+    for field in ("corrections", "unresolved", "conflicts"):
+        merged = []
+        fingerprints = set()
+        for item in previous.get(field, []) + pending[field]:
+            fingerprint = json.dumps(item, ensure_ascii=False, sort_keys=True)
+            if fingerprint not in fingerprints:
+                merged.append(item)
+                fingerprints.add(fingerprint)
+        pending[field] = merged
+    pending["batches"] = list(dict.fromkeys(previous.get("batches", [])
+        + ([previous["from"]] if previous.get("from") else []) + [pending["from"]]))
+    prepared.append((pp, pending))
+    # Validate all tables before any writes; conflicting keys must not partly advance scope.
+    for target, value in prepared:
+        save(target, value)
 
     print("合并完成：%s → %s" % (os.path.basename(args.append), args.base_dir))
     for name, added, skipped in report:
@@ -160,4 +192,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except (ValueError, OSError) as exc:
+        print("合并失败: %s" % exc, file=sys.stderr)
+        sys.exit(1)

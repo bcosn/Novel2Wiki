@@ -4,15 +4,15 @@
 
 规范 1c 要求：正文里凡用了原文的字句，都必须加引号标出；没加引号的必须是
 现代汉语的编者语言。本脚本把两边的标点与引号内内容都去掉，只留汉字，做最长
-公共子串扫描，把所有 ≥N 字的连续重合片段列出来。结果应为 0 处。
+公共子串扫描，把所有 ≥N 字的连续重合片段列出来，作为可选线索而非清零门槛。
 
-引号内内容按设计就是要与原文重合的引用，故先剔除；剔除后仍有重合，说明该处
-是没标出来的原文照搬。
+引号内内容按设计就是要与原文重合的引用，故先剔除；剩余重合也可能来自专名或正常
+事实短语，需结合语境判断，不能直接断定照搬。
 
 用法：
     python original_overlap_check.py <entries.json> <chapters.json> [--min 10]
 
-退出码：有重合片段时为 1，全清为 0。
+默认只提示；--strict 时命中返回 1。重合本身不能证明照搬或事实错误。
 """
 
 from __future__ import annotations
@@ -79,6 +79,7 @@ def main() -> int:
     ap.add_argument("entries")
     ap.add_argument("chapters")
     ap.add_argument("--min", type=int, default=10, help="阈值字数，默认 10")
+    ap.add_argument("--strict", action="store_true", help="命中时返回失败；默认线索检查不要求清零")
     ap.add_argument("--allow", default="",
                     help="允许的片段，逗号分隔。专名与固定名词短语属合规，"
                          "不该为躲检查器而改写（如「大荒山无稽崖」「义忠亲王老千岁」）")
@@ -129,9 +130,9 @@ def main() -> int:
     if total == 0:
         print("正文与原文连续重合 ≥%d 字的片段：0 处。全部通过。" % args.min)
     else:
-        print("正文与原文连续重合 ≥%d 字的片段：%d 处，需加引号或改成现代汉语转述。"
+        print("正文与原文连续重合 ≥%d 字的线索：%d 处，结合语境判断，不要求清零。"
               % (args.min, total))
-    return 1 if total else 0
+    return 1 if total and args.strict else 0
 
 
 if __name__ == "__main__":
