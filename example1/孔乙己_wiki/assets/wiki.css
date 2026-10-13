@@ -1,136 +1,71 @@
-/* 维基式版式：白灰配色、少圆角、无外部依赖 */
+/* Local Vector 2022 inspired reading layout; no downloaded fonts or resources. */
 *{box-sizing:border-box}
-html{font-size:100%}
-body{margin:0;background:#fff;color:#202122;
- font-family:sans-serif,"Segoe UI","Noto Sans CJK SC","Source Han Sans SC","Microsoft YaHei";
- font-size:.9375rem;line-height:1.65}
-a{color:#3366cc;text-decoration:none}
-a:hover{text-decoration:underline}
-a.ext::after{content:"\2197";font-size:.7em;margin-left:.15em}
-
-/* 顶栏 */
-#top{padding:.7rem 1.2rem .3rem}
-#top .site{font-size:1.7rem;line-height:1.2;font-family:Georgia,"Songti SC",serif}
-#top .site a{color:#202122}
-#top .tagline{color:#54595d;font-size:.9rem;margin-top:.15rem}
-
-/* 面包屑与标签页 */
-#crumbs{padding:.4rem 1.2rem;font-size:.85rem;color:#54595d;border-bottom:2px solid #a2a9b1}
-#tabs{padding:0 1.2rem;font-size:.85rem;border-bottom:2px solid #a2a9b1;display:flex;gap:.15rem}
-#tabs span{padding:.35rem .8rem;border:2px solid #a2a9b1;border-bottom:none;
- background:#f8f9fa;color:#54595d;margin-bottom:-2px}
-#tabs span.cur{background:#fff;color:#202122;font-weight:600}
-#tabs span.disabled{color:#a2a9b1}
-
-/* 三栏：左目录 中正文 右信息框 */
-#layout{display:grid;grid-template-columns:13rem minmax(0,1fr) 19rem;
- gap:1.4rem;max-width:76rem;margin:0 auto;padding:1.2rem 1.2rem 3rem;align-items:start}
-/* 无目录的页（notoc）去掉第一轨，正文不被空左栏推后 */
-#layout.notoc{grid-template-columns:minmax(0,1fr) 19rem}
-#left{font-size:.85rem}
-#left .tocbox{border:2px solid #a2a9b1;background:#f8f9fa;padding:.5rem .7rem}
-#left .tocbox .t{font-weight:600;text-align:center;padding-bottom:.3rem;margin-bottom:.3rem;
- border-bottom:2px solid #c8ccd1}
-#left ol{margin:0;padding-left:1.3rem}
-#left li{margin:.15rem 0}
-#mid{min-width:0}
-#right{font-size:.85rem}
-
-/* 正文 */
-h1.firstHeading{font-family:Georgia,"Songti SC",serif;font-size:1.9rem;font-weight:400;
- margin:.1rem 0 .3rem;padding-bottom:.35rem;border-bottom:3px solid #a2a9b1}
-h2{font-family:Georgia,"Songti SC",serif;font-size:1.35rem;font-weight:400;
- margin:1.5rem 0 .5rem;padding-bottom:.2rem;border-bottom:2px solid #c8ccd1}
-h3{font-size:1.05rem;font-weight:600;margin:1.1rem 0 .35rem}
-p{margin:.55rem 0}
-.subtitle{color:#54595d;font-size:.88rem;margin:0 0 .7rem}
-ul{margin:.4rem 0 .8rem;padding-left:1.4rem}
-li{margin:.15rem 0}
-
-/* 灰色原文引用 */
-blockquote.ref{margin:.5rem 0 .9rem;padding:.35rem .8rem;border-left:3px solid #c8ccd1;
- background:#f8f9fa;color:#72777d;font-size:.88rem;line-height:1.6}
-blockquote.ref .cite{color:#a2a9b1;margin-right:.4rem}
-
-/* 正文内联注脚标记 */
-sup.ref{font-size:.72em;line-height:0;margin-left:.1rem;white-space:nowrap}
-sup.ref a{color:#3366cc;padding:0 .1rem}
-
-/* 考据列表（带编号，与正文标记对应）
-   默认折叠：条目一多，这一块比正文还长。
-   展开有两个来源——点标题（.refs 自身成为 :target），或点正文里的上标 [3]
-   （某个 .refrow 成为 :target）。
-   :target 只能置位、不能切换，所以不用 checkbox 做开关：那会与 :target 打架，
-   点了上标之后取消勾选也收不回去。改用两个互斥的链接——
-   收起态显示「考据（N 条）」指向 .refs，展开态显示「收起考据」指向 .refsblock，
-   把 :target 移开即收起。纯 CSS，无脚本。 */
-.refs{counter-reset:ref;font-size:.9rem;margin:.3rem 0;display:none}
-.refsblock{margin:.6rem 0 0}
-.refsblock:has(.refs:target) .refs,
-.refsblock:has(.refrow:target) .refs{display:block}
-.refslabel{display:block;cursor:pointer;user-select:none;
- border:2px solid #a2a9b1;background:#f8f9fa;color:#202122;
- font-weight:600;font-size:.9rem;padding:.4rem .7rem;margin-bottom:.5rem}
-.refslabel::before{content:"▸　";color:#54595d}
+html{font-size:16px;scroll-behavior:smooth;scroll-padding-top:1.5rem}
+body{margin:0;background:#fff;color:#202122;font-family:Arial,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65}
+a{color:#36c;text-decoration:none}a:hover{text-decoration:underline}
+a:focus-visible,summary:focus-visible,input:focus-visible{outline:2px solid #36c;outline-offset:3px}
+.skip-link{position:absolute;left:1rem;top:-5rem;background:#fff;padding:.5rem;z-index:5}.skip-link:focus{top:.5rem}
+.site-header{max-width:1560px;min-height:88px;margin:auto;padding:18px 44px;display:flex;align-items:center;gap:22px}
+.main-menu{position:relative}.main-menu summary{cursor:pointer;list-style:none;font-size:24px;line-height:1}.main-menu summary::-webkit-details-marker{display:none}
+.main-menu nav{position:absolute;top:36px;left:0;min-width:150px;padding:12px;background:#fff;border:1px solid #a2a9b1;z-index:4}
+.main-menu nav a{display:block;margin:.25rem 0}
+.brand{display:flex;align-items:center;gap:10px;color:#202122;line-height:1.2}.brand:hover{text-decoration:none}
+.brand-mark{display:grid;place-items:center;width:46px;height:46px;border:1px solid #c8ccd1;border-radius:50%;background:#f8f9fa;font:30px Georgia,"Songti SC",serif;color:#54595d}
+.brand strong{display:block;font:24px Georgia,"Songti SC","SimSun",serif;letter-spacing:.08em}.brand small{font-size:12px;color:#54595d;letter-spacing:.04em}
+.browse-link{display:flex;align-items:center;gap:8px;width:260px;padding:6px 10px;margin-left:38px;color:#54595d;border:1px solid #a2a9b1;font-size:14px}
+.browse-link span{font-size:23px;line-height:1}
+.page-shell{display:grid;grid-template-columns:176px minmax(0,960px) 152px;gap:36px;max-width:1460px;margin:0 auto;padding:10px 44px 44px;align-items:start}
+#left,#right{position:sticky;top:24px;font-size:14px;color:#202122;padding-top:9px;min-width:0}
+.tocbox summary,.side-heading{font-weight:600;font-size:14px;border-bottom:1px solid #eaecf0;padding-bottom:6px;margin-bottom:8px}
+.tocbox summary{list-style:none;cursor:pointer}.tocbox summary::-webkit-details-marker{display:none}
+.tocbox nav ul,#right ul{list-style:none;padding:0;margin:0}
+.tocbox nav li,#right li{margin:7px 0;line-height:1.45}.tocbox nav a{overflow-wrap:anywhere}
+#right ul{margin-bottom:24px}
+#right fieldset{border:0;padding:0;margin:12px 0}
+#right legend{padding:0;color:#54595d;margin-bottom:5px;border-bottom:1px solid #eaecf0;width:100%}
+#right label{display:flex;align-items:center;gap:6px;margin:5px 0;cursor:pointer}
+#right input{accent-color:#36c}
+#content{min-width:0}
+.mobile-toc{display:none}
+.titlebar{border-bottom:1px solid #a2a9b1}
+h1{font-family:Georgia,"Songti SC","SimSun",serif;font-size:29px;font-weight:400;line-height:1.4;margin:0 0 7px}
+.article-toolbar{display:flex;justify-content:space-between;border-bottom:1px solid #c8ccd1;font-size:14px;margin-bottom:14px;gap:12px}
+.article-toolbar>div{display:flex;gap:18px}
+.article-toolbar span{padding:8px 0;white-space:nowrap}
+.article-toolbar .current{border-bottom:2px solid #202122;margin-bottom:-1px}
+.unavailable{color:#72777d;cursor:default}
+.shortdescription{font-size:13px;color:#54595d;margin-bottom:13px}
+.article-body{font-size:16px;overflow-wrap:break-word}.article-body::after{content:"";display:block;clear:both}
+.article-body p{margin:0 0 1rem}.article-body .lead{margin-bottom:1.2rem}
+h2{font-family:Georgia,"Songti SC","SimSun",serif;font-size:23px;font-weight:400;line-height:1.4;margin:1.4rem 0 .75rem;border-bottom:1px solid #a2a9b1;padding-bottom:4px}
+h3{font-size:18px;font-weight:600;margin:1rem 0 .5rem}
+.infobox{float:right;clear:right;width:264px;max-width:46%;margin:0 0 1rem 1.5rem;border:1px solid #a2a9b1;background:#f8f9fa;font-size:14px;border-spacing:3px;padding:4px;line-height:1.55}
+.infobox caption{font-size:17px;font-weight:600;padding:7px;background:#eaecf0;border:1px solid #a2a9b1;border-bottom:0}
+.infobox th{width:31%;text-align:left;vertical-align:top;font-weight:600;padding:4px}
+.infobox td{vertical-align:top;padding:4px;overflow-wrap:anywhere}
+sup.ref{font-size:.72em;line-height:0;white-space:nowrap;margin-left:2px}
+sup.ref a{padding:0 1px}
+.refsblock{clear:both}.refsblock>a{font-size:14px}
+.references{display:none;font-size:14px;padding-left:28px;margin:.75rem 0}
+.refsblock:has(#refs-open:target) .references,.refsblock:has(.refrow:target) .references{display:block}
 .refsshut{display:none}
-.refsblock:has(.refs:target) .refsopen,
-.refsblock:has(.refrow:target) .refsopen{display:none}
-.refsblock:has(.refs:target) .refsshut,
-.refsblock:has(.refrow:target) .refsshut{display:block}
-.refsblock:has(.refs:target) .refsshut::before,
-.refsblock:has(.refrow:target) .refsshut::before{content:"▾　"}
-.refs .refrow{display:flex;gap:.6rem;padding:.4rem .6rem;margin:.35rem 0;
- border-left:3px solid #a2a9b1;background:#f8f9fa}
-.refs .num{color:#3366cc;font-weight:600;min-width:1.8rem}
-.refs .num::before{content:"[" counter(ref) "]";counter-increment:ref}
-.refs .quote{color:#54595d}
-.refs .ch{color:#202122;margin-right:.4rem}
-
-/* 信息框 */
-.infobox{border:2px solid #a2a9b1;background:#f8f9fa;width:100%;margin:0 0 1rem}
-.infobox caption{background:#eaecf0;font-weight:600;padding:.45rem .6rem;
- border-bottom:2px solid #a2a9b1;text-align:left;font-size:.95rem}
-.infobox th{text-align:left;vertical-align:top;padding:.3rem .6rem;width:6rem;
- border-top:1px solid #c8ccd1}
-.infobox td{padding:.3rem .6rem;border-top:1px solid #c8ccd1}
-.infobox tr:first-child th,.infobox tr:first-child td{border-top:none}
-
-/* 相关条目（右栏长标签卡） */
-.relbox{border:2px solid #a2a9b1;background:#f8f9fa;margin:0 0 1rem}
-.relbox .t{background:#eaecf0;font-weight:600;padding:.45rem .6rem;
- border-bottom:2px solid #a2a9b1;font-size:.95rem}
-.relbox ul{list-style:none;margin:0;padding:.4rem .6rem}
-.relbox li{margin:0 0 .35rem}
-.relbox a{display:block;padding:.25rem .5rem;border:1px solid #c8ccd1;background:#fff;
- font-size:.85rem}
-.relbox a:hover{background:#eaecf0;text-decoration:none}
-
-/* 考据 */
-.refs{font-size:.85rem}
-.note{border:2px solid #a2a9b1;background:#f8f9fa;font-size:.82rem;color:#54595d;
- padding:.5rem .7rem;margin:.8rem 0}
-.note b{color:#202122}
-
-/* 评价 */
-.rec{margin:.5rem 0;font-size:.92rem}
-.rec b{font-weight:600}
-
-/* 首页 */
-.home{max-width:56rem;margin:0 auto;padding:1.2rem 1.2rem 3rem}
-.boxes{display:grid;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));gap:.8rem;
- margin:1rem 0 1.5rem}
-.box{border:2px solid #a2a9b1;background:#f8f9fa;padding:.6rem .8rem}
-.box h3{margin:0 0 .4rem;font-size:.95rem;font-weight:600;background:#eaecf0;
- margin:-.6rem -.8rem .5rem;padding:.4rem .8rem;border-bottom:2px solid #a2a9b1}
-.box ul{margin:0;padding-left:1.1rem;columns:2;column-gap:1rem;font-size:.85rem}
-/* 首页附加说明（底本、整理情况之类），走灰底灰字，与条目正文区分开 */
-.homenote{border-left:3px solid #a2a9b1;background:#f8f9fa;color:#54595d;
- padding:.5rem .8rem;font-size:.85rem;line-height:1.6}
-
-#foot{border-top:2px solid #a2a9b1;margin-top:2rem;padding:.7rem 1.2rem;
- font-size:.8rem;color:#54595d}
-/* 断点取 72rem（1152px）：64rem 时 1025px 视口下正文只剩 430px，
- 而右栏仍固定占 19rem，正文过窄。 */
-@media (max-width:72rem){#layout{grid-template-columns:1fr}
- #layout.notoc{grid-template-columns:1fr}
- #right{order:-1}#left .tocbox{margin-bottom:1rem}}
+.refsblock:has(#refs-open:target) .refsopen,.refsblock:has(.refrow:target) .refsopen{display:none}
+.refsblock:has(#refs-open:target) .refsshut,.refsblock:has(.refrow:target) .refsshut{display:inline}
+.refrow{padding:3px 5px 7px;margin-bottom:.4rem;scroll-margin-top:16px}
+.refrow:target{background:#eaf3ff}
+.ref-cite{font-weight:600}
+.refrow blockquote{margin:.35rem 0;padding:.35rem .75rem;border-left:2px solid #c8ccd1;color:#54595d;background:#f8f9fa;line-height:1.6}
+.source-note{font-size:13px;color:#72777d;margin:.25rem 0!important}
+.note{clear:both;border-left:3px solid #c8ccd1;background:#f8f9fa;padding:.5rem .8rem;color:#54595d;font-size:14px}
+.external{overflow-wrap:anywhere}
+.category-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 28px}
+.category{border-top:1px solid #eaecf0}.category ul{columns:2;column-gap:20px;padding-left:20px;font-size:14px}.category li{break-inside:avoid;margin:.3rem 0}
+.site-footer{max-width:1372px;margin:0 auto;padding:20px 0 30px;border-top:1px solid #a2a9b1;color:#54595d;font-size:12px}
+body:has(#text-small:checked) .article-body{font-size:14px}
+body:has(#text-large:checked) .article-body{font-size:18px}
+body:has(#width-wide:checked) .page-shell{max-width:none;grid-template-columns:176px minmax(0,1fr) 152px}
+@media(max-width:1200px){.page-shell{grid-template-columns:156px minmax(0,1fr);gap:28px;padding:10px 32px 36px}#right{display:none}.site-header{padding:18px 32px}.site-footer{margin:0 32px}body:has(#width-wide:checked) .page-shell{grid-template-columns:156px minmax(0,1fr)}}
+@media(max-width:800px){.site-header{min-height:70px;padding:12px 18px;gap:14px}.brand-mark{width:36px;height:36px;font-size:24px}.brand strong{font-size:21px}.browse-link{margin-left:auto;width:auto;padding:4px 8px;font-size:12px}.page-shell,body:has(#width-wide:checked) .page-shell{display:flex;flex-direction:column;padding:8px 18px 28px;gap:14px}#left{position:static;order:0;padding:0;width:100%}.tocbox{border-bottom:1px solid #eaecf0}.tocbox summary{list-style:disclosure-open;border:0;display:list-item;margin-left:16px}.tocbox nav{columns:2;margin-bottom:12px}.tocbox nav ul{margin:0}#content{width:100%}h1{font-size:28px}.article-toolbar>div{gap:14px}.article-toolbar{font-size:13px}.site-footer{margin:0 18px}.category-grid{grid-template-columns:1fr}.infobox{max-width:45%;width:240px;margin-left:1rem}}
+@media(max-width:520px){.brand small{font-size:11px}.browse-link{border:0;padding:0}.browse-link span{display:none}.infobox{float:none;width:100%;max-width:none;margin:0 0 1rem}.article-toolbar>div{gap:12px}.article-body{font-size:16px}.tocbox nav{font-size:13px}.category ul{columns:2}}
+@media print{.site-header,#left,#right,.article-toolbar,.site-footer,.refsopen,.refsshut{display:none}.page-shell{display:block;padding:0}.references{display:block}.infobox{max-width:40%}.article-body{font-size:12pt}a{color:#202122}}
+@media(max-width:800px){#left{display:none}.mobile-toc{display:block;margin:0 0 16px;font-size:14px}.mobile-toc summary{cursor:pointer;list-style:disclosure-closed}.mobile-toc[open] summary{list-style:disclosure-open}.mobile-toc nav ul{list-style:none;padding:0;columns:2}.mobile-toc nav li{margin:5px 0;break-inside:avoid}}

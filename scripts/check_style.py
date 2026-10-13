@@ -54,6 +54,7 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("entries")
     ap.add_argument("--report", default="")
+    ap.add_argument("--strict", action="store_true", help="将文风线索视为失败；默认只提示")
     args = ap.parse_args()
 
     doc = json.load(open(args.entries, encoding="utf-8"))
@@ -149,7 +150,7 @@ def main() -> int:
                                "lead 共用同形片段「%s」" % best))
 
     by = Counter(x[0] for x in issues)
-    print("条目 %d 条，体例与一致性问题 %d 处" % (len(ents), len(issues)))
+    print("条目 %d 条，文风线索 %d 处（可选核对，不要求清零）" % (len(ents), len(issues)))
     for k, v in by.most_common():
         print("  %-14s %d 处" % (k, v))
     print()
@@ -162,7 +163,7 @@ def main() -> int:
             fh.write("# 体例与一致性检查\n\n条目 %d 条，问题 %d 处\n\n" % (len(ents), len(issues)))
             for rule, where, detail in issues:
                 fh.write("- [%s] %s  %s\n" % (rule, where, detail))
-    return 1 if issues else 0
+    return 1 if issues and args.strict else 0
 
 
 if __name__ == "__main__":

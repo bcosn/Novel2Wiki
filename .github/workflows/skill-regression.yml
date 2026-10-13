@@ -1,0 +1,19 @@
+name: Skill regression
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.10'
+      - run: python -m unittest discover -s tests -v
+      - run: python scripts/quote_source_check.py example1/孔乙己.entries.json --chapters example1/孔乙己.chapters.json
+      - run: python scripts/quote_source_check.py example1/红楼梦.entries.json --chapters example1/红楼梦.chapters.json
+      - run: python scripts/check_voice.py example1/孔乙己.entries.json
+      - run: python scripts/check_voice.py example1/红楼梦.entries.json
+      - run: python scripts/verify_example.py example1 --book 孔乙己
+      - run: python scripts/verify_example.py example1 --book 红楼梦
