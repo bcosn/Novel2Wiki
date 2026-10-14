@@ -1,0 +1,515 @@
+{
+  "protocol": {
+    "experiment": "某小说前三十章 skill 对照",
+    "created_at": "2026-10-14T11:15:03.046578+08:00",
+    "arm_versions": {
+      "A": "v0.2",
+      "B": "v0.2fix"
+    },
+    "run_order": [
+      "A",
+      "B"
+    ],
+    "model": {
+      "provider": "deepseek-official",
+      "model": "deepseek-flash",
+      "version": "DeepSeek-V4.1-Flash",
+      "reasoning": "high"
+    },
+    "input_sha256": "21bedc388bd4f4762a5c93a37f1fd82ca8c40c5c5d0009254d7973e653643505",
+    "chapter_count": 30,
+    "input_chars": 105785,
+    "version_fingerprints": {
+      "A": {
+        "package_sha256": "1e089bfefff217b9681f13296bd60e75da11631c5d49f6f467c866484fbe3d47",
+        "skill_sha256": "788b847b51e5fd5db5ac42431a3fb66439ab7dc7d3af3a567c98151473bada10"
+      },
+      "B": {
+        "package_sha256": "97a998d243d0aa9fd2ba729b80de8f0d00a785c313ed3ba8bc9e6632e8c3d539",
+        "skill_sha256": "b2b72ee82a88959f967a23da4583468ff89d7f7956431f973a62b10a3d1606bd"
+      }
+    },
+    "budget_limit": null,
+    "pricing_cny_per_million": {
+      "off_peak": {
+        "input": 1,
+        "cache": 0.02,
+        "output": 4
+      },
+      "peak": {
+        "input": 2,
+        "cache": 0.04,
+        "output": 8
+      }
+    },
+    "pricing_source": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing/",
+    "price_retrieval_date": "2026-10-14",
+    "cost_note": "按usage与官方价格估算，非账户账单；另计算统一空闲时段单价的归一化费用。",
+    "design_note": "同模型、相同思考强度、相同文本与请求、顺序单次A/B；无法排除顺序和缓存效应，无统计显著性推断。"
+  },
+  "run_status": {
+    "started": "2026-10-14T03:17:08.613Z",
+    "phase": "finished",
+    "ended": "2026-10-14T06:02:06.785Z",
+    "completion_detection_correction": "B的source.chapters_read=30被旧检查器忽略，误判未完成；验收解析兼容该明确字段后确认完整。两次多余续跑检查的耗时和用量保留计入B。",
+    "arms": {
+      "A": {
+        "state": "completed",
+        "started": "2026-10-14T03:17:08.615Z",
+        "rootUsage": {
+          "inputTokens": 269349,
+          "outputTokens": 155658,
+          "cacheReadTokens": 35704832,
+          "cacheWriteTokens": 0,
+          "totalTokens": 36129839
+        },
+        "rootSteps": 155,
+        "rootToolCalls": 170,
+        "attempt": 2,
+        "exitCode": 0,
+        "ended": "2026-10-14T05:25:18.091Z"
+      },
+      "B": {
+        "state": "completed",
+        "started": "2026-10-14T05:25:18.091Z",
+        "rootUsage": {
+          "inputTokens": 268734,
+          "outputTokens": 217872,
+          "cacheReadTokens": 65068800,
+          "cacheWriteTokens": 0,
+          "totalTokens": 65555406
+        },
+        "rootSteps": 244,
+        "rootToolCalls": 256,
+        "attempt": 3,
+        "exitCode": 0,
+        "ended": "2026-10-14T06:02:06.784Z",
+        "state_before_detection_correction": "incomplete"
+      }
+    }
+  },
+  "integrity": {
+    "inputs": {
+      "A": true,
+      "B": true
+    },
+    "packages": {
+      "A": {
+        "checked_files": 169,
+        "unchanged": true,
+        "changed_files": []
+      },
+      "B": {
+        "checked_files": 180,
+        "unchanged": true,
+        "changed_files": []
+      }
+    },
+    "shared_input_unchanged": true,
+    "reference_matches_frozen_text": true,
+    "all_passed": true
+  },
+  "manual_verification": {
+    "assessor": "主助理，回查冻结原文和最终产物；不是独立第三方评估",
+    "A": {
+      "voice_rule_hits": 5,
+      "confirmed_voice_errors": 0,
+      "voice_false_positives": 5,
+      "voice_details": [
+        {
+          "where": "e-0005/lead",
+          "text": "他本人死在城门外",
+          "verdict": "误报；本人修饰第三人称他"
+        },
+        {
+          "where": "e-0021/sections[1]",
+          "text": "张俊东本人是个",
+          "verdict": "误报；本人修饰角色名"
+        },
+        {
+          "where": "e-0059/sections[2]",
+          "text": "他本人并不习武",
+          "verdict": "误报；本人修饰第三人称他"
+        },
+        {
+          "where": "e-0063/sections[1]",
+          "text": "由他本人录制",
+          "verdict": "误报；本人修饰第三人称他"
+        },
+        {
+          "where": "e-0067/sections[1]",
+          "text": "寄卖者本人也核证过",
+          "verdict": "误报；本人修饰第三人称角色称谓"
+        }
+      ],
+      "scope_note": "确认错误数仅针对这五处规则命中，不代表已排除全文所有语义指代问题；64处代词线索尚不能算已确认错误。",
+      "source_details": [
+        {
+          "where": "e-0049/source[3]",
+          "entry": "溶洞黑会会场",
+          "declared_chapter": 7,
+          "matched_chapters": [
+            8
+          ],
+          "verdict": "错章；引文确在输入中，不能称为内容虚构"
+        },
+        {
+          "where": "e-0060/source[4]",
+          "entry": "北地",
+          "declared_chapter": 1,
+          "matched_chapters": [
+            2
+          ],
+          "verdict": "错章；引文确在输入中，不能称为内容虚构"
+        }
+      ],
+      "timeline_note": "七个规则失败都为 from_chapter=null 的首次出现记录，在收口后 to_chapter 早于实体 first_chapter，形成无效有效范围。属于数据分段错误，不直接等同于叙事情节虚构。"
+    },
+    "B": {
+      "voice_rule_hits": 0,
+      "confirmed_voice_errors": 0,
+      "voice_false_positives": 0,
+      "scope_note": "仅确认规则未命中，不代表全文无语义指代或主语归属错误。31处代词候选不是已确认错误。",
+      "semantic_issues": [
+        {
+          "entry": "端木婉",
+          "section": "两次交易",
+          "dimension": "主语与归属",
+          "entry_quote": "原文写她的身份被路胜隐藏也没能瞒住",
+          "source_chapter": 12,
+          "source_quote": "端木小姐果然厉害，我隐藏身份面貌，也还是被您找上门来了。",
+          "verdict": "确认主语错配：隐藏身份的是路胜，识破身份的是端木婉。该问题没有被第一第二人称规则检出。"
+        },
+        {
+          "entry": "小巧",
+          "section": "服侍与随行",
+          "dimension": "无依据能力扩写",
+          "entry_quote": "第14章以后她随路胜习练内功，能听出内气的动静",
+          "source_chapters": [
+            14,
+            23
+          ],
+          "source_quote": "小巧一个人找了张凳子坐在门外，等自己不知等了多久。",
+          "verdict": "给定原文没有找到小巧习练内功、能听出内气的依据。第14章小巧在门外等候、留饭；第23章练功者为路胜，小巧送饭、递信。本段唯一refs指向第1章小巧的‘又上当了啊’，不能支持能力陈述。"
+        }
+      ]
+    }
+  },
+  "metrics": {
+    "v0.2": {
+      "arm": "A",
+      "session_files": 71,
+      "partial_files": 0,
+      "model_calls_with_usage": 2259,
+      "failed_attempts": 3,
+      "missing_usage_events": 3,
+      "tokens": {
+        "inputTokens": 6363076,
+        "outputTokens": 3813549,
+        "cacheReadTokens": 231307648,
+        "totalTokens": 241484273
+      },
+      "token_sum_delta": 0,
+      "estimated_cny": 33.816102440000066,
+      "normalized_off_peak_cny": 26.243424960000013,
+      "models": {
+        "deepseek-official/deepseek-flash": 69,
+        "deepseek-official/deepseek-flash-high": 1,
+        "deepseek-official/deepseek-flash:high": 1
+      },
+      "efforts": {
+        "deepseek-flash/high": 70,
+        "deepseek-flash-high/high": 1,
+        "deepseek-flash:high/high": 1
+      },
+      "tools": {
+        "skill": 58,
+        "read": 858,
+        "grep": 252,
+        "glob": 33,
+        "pwsh": 1152,
+        "structured_output": 23,
+        "write": 96,
+        "edit": 661,
+        "todo_write": 15,
+        "subagent": 5,
+        "create_goal": 1,
+        "workflow": 20,
+        "job_output": 18,
+        "get_goal": 1,
+        "update_goal": 1
+      }
+    },
+    "v0.2fix": {
+      "arm": "B",
+      "session_files": 7,
+      "partial_files": 0,
+      "model_calls_with_usage": 361,
+      "failed_attempts": 0,
+      "missing_usage_events": 0,
+      "tokens": {
+        "inputTokens": 691501,
+        "outputTokens": 567493,
+        "cacheReadTokens": 71974784,
+        "totalTokens": 73233778
+      },
+      "token_sum_delta": 0,
+      "estimated_cny": 4.550408719999999,
+      "normalized_off_peak_cny": 4.400968679999997,
+      "models": {
+        "deepseek-official/deepseek-flash": 7
+      },
+      "efforts": {
+        "deepseek-flash/high": 9
+      },
+      "tools": {
+        "read": 108,
+        "glob": 3,
+        "grep": 15,
+        "write": 22,
+        "pwsh": 168,
+        "send_message": 6,
+        "skill": 5,
+        "edit": 92,
+        "todo_write": 2,
+        "subagent": 6,
+        "list_agents": 2,
+        "read_image": 4
+      }
+    }
+  },
+  "quality": {
+    "v0.2": {
+      "arm": "A",
+      "outputs_ready": true,
+      "errors": [],
+      "entries": 113,
+      "by_kind": {
+        "character": 30,
+        "place": 32,
+        "object": 30,
+        "event": 21
+      },
+      "prose_chars": 48691,
+      "sources": 1412,
+      "chapters": 30,
+      "quote_count": 444,
+      "citation_errors": 113,
+      "voice_errors": 5,
+      "source_quote_errors": 2,
+      "citation_categories": {
+        "引用编号/缺失引用": 95,
+        "正文引文与节级来源不匹配": 16,
+        "原文章节/引文": 2
+      },
+      "source_quote_failures_per_100_sources": 0.141643059490085,
+      "sourced_chapters": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "entry_integrity_errors": 0,
+      "pronoun_hints": 64,
+      "site_errors": 0,
+      "declared_scopes": {
+        "characters": "第1-30章",
+        "places": "第1-30章",
+        "objects": "第1-30章",
+        "races": "第1-30章",
+        "character_timeline": "第1-30章",
+        "object_timeline": "第1-30章",
+        "interactions": "第1-30章",
+        "custom_attributes": "第1-30章"
+      },
+      "table_errors": 7,
+      "table_rows": {
+        "characters": 71,
+        "places": 72,
+        "objects": 150,
+        "races": 6,
+        "character_timeline": 126,
+        "object_timeline": 44,
+        "interactions": 122,
+        "custom_attributes": 91
+      },
+      "key_entities_total": 11,
+      "key_entities_covered_count": 11
+    },
+    "v0.2fix": {
+      "arm": "B",
+      "outputs_ready": true,
+      "errors": [],
+      "entries": 82,
+      "by_kind": {
+        "character": 34,
+        "place": 21,
+        "object": 13,
+        "event": 10,
+        "race": 4
+      },
+      "prose_chars": 22969,
+      "sources": 322,
+      "chapters": 30,
+      "quote_count": 22,
+      "citation_errors": 0,
+      "voice_errors": 0,
+      "source_quote_errors": 0,
+      "citation_categories": {},
+      "source_quote_failures_per_100_sources": 0.0,
+      "sourced_chapters": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30
+      ],
+      "entry_integrity_errors": 0,
+      "pronoun_hints": 31,
+      "site_errors": 0,
+      "declared_scopes": {
+        "characters": "第1-30章",
+        "places": "第1-30章",
+        "objects": "第1-30章",
+        "races": "第1-30章",
+        "character_timeline": "第1-30章",
+        "object_timeline": "第1-30章",
+        "interactions": "第1-30章",
+        "custom_attributes": "第1-30章"
+      },
+      "table_errors": 0,
+      "table_rows": {
+        "characters": 67,
+        "places": 38,
+        "objects": 60,
+        "races": 13,
+        "character_timeline": 64,
+        "object_timeline": 17,
+        "interactions": 82,
+        "custom_attributes": 21
+      },
+      "key_entities_total": 11,
+      "key_entities_covered_count": 11
+    }
+  },
+  "semantic_observations": {
+    "method": "预先指定6个实体；随机标签展示，核对导语、前两节及相关原文。主助理知道试验设计，不是独立第三方盲评；没有另起DSH审查，没有全库错误率推断。",
+    "samples": [
+      {
+        "name": "路胜",
+        "observation": "fix导语明确作者、作品和虚构人物语境；旧版导语直接进入家世。fix不在导语断言十九岁，完成记录明确年龄依据不足；这是更保守的处理。两个版本仍有剧情复述。"
+      },
+      {
+        "name": "小巧",
+        "observation": "两版保留十二岁与侍女身份。fix更短，但‘习练内功、能听出内气’缺乏原文支持，所挂引用也不支持这项能力。"
+      },
+      {
+        "name": "赵大虎",
+        "observation": "fix对武艺排行保留‘路胜判断’，观点归属更明确。旧版保留较多形貌、授艺过程和直接台词；fix正文仍按章号推进。"
+      },
+      {
+        "name": "端木婉",
+        "observation": "fix退房段落明确区分掌柜说法与路胜直觉，但交易段落把隐藏身份的主体写反。归属改善不稳定。"
+      },
+      {
+        "name": "九连城",
+        "observation": "两版提及城市、时局与周边。旧版把‘已查破’先写成事实，后面又引用路胜认为并未查破，信中说法与主角判断的关系不够清晰。fix较短且仍混有按章复述；没有逐句完整判定两版的全部地理与时局断言。"
+      },
+      {
+        "name": "黑虎刀法",
+        "observation": "旧版存在同名条目；fix精确同名未命中，另有‘黑虎刀法册子’和‘路胜得授黑虎刀法并初见作弊器’条目。没有替换预定样本或给缺失样本补评分；不能称其完全遗漏刀法内容。"
+      }
+    ],
+    "overall": "导语的作品语境、少量观点归属与不确定性处理有改善；正文仍大量按章号复述，并残留主语错配和无依据能力扩写。不能以机械检查零失败宣称语义质量不降或全面提升。"
+  },
+  "browser": {
+    "v0.2": {
+      "arm": "A",
+      "page": "路胜.html",
+      "pages": 114,
+      "tocLinks": 0,
+      "appearanceControls": 0,
+      "tocWorks": false,
+      "textControlWorks": null,
+      "widthControlWorks": null,
+      "mobile": {
+        "viewport": 390,
+        "documentWidth": 390,
+        "overflow": false
+      },
+      "remote_resource_requests": 0
+    },
+    "v0.2fix": {
+      "arm": "B",
+      "page": "路胜.html",
+      "pages": 83,
+      "tocLinks": 8,
+      "appearanceControls": 5,
+      "tocWorks": true,
+      "textControlWorks": true,
+      "widthControlWorks": true,
+      "mobile": {
+        "viewport": 390,
+        "documentWidth": 390,
+        "overflow": false
+      },
+      "remote_resource_requests": 0
+    }
+  },
+  "changes": {
+    "normalized_cost_reduction_percent": 83.23020456854273,
+    "calls_reduction_percent": 84.01947764497565,
+    "elapsed_reduction_percent": 71.27641727472715
+  }
+}
