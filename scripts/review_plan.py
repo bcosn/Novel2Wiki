@@ -52,7 +52,7 @@ def plan(doc, state, include=()):
     by_id = {e["id"]: e for e in entries}
     if len(by_id) != len(entries):
         raise ValueError("条目 id 重复")
-    reviewed = {eid: sig for h in state["history"] for eid, sig in h["entry_signatures"].items()}
+    reviewed = {eid: sig for h in state["history"] if h.get("status", "completed") == "completed" for eid, sig in h["entry_signatures"].items()}
     issues = state["history"][-1]["issues"] if state["history"] else []
     affected = list(dict.fromkeys(i["entry_id"] for i in issues if i["kind"] in CONTENT_KINDS and i["entry_id"] in by_id))
     requested = list(dict.fromkeys(list(include) + affected))
@@ -112,7 +112,7 @@ def operate(args):
             if getattr(args, key) is not None and getattr(args, key) != state["settings"][key]:
                 raise ValueError("已有台账的 %s 不可由续跑命令更改" % key)
     else:
-        if args.claim or args.record_result:
+        if args.claim or args.record_result or getattr(args, "record_failure", None):
             raise ValueError("先生成审查包和台账")
         mode = args.mode or "balanced"
         state = {"version": 1, "work": work, "settings": {"mode": mode,
@@ -138,14 +138,26 @@ def operate(args):
         state["calls"] += 1
         save(state_path, state)
         return {"status": "claimed", "calls": state["calls"], "max_reviews": settings["max_reviews"]}
-    if args.record_result:
+    if args.record_result or getattr(args, "record_failure", None):
         if not pending or pending["status"] != "claimed":
             raise ValueError("只能记录已领取审查包的结果")
-        result = json.loads(Path(args.record_result).read_text(encoding="utf-8"))
+        failure = getattr(args, "record_failure", None)
+        result = ({"status": "model_failed", "failure_reason": failure,
+                   "issues": [], "needs_followup": False} if failure is not None
+                  else json.loads(Path(args.record_result).read_text(encoding="utf-8")))
+        outcome = result.get("status", "completed")
+        if outcome not in ("completed", "model_failed"):
+            raise ValueError("审查结果 status 必须是 completed 或 model_failed")
         ids = {e["id"] for e in pending["packet"]["entries"]}
         issues = result.get("issues")
         if not isinstance(issues, list) or type(result.get("needs_followup")) is not bool:
             raise ValueError("result 需要 issues 数组和 needs_followup 布尔")
+        if outcome == "model_failed":
+            reason = result.get("failure_reason")
+            if not isinstance(reason, str) or not reason.strip() or len(reason) > 500:
+                raise ValueError("失败结果需要 1-500 字符 failure_reason")
+            if issues or result["needs_followup"]:
+                raise ValueError("失败审查没有内容结论，不能附带 issues 或 needs_followup")
         for issue in issues:
             if not isinstance(issue, dict) or issue.get("entry_id") not in ids or issue.get("kind") not in CONTENT_KINDS | {"style"}:
                 raise ValueError("issue 的条目不在样本中，或 kind 无效")
@@ -153,10 +165,11 @@ def operate(args):
                 raise ValueError("issue 需要 sentence 与 fix")
         followup = result["needs_followup"] and any(i["kind"] in CONTENT_KINDS for i in issues)
         state["history"].append({"entry_signatures": pending["entry_signatures"],
-            "issues": issues, "needs_followup": followup})
+            "issues": issues, "needs_followup": followup, "status": outcome,
+            **({"failure_reason": result["failure_reason"]} if outcome == "model_failed" else {})})
         state["pending"] = None
         save(state_path, state)
-        return {"status": "recorded", "calls": state["calls"], "needs_followup": followup}
+        return {"status": "recorded", "calls": state["calls"], "needs_followup": followup, "review_status": outcome}
     if not out_path:
         raise ValueError("生成审查包需要 -o")
     if pending:
@@ -167,12 +180,16 @@ def operate(args):
             return {"status": "reused", "calls": state["calls"], "packet_chars": len(serialized(pending["packet"]))}
         state["pending"] = None
     reason = None
-    if state["calls"] >= settings["max_reviews"]:
+    if state["history"] and state["history"][-1].get("status") == "model_failed":
+        reason = "上一轮审查失败，没有内容结论；已领取额度不退还，不自动重试"
+    elif state["calls"] >= settings["max_reviews"]:
         reason = "已达到作品级审查上限"
     elif state["history"] and not state["history"][-1]["needs_followup"]:
         reason = "上一轮无需要复查的内容问题"
     if reason:
         packet = {"status": "stop", "work": work, "reason": reason, "calls": state["calls"]}
+        if state["history"]:
+            packet["review_status"] = state["history"][-1].get("status", "completed")
         save(out_path, packet)
         save(state_path, state)
         return packet
@@ -240,6 +257,7 @@ def main():
     actions = ap.add_mutually_exclusive_group()
     actions.add_argument("--claim", action="store_true")
     actions.add_argument("--record-result")
+    actions.add_argument("--record-failure", metavar="REASON", help="记录审查失败，保留已领取次数，不伪装成无问题结论")
     args = ap.parse_args()
     try:
         print(serialized(operate_sqlite(args)).strip())

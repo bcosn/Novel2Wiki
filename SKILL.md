@@ -151,7 +151,7 @@ python scripts/review_plan.py data/<书名>.entries.json --mode balanced --state
 ```
 
 只把 packet 中的材料交给审查 AI。复用 pending 包，不重复计一次调用。
-调用前按审查配置 claim；完成后 record。禁止直接跳过台账再另起审批。
+调用前按审查配置 claim；完成后 record。截断/超时未取得结论时用 --record-failure 记录失败，禁止把空 issues 当作通过；已领取次数不退还，不自动重试。禁止直接跳过台账再另起审批。
 审查请求必须给出具体句子、问题性质与最小改法，不索要长篇审批报告。
 渲染用固定模板，不让 AI 临场改页面或逐页写 HTML。
 

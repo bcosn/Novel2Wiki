@@ -279,6 +279,49 @@ class CoreTests(unittest.TestCase):
         with self.assertRaises(ValueError): review_plan.operate_sqlite(self.review_args(out=None, claim=True))
         self.assertEqual(self.store.get_document("书", "_review_state")["calls"], 1)
 
+    def test_failed_review_remains_failed_after_export_loss(self):
+        write_json(self.root / "entries.json", {"meta": {"book": "书"}, "entries": [entry()]})
+        review_plan.operate_sqlite(self.review_args(mode="strict"))
+        review_plan.operate_sqlite(self.review_args(out=None, claim=True))
+        result = review_plan.operate_sqlite(self.review_args(out=None, record_failure="单次输出上限"))
+        self.assertEqual(result["review_status"], "model_failed")
+        state = self.store.get_document("书", "_review_state")
+        self.assertEqual(state["calls"], 1)
+        self.assertEqual(state["history"][0]["status"], "model_failed")
+        self.assertEqual(state["history"][0]["failure_reason"], "单次输出上限")
+        (self.root / "review-state.json").unlink()
+        result = review_plan.operate_sqlite(self.review_args())
+        self.assertEqual(result["status"], "stop")
+        self.assertEqual(result["review_status"], "model_failed")
+        self.assertEqual(result["calls"], 1)
+        with self.assertRaises(ValueError):
+            review_plan.operate_sqlite(self.review_args(out=None, claim=True))
+    def test_failure_result_file_is_not_recorded_as_pass(self):
+        write_json(self.root / "entries.json", {"meta": {"book": "书"}, "entries": [entry()]})
+        review_plan.operate_sqlite(self.review_args())
+        review_plan.operate_sqlite(self.review_args(out=None, claim=True))
+        p = self.root / "result.json"
+        write_json(p, {"status": "model_failed", "failure_reason": "没有取得结论", "issues": [], "needs_followup": False})
+        review_plan.operate_sqlite(self.review_args(out=None, record_result=str(p)))
+        self.assertEqual(self.store.get_document("书", "_review_state")["history"][0]["status"], "model_failed")
+    def test_failed_review_cannot_also_claim_a_content_conclusion(self):
+        write_json(self.root / "entries.json", {"meta": {"book": "书"}, "entries": [entry()]})
+        review_plan.operate_sqlite(self.review_args())
+        review_plan.operate_sqlite(self.review_args(out=None, claim=True))
+        p = self.root / "result.json"
+        for value in [
+            {"status": "model_failed", "failure_reason": "", "issues": [], "needs_followup": False},
+            {"status": "model_failed", "failure_reason": "失败", "issues": [], "needs_followup": True},
+            {"status": "model_failed", "failure_reason": "失败", "issues": [{"entry_id": "e-1", "kind": "style", "sentence": "句", "fix": "改"}], "needs_followup": False},
+        ]:
+            write_json(p, value)
+            with self.assertRaises(ValueError):
+                review_plan.operate_sqlite(self.review_args(out=None, record_result=str(p)))
+            state = self.store.get_document("书", "_review_state")
+            self.assertEqual(state["calls"], 1)
+            self.assertEqual(state["pending"]["status"], "claimed")
+            self.assertEqual(state["history"], [])
+
 class ParserTests(unittest.TestCase):
     def test_prefixed_xhtml_paragraphs_remain_separate(self):
         text = convert.html_to_text('<x:html><x:head><x:title>标题</x:title></x:head><x:body><x:p>甲。</x:p><x:p>乙。</x:p></x:body></x:html>')
