@@ -9,7 +9,7 @@ An AI skill for turning fiction into source-backed encyclopedia entries and loca
 
 https://github.com/user-attachments/assets/3091fdab-414f-4c4f-b55b-f4f779e9d1e8
 
-[观看演示视频](https://github.com/user-attachments/assets/3091fdab-414f-4c4f-b55b-f4f779e9d1e8)（57 秒，720p） · [下载 MP4](assets/novel2wiki-demo.mp4?raw=true)
+[观看演示视频](https://github.com/user-attachments/assets/3091fdab-414f-4c4f-b55b-f4f779e9d1e8)（57 秒，720p） · [下载 MP4](docs/novel2wiki-demo.mp4?raw=true)
 
 ## 本版修复
 
