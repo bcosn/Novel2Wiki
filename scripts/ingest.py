@@ -21,7 +21,7 @@ def ingest(store, work, source, author="", encoding="", denoise=False):
     # Reuse only the still-active revision; an old receipt must not claim a newer input is current.
     current = store.get_document(work, "chapters")
     if current and current.get("meta", {}).get("ingest_id") == batch_id:
-        return {"status": "reused", "ingest_id": batch_id, "chapters": len(current["chapters"]), "chars": current["meta"]["total_chars"]}
+        return {"status": "reused", "work": work, "title": current["meta"]["title"], "ingest_id": batch_id, "chapters": len(current["chapters"]), "chars": current["meta"]["total_chars"]}
     snapshot = store.path.parent / "sources" / (raw_hash + source.suffix.lower())
     snapshot.parent.mkdir(parents=True, exist_ok=True)
     if not snapshot.is_file() or file_digest(snapshot) != raw_hash:
@@ -47,5 +47,5 @@ def ingest(store, work, source, author="", encoding="", denoise=False):
         store.ensure_work(work)
         store.put_document(work, "chapters", doc)
         store.connection.execute("INSERT OR IGNORE INTO batches VALUES(?,?,?,?)", (work, batch_id, digest(doc), now()))
-    return {"status": "ingested", "ingest_id": batch_id, "chapters": len(doc["chapters"]),
+    return {"status": "ingested", "work": work, "title": doc["meta"]["title"], "ingest_id": batch_id, "chapters": len(doc["chapters"]),
             "chars": doc["meta"]["total_chars"], "findings": len(findings)}

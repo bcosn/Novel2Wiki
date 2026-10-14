@@ -63,6 +63,11 @@ def main():
     command = sub.add_parser("render")
     command.add_argument("directory")
     command.add_argument("--unit", default="章")
+    command = sub.add_parser("finalize")
+    command.add_argument("batches", nargs="+")
+    command.add_argument("--directory", required=True, help="exports into data/ and site/ within this directory")
+    command.add_argument("--report", required=True)
+    command.add_argument("--expected-hash", help="current entries hash, required when changing an existing draft")
     command = sub.add_parser("usage")
     command.add_argument("file", help="normalized usage JSON; IDs prevent double counting")
     sub.add_parser("usage-summary")
@@ -133,6 +138,9 @@ def main():
         elif a.action == "delete-upload":
             _assert_upload_work(store, a.id, a.work)
             result = uploads.remove(store, a.id)
+        elif a.action == "finalize":
+            from finalize_entries import finalize
+            result = finalize(store, a.work, a.batches, a.directory, a.report, a.expected_hash)
         elif a.action == "render":
             import render_wiki
             doc = store.get_document(a.work, "entries")
@@ -149,7 +157,7 @@ def main():
             counts = store.connection.execute("SELECT status,count(*) AS n FROM jobs WHERE work_id=? GROUP BY status", (a.work,)).fetchall()
             result = {"work": a.work, "documents": [dict(r) for r in docs], "jobs": {r["status"]: r["n"] for r in counts}}
     print(json.dumps(result, ensure_ascii=False))
-    return 0
+    return 1 if result.get("status") == "invalid" else 0
 
 def _assert_upload_work(store, identity, work):
     if not store.connection.execute("SELECT 1 FROM uploads WHERE id=? AND work_id=?", (identity, work)).fetchone():

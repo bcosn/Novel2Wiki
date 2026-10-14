@@ -24,6 +24,7 @@ import merge_append
 import render_wiki
 import usage_metrics
 import review_plan
+import finalize_entries
 from argparse import Namespace
 from test_v02fix import entry
 
@@ -321,6 +322,57 @@ class CoreTests(unittest.TestCase):
             self.assertEqual(state["calls"], 1)
             self.assertEqual(state["pending"]["status"], "claimed")
             self.assertEqual(state["history"], [])
+
+    def finalize_fixture(self):
+        meta = {"book": "书", "scope": "第1章"}
+        docs = {k: {"meta": dict(meta), "items": []} for k in ["characters", "places", "objects", "races", "character_timeline", "object_timeline", "interactions", "custom_attributes"]}
+        docs["characters"]["items"] = [{"name": "甲", "first_chapter": 1}]
+        docs["custom_attributes"]["attribute_defs"] = []
+        docs["chapters"] = {"meta": dict(meta), "chapters": [{"index": 1, "content": "甲在酒店工作。"}]}
+        self.store.import_documents("书", docs)
+        p = self.root / "batch.json"
+        write_json(p, {"meta": meta, "entries": [entry()]})
+        return p
+    def test_finalize_valid_draft_and_resume_after_render_failure(self):
+        p = self.finalize_fixture()
+        with mock.patch("render_wiki.render", side_effect=OSError("interrupted render")):
+            with self.assertRaises(OSError):
+                finalize_entries.finalize(self.store, "书", [p], self.root, self.root / "report.json")
+        committed = self.store.get_document("书", "entries")
+        result = finalize_entries.finalize(self.store, "书", [p], self.root, self.root / "report.json")
+        self.assertEqual(result["status"], "completed")
+        self.assertEqual(self.store.get_document("书", "entries"), committed)
+        self.assertEqual(json.loads((self.root / "data/书.entries.json").read_text(encoding="utf-8")), committed)
+        self.assertTrue((self.root / "site/index.html").exists())
+    def test_finalize_bad_citation_preserves_existing_draft_and_site(self):
+        p = self.finalize_fixture()
+        finalize_entries.finalize(self.store, "书", [p], self.root, self.root / "report.json")
+        previous = self.store.get_document("书", "entries")
+        page = (self.root / "site/index.html").read_bytes()
+        bad = entry(); bad["sources"][0]["chapter"] = 99
+        write_json(p, {"meta": {"book": "书", "scope": "第1章"}, "entries": [bad]})
+        result = finalize_entries.finalize(self.store, "书", [p], self.root, self.root / "report.json", digest(previous))
+        self.assertEqual(result["status"], "invalid")
+        self.assertEqual(self.store.get_document("书", "entries"), previous)
+        self.assertEqual((self.root / "site/index.html").read_bytes(), page)
+        self.assertLess(len(json.dumps(result, ensure_ascii=False)), 1200)
+    def test_finalize_rejects_stale_version_and_overwriting_input(self):
+        p = self.finalize_fixture()
+        finalize_entries.finalize(self.store, "书", [p], self.root, self.root / "report.json")
+        with self.assertRaises(ValueError):
+            finalize_entries.finalize(self.store, "书", [p], self.root, self.root / "report.json", "stale")
+        exported = self.root / "data/书.entries.json"
+        previous = exported.read_bytes()
+        with self.assertRaises(ValueError):
+            finalize_entries.finalize(self.store, "书", [exported], self.root, self.root / "report.json")
+        self.assertEqual(exported.read_bytes(), previous)
+    def test_finalize_rejects_batch_scope_mismatch(self):
+        p = self.finalize_fixture()
+        other = self.root / "other.json"
+        write_json(other, {"meta": {"book": "书", "scope": "第2章"}, "entries": [entry("e-2", "乙")]})
+        with self.assertRaises(ValueError):
+            finalize_entries.finalize(self.store, "书", [p, other], self.root, self.root / "report.json")
+        self.assertIsNone(self.store.get_document("书", "entries"))
 
 class ParserTests(unittest.TestCase):
     def test_prefixed_xhtml_paragraphs_remain_separate(self):
