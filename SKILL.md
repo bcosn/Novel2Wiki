@@ -3,10 +3,27 @@ name: novel2wiki
 description: 把小说电子书整理成可溯源的百科条目与本地静态 Wiki；适用于电子书清洗、人物与设定抽取、叙事时间线及小说百科生成。
 ---
 
-# Novel2Wiki v0.2fix
+# Novel2Wiki v0.3
 
 这是一套给 AI 使用的 skill。把小说整理成第三人称百科条目，再用固定模板渲染站点。
-Python 3.10+，脚本只用标准库；旧版 doc 与部分 azw3 可选用 Calibre。
+Python 3.10+；先安装 requirements-lock.txt 中的 lxml 与 charset-normalizer。
+SQLite 使用 Python 标准库；格式转换后端保持原样，旧版 doc 与部分 azw3 可选用 Calibre。
+
+## v0.3 内核入口
+
+正式状态由 data/novel2wiki.sqlite 保存，JSON 是模型交换和校验、渲染用的导出。
+完整命令见 docs/v0.3-workspace.md；子代理创建与通信使用 schema/子代理协议.md。
+任务只传 ID、输入路径/hash/范围及输出路径，不复制正文、全表、全库或历史到消息与 stdout。
+默认不创建子代理；需要独立任务才启用 spawn，禁止 fork 和再创建子代理。
+合并、校验、入库、上传、渲染用程序执行，不再让代理搬运全部内容。
+固定角色指令先于动态任务；先查任务缓存，模型审查仍受原有作品级审查上限约束。
+DSH 使用专用 headless profile 配合 config/dsh-core.patch.yml，不沿用全局插件清单。
+该配置不自动加载其他 skill，当前项目规范按步骤通过文件读取。
+
+旧 JSON 可一次性用 workspace import 迁移；之后以数据库为准，不用旧导出覆盖新版本。
+抽取批次用 task submit 合并新增记录，条目全稿替换需要当前 entries hash。
+阶段完成后按需导出供旧校验器读取；JSON 导出中断只重导出，不重做模型工作。
+条目生成原则和 importance 策略保持现状，关联跳转留在 v0.3fix。
 
 ## 开始前
 
@@ -40,7 +57,8 @@ Python 3.10+，脚本只用标准库；旧版 doc 与部分 azw3 可选用 Calib
 ## 1. 清洗
 
 ```powershell
-scripts/convert.ps1 <电子书> -OutDir out
+python scripts/workspace.py --db data/novel2wiki.sqlite --work <书名> ingest <电子书>
+python scripts/workspace.py --db data/novel2wiki.sqlite --work <书名> export out --kind chapters
 python scripts/audit.py out/<书名>.chapters.json --report out/audit.md
 ```
 
@@ -141,6 +159,14 @@ python scripts/review_plan.py data/<书名>.entries.json --mode balanced --state
 python scripts/render_wiki.py data/<书名>.entries.json -o <书名>_wiki --work <书名> --unit 章
 python scripts/verify_example.py data --book <书名> --site-dir <书名>_wiki
 ```
+
+包含用户图片与书评时改用数据库渲染入口：
+
+```powershell
+python scripts/workspace.py --db data/novel2wiki.sqlite --work <书名> render <书名>_wiki --unit 章
+```
+
+图片、书评独立保存，不写回模型条目，不因重生成覆盖；没有上传界面，客户端入口留待后续版本。
 
 默认界面参照 Vector 2022：左侧可点击目录、中间正文、右侧工具与外观；
 信息框位于正文内，不占右侧工具栏。桌面与窄屏各抽一页人工或浏览器检查。

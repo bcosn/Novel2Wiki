@@ -8,6 +8,7 @@ import json
 import os
 import re
 import sys
+import sqlite3
 from pathlib import Path
 
 PROFILES = {"economy": 0, "balanced": 1, "strict": 2}
@@ -187,6 +188,40 @@ def operate(args):
             "packet_chars": len(serialized(packet)), "calls": state["calls"], "max_reviews": settings["max_reviews"],
             "omitted_candidates": state.get("omitted_candidates", [])}
 
+def operate_sqlite(args):
+    """Reuse existing review policy, commit the ledger transactionally."""
+    import copy
+    import tempfile
+    from core_store import Store, write_json
+    entries_path = Path(args.entries).resolve()
+    state_path = Path(args.state).resolve()
+    out_path = Path(args.out).resolve() if args.out else None
+    if state_path == entries_path or out_path in (entries_path, state_path):
+        raise ValueError("entries、state 与 packet 必须使用不同路径")
+    doc = json.loads(entries_path.read_text(encoding="utf-8"))
+    work = (doc.get("meta") or {}).get("book") or entries_path.stem
+    state_path.parent.mkdir(parents=True, exist_ok=True)
+    with Store(getattr(args, "db", None) or state_path.parent / "novel2wiki.sqlite") as store:
+        with tempfile.TemporaryDirectory(prefix="review-", dir=state_path.parent) as temporary:
+            stage = Path(temporary)
+            with store.transaction():
+                state = store.get_document(work, "_review_state")
+                if state is None and state_path.exists():
+                    state = json.loads(state_path.read_text(encoding="utf-8"))
+                if state is not None:
+                    write_json(stage / "state.json", state)
+                call_args = copy.copy(args)
+                call_args.state = str(stage / "state.json")
+                call_args.out = str(stage / "packet.json") if out_path else None
+                result = operate(call_args)
+                state = json.loads((stage / "state.json").read_text(encoding="utf-8"))
+                store.put_document(work, "_review_state", state)
+            # Export after the canonical commit. A failed export must never reset the quota.
+            write_json(state_path, state)
+            if out_path and (stage / "packet.json").exists():
+                write_json(out_path, json.loads((stage / "packet.json").read_text(encoding="utf-8")))
+    return result
+
 def main():
     try:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -195,6 +230,7 @@ def main():
     ap = argparse.ArgumentParser(description="作品级 AI 审查参数、限量上下文与调用台账")
     ap.add_argument("entries")
     ap.add_argument("--state", required=True)
+    ap.add_argument("--db", help="默认 state 所在目录/novel2wiki.sqlite，台账以数据库为准")
     ap.add_argument("-o", "--out")
     ap.add_argument("--mode", choices=PROFILES)
     ap.add_argument("--max-reviews", type=int)
@@ -205,23 +241,12 @@ def main():
     actions.add_argument("--claim", action="store_true")
     actions.add_argument("--record-result")
     args = ap.parse_args()
-    state_path = Path(args.state).resolve()
-    state_path.parent.mkdir(parents=True, exist_ok=True)
-    lock = state_path.with_name(state_path.name + ".lock")
     try:
-        descriptor = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-    except FileExistsError:
-        print("台账正在使用，稍后重试；不要并行领取审查", file=sys.stderr)
-        return 1
-    try:
-        os.close(descriptor)
-        print(serialized(operate(args)).strip())
+        print(serialized(operate_sqlite(args)).strip())
         return 0
-    except (ValueError, OSError, KeyError, TypeError) as exc:
+    except (ValueError, OSError, KeyError, TypeError, sqlite3.Error) as exc:
         print("审查计划失败: %s" % exc, file=sys.stderr)
         return 1
-    finally:
-        lock.unlink()
 
 if __name__ == "__main__":
     sys.exit(main())

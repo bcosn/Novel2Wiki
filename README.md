@@ -1,9 +1,22 @@
-# Novel2Wiki · v0.2fix
+# Novel2Wiki · v0.3
 
 给 AI 使用的小说百科生成 skill。先抽取人物、地点、物品、互动与状态变化，
 再用作品外的第三人称写百科条目，输出可在本地打开的静态 Wiki。
 
 An AI skill for turning fiction into source-backed encyclopedia entries and local static wiki pages.
+
+## v0.3：内核鲁棒性与成本控制
+
+- SQLite 保存正式数据、不可变版本、稳定记录 ID、幂等批次和可恢复任务；JSON 保留为交换与导出格式。
+- lxml 解析现有 XML/HTML，charset-normalizer 辅助编码探测；格式转换后端保持原样。
+- 子代理默认关闭；任务按路径、hash 和范围派发，结果直接落盘，由程序提交和合并。
+- 图片与书评独立导入、关联、更新、删除，数据库渲染入口支持离线展示，重生成不覆盖用户内容。
+- 三份网上作品的 800 字节选用于回归，不是模型训练数据；新测试包含并行提交与强制退出恢复。
+- 专用 DSH headless overlay 精简插件与工具，固定可复用上下文，提供请求审计和用量去重统计。
+
+先运行 `python -m pip install -r requirements-lock.txt`。
+用法：[工作区说明](docs/v0.3-workspace.md) · [看板](docs/v0.3-board.md) · [开发记录](docs/development-notes.md) · [验证结果](docs/v0.3-validation.md)。
+事件与人物条目自动关联跳转留到 v0.3fix；小模型留到 v0.5；格式后端升级和客户端分发留到 v1.0。
 
 ## 演示视频
 
@@ -36,7 +49,7 @@ https://github.com/user-attachments/assets/3091fdab-414f-4c4f-b55b-f4f779e9d1e8
 ## 使用
 
 把本目录作为 skill 交给 AI，入口是 [SKILL.md](SKILL.md)。
-需要 Python 3.10+，运行脚本只使用标准库。Calibre 仅为旧版 doc 与部分 azw3 的可选依赖。
+需要 Python 3.10+、lxml 和 charset-normalizer，SQLite 使用标准库。Calibre 仅为旧版 doc 与部分 azw3 的可选依赖。
 
 流程与标准按需读取，不要每次加载全部文件：
 

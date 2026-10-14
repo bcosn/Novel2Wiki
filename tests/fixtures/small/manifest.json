@@ -1,0 +1,32 @@
+{
+  "purpose": "small regression excerpts; no model training",
+  "samples": [
+    {
+      "file": "madman.txt",
+      "title": "狂人日记",
+      "source_url": "https://zh.wikisource.org/zh-hans/狂人日记",
+      "source_page_sha256": "443275efe4cac35aeb820f8900c326f393bb669c578303eed85876de9fea0ca2",
+      "sha256": "789896dc5ed8ecaa89e3870dbb164a50f6fed047d39855c95aae57ca3071312e",
+      "chars": 800,
+      "scope": "首段节选，截断位置不代表章节边界"
+    },
+    {
+      "file": "medicine.txt",
+      "title": "药",
+      "source_url": "https://zh.wikisource.org/zh-hans/药",
+      "source_page_sha256": "8ab85521f406d4fa4bef96b967b83c9d2a7a1da72299199b7fc7ba20b9a087fb",
+      "sha256": "0c60b61d72b8d171f4cb6185c75128494535579f1599b6cea6573c4447dbeaff",
+      "chars": 800,
+      "scope": "首段节选，截断位置不代表章节边界"
+    },
+    {
+      "file": "red-chamber.txt",
+      "title": "红楼梦第一回",
+      "source_url": "https://zh.wikisource.org/zh-hans/紅樓夢/第001回",
+      "source_page_sha256": "8668dc2dc2021c6afe30caa731bda8ac123c72408d75cae034f71c39c8807e90",
+      "sha256": "fb8f47646576840ce848538ce1a41aaa1908d88393382038cddd33af60cc1098",
+      "chars": 800,
+      "scope": "首段节选，截断位置不代表章节边界"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+# Explicit opt-in only. Never fork the parent conversation or enable web tools.
+- id: subagent
+  disabled: false
+- id: subagent-spawn-in-process
+  disabled: false
+- id: tool-subagent
+  disabled: false
+# Fork, list/control, and workflow tools remain disabled by dsh-core.patch.yml.

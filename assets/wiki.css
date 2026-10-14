@@ -69,3 +69,8 @@ body:has(#width-wide:checked) .page-shell{max-width:none;grid-template-columns:1
 @media(max-width:520px){.brand small{font-size:11px}.browse-link{border:0;padding:0}.browse-link span{display:none}.infobox{float:none;width:100%;max-width:none;margin:0 0 1rem}.article-toolbar>div{gap:12px}.article-body{font-size:16px}.tocbox nav{font-size:13px}.category ul{columns:2}}
 @media print{.site-header,#left,#right,.article-toolbar,.site-footer,.refsopen,.refsshut{display:none}.page-shell{display:block;padding:0}.references{display:block}.infobox{max-width:40%}.article-body{font-size:12pt}a{color:#202122}}
 @media(max-width:800px){#left{display:none}.mobile-toc{display:block;margin:0 0 16px;font-size:14px}.mobile-toc summary{cursor:pointer;list-style:disclosure-closed}.mobile-toc[open] summary{list-style:disclosure-open}.mobile-toc nav ul{list-style:none;padding:0;columns:2}.mobile-toc nav li{margin:5px 0;break-inside:avoid}}
+:root { --upload-border: #a2a9b1; }
+.user-gallery figure { margin: 1rem 0; max-width: 36rem; }
+.user-gallery img { display: block; max-width: 100%; height: auto; }
+.user-gallery figcaption, .review-meta, .upload-source { color: #54595d; font-size: .875rem; }
+.user-review { border-top: 1px solid var(--upload-border); padding: .5rem 0; }

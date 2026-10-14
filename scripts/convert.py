@@ -27,6 +27,10 @@ import sys
 import zipfile
 from datetime import datetime, timezone
 from html import unescape
+from lxml import etree, html as lxml_html
+from charset_normalizer import from_bytes
+import posixpath
+from urllib.parse import unquote
 
 # Windows 控制台默认代码页不是 UTF-8，中文会乱码；强制 UTF-8 输出
 for _stream in (sys.stdout, sys.stderr):
@@ -104,20 +108,38 @@ def normalize_text(t: str) -> str:
 
 
 def html_to_text(html: str) -> str:
-    """HTML → 纯文本，保留段落换行。"""
-    t = re.sub(r"(?is)<(script|style|head)[^>]*>.*?</\1>", "", html)
-    t = RE_PAGEBREAK.sub("\n\n", t)
-    t = re.sub(r"(?i)<br\s*/?>", "\n", t)
-    t = re.sub(r"(?i)</(p|div|h[1-6]|li|tr|pre|section)>", "\n\n", t)
-    t = RE_HTML_TAG.sub("", t)
-    return normalize_text(unescape(t))
+    """Parse HTML structurally and preserve paragraph/line boundaries."""
+    if not html.strip():
+        return ""
+    root = lxml_html.fromstring(html, parser=lxml_html.HTMLParser(no_network=True))
+    pieces = []
+    blocks = {"p", "div", "h1", "h2", "h3", "h4", "h5", "h6", "li", "tr", "pre", "section", "article"}
+    def visit(node):
+        if not isinstance(node.tag, str):
+            return
+        tag = node.tag.rsplit("}", 1)[-1].rsplit(":", 1)[-1].lower()
+        if tag in {"head", "script", "style"}:
+            return
+        if tag in blocks:
+            pieces.append("\n\n")
+        if tag in {"br", "pagebreak", "mbp:pagebreak"}:
+            pieces.append("\n")
+        if node.text:
+            pieces.append(node.text)
+        for child in node:
+            visit(child)
+            if child.tail:
+                pieces.append(child.tail)
+        if tag in blocks:
+            pieces.append("\n\n")
+        elif tag in {"td", "th"}:
+            pieces.append(" ")
+    visit(root)
+    return normalize_text("".join(pieces))
 
-
-# ---------------------------------------------------------------- 编码探测
 
 def sniff_encoding(raw: bytes) -> tuple[str, str]:
-    """返回 (编码名, 说明)。优先 BOM，其次严格 UTF-8，最后用汉字频率在 GBK/Big5 间判优。"""
-    if raw[:3] == b"\xef\xbb\xbf":
+    if raw.startswith(b"\xef\xbb\xbf"):
         return "utf-8-sig", "utf-8 (bom)"
     if raw[:2] in (b"\xff\xfe", b"\xfe\xff"):
         return "utf-16", "utf-16 (bom)"
@@ -126,22 +148,10 @@ def sniff_encoding(raw: bytes) -> tuple[str, str]:
         return "utf-8", "utf-8"
     except UnicodeDecodeError:
         pass
-
-    # GBK 与 Big5 都能解大部分字节流，用常用汉字命中率判优
-    common = set("的一是了我不人在他有这上们来到时大地为子中你说生国年着就那和要"
-                 "她出也得里后自以会家可下而过天去能对小多然于心学么之都好看起发当没")
-    best, best_score = None, -1
-    for enc in ("gbk", "big5", "gb18030"):
-        try:
-            s = raw.decode(enc)
-        except UnicodeDecodeError:
-            continue
-        score = sum(1 for ch in s if ch in common) + s.count("\ufffd") * -50
-        if score > best_score:
-            best, best_score = enc, score
-    if best:
-        return best, f"{best} (heuristic)"
-    return "gb18030", "gb18030 (fallback)"
+    match = from_bytes(raw, cp_isolation=["gb18030", "big5"]).best()
+    if match is None:
+        raise ValueError("无法可靠识别编码；请用 --encoding 指定，不以替换字符继续")
+    return match.encoding, "%s (charset-normalizer; heuristic)" % match.encoding
 
 
 # ---------------------------------------------------------------- 章节切分
@@ -246,54 +256,51 @@ def strip_site_declarations(text: str) -> tuple[str, str, str]:
 # ---------------------------------------------------------------- EPUB
 
 def read_epub(path: str) -> tuple[dict, str, list[str]]:
-    """返回 (元数据, 纯文本, 警告列表)。"""
-    warn: list[str] = []
+    """Keep the existing EPUB backend, replace regex XML parsing with lxml."""
+    warn = []
+    parser = etree.XMLParser(resolve_entities=False, no_network=True)
     with zipfile.ZipFile(path) as z:
-        names = set(z.namelist())
-
-        def read(name: str) -> str:
-            try:
-                return z.read(name).decode("utf-8", errors="replace")
-            except KeyError:
-                return ""
-
-        container = read("META-INF/container.xml")
-        m = re.search(r'full-path="([^"]+)"', container)
-        if not m:
-            raise ValueError("EPUB 缺少 META-INF/container.xml 或其中没有 full-path")
-        opf_name = m.group(1)
-        opf_dir = opf_name.rsplit("/", 1)[0] + "/" if "/" in opf_name else ""
-        opf = read(opf_name)
-
-        def dc(tag: str) -> str:
-            m = re.search(rf"<dc:{tag}[^>]*>(.*?)</dc:{tag}>", opf, re.S)
-            return unescape(m.group(1)).strip() if m else ""
-
-        meta = {"title": dc("title"), "creator": dc("creator"), "language": dc("language")}
-
-        href_by_id = {}
-        for tag in re.findall(r"<item\s[^>]*>", opf):
-            i = re.search(r'id="([^"]+)"', tag)
-            h = re.search(r'href="([^"]+)"', tag)
-            t = re.search(r'media-type="([^"]+)"', tag)
-            if i and h:
-                href_by_id[i.group(1)] = (h.group(1), t.group(1) if t else "")
-
+        try:
+            container = etree.fromstring(z.read("META-INF/container.xml"), parser)
+            roots = container.xpath("//*[local-name()='rootfile']/@full-path")
+            if not roots:
+                raise ValueError("EPUB 缺少 OPF 路径")
+            opf_name = unquote(roots[0])
+            opf = etree.fromstring(z.read(opf_name), parser)
+        except (KeyError, etree.XMLSyntaxError) as exc:
+            raise ValueError("EPUB 结构损坏: %s" % exc) from exc
+        def metadata(tag):
+            values = opf.xpath("//*[local-name()='metadata']/*[local-name()='%s']/text()" % tag)
+            return values[0].strip() if values else ""
+        meta = {"title": metadata("title"), "creator": metadata("creator"), "language": metadata("language")}
+        manifest = {item.get("id"): item for item in opf.xpath("//*[local-name()='manifest']/*[local-name()='item']")}
         spine = []
-        for m in re.finditer(r'<itemref\s[^>]*idref="([^"]+)"', opf):
-            entry = href_by_id.get(m.group(1))
-            if entry and entry[1] == "application/xhtml+xml":
-                spine.append(opf_dir + entry[0])
+        for ref in opf.xpath("//*[local-name()='spine']/*[local-name()='itemref']"):
+            item = manifest.get(ref.get("idref"))
+            if item is None:
+                raise ValueError("EPUB spine 引用缺失: %s" % ref.get("idref"))
+            if item.get("media-type") not in {"application/xhtml+xml", "text/html"}:
+                continue
+            name = posixpath.normpath(posixpath.join(posixpath.dirname(opf_name), unquote(item.get("href", "").split("#")[0])))
+            if name.startswith("../") or name.startswith("/"):
+                raise ValueError("EPUB 资源路径越界")
+            spine.append(name)
         if not spine:
-            spine = sorted(n for n in names if n.lower().endswith((".xhtml", ".html", ".htm")))
-            warn.append("OPF spine 为空，回退到按文件名顺序读取全部 HTML")
-
+            raise ValueError("EPUB 缺少可读取 spine；不按文件名猜测正文顺序")
         parts = []
         for name in spine:
-            if name not in names:
-                warn.append(f"spine 指向的文件不存在：{name}")
-                continue
-            parts.append(html_to_text(read(name)))
+            try:
+                raw = z.read(name)
+            except KeyError as exc:
+                raise ValueError("EPUB 正文文件缺失: %s" % name) from exc
+            try:
+                tree = etree.fromstring(raw, parser)
+                html = etree.tostring(tree, encoding="unicode", method="html")
+            except etree.XMLSyntaxError:
+                tree = lxml_html.fromstring(raw, parser=lxml_html.HTMLParser(encoding="utf-8", no_network=True))
+                html = lxml_html.tostring(tree, encoding="unicode")
+                warn.append("XHTML 使用 HTML 容错解析: %s" % name)
+            parts.append(html_to_text(html))
         return meta, normalize_text("\n\n".join(parts)), warn
 
 
@@ -520,7 +527,8 @@ def read_mobi(path: str) -> tuple[dict, str, list[str]]:
 
 def read_docx(path: str) -> tuple[dict, str, list[str]]:
     """DOCX → (元数据, 文本, 警告)。按段落还原，尾注/脚注一并取出。"""
-    import xml.etree.ElementTree as ET
+    ET = etree
+    xml_parser = etree.XMLParser(resolve_entities=False, no_network=True)
 
     W = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
     warn: list[str] = []
@@ -529,28 +537,27 @@ def read_docx(path: str) -> tuple[dict, str, list[str]]:
     with zipfile.ZipFile(path) as z:
         names = set(z.namelist())
 
-        def read(name: str) -> str:
+        def read(name: str) -> bytes:
             try:
-                return z.read(name).decode("utf-8", errors="replace")
+                return z.read(name)
             except KeyError:
                 return ""
 
         # 核心属性里的标题/作者
         core = read("docProps/core.xml")
         if core:
-            m = re.search(r"<dc:title[^>]*>(.*?)</dc:title>", core, re.S)
-            if m:
-                meta["title"] = unescape(m.group(1)).strip()
-            m = re.search(r"<dc:creator[^>]*>(.*?)</dc:creator>", core, re.S)
-            if m:
-                meta["creator"] = unescape(m.group(1)).strip()
+            props = ET.fromstring(core, xml_parser)
+            for field in ("title", "creator"):
+                values = props.xpath("//*[local-name()='%s']/text()" % field)
+                if values:
+                    meta[field] = values[0].strip()
 
         def paragraphs(xml: str) -> list[str]:
             if not xml:
                 return []
             try:
-                root = ET.fromstring(xml)
-            except ET.ParseError as exc:
+                root = ET.fromstring(xml, xml_parser)
+            except ET.XMLSyntaxError as exc:
                 warn.append(f"XML 解析失败：{exc}")
                 return []
             out = []
@@ -616,7 +623,7 @@ def convert_with_calibre(path: str, target_ext: str = ".epub") -> str:
 
 # ---------------------------------------------------------------- 主流程
 
-def build_result(path: str, title_override: str, author_override: str) -> dict:
+def build_result(path: str, title_override: str, author_override: str, encoding_override: str = "") -> dict:
     ext = os.path.splitext(path)[1].lower()
     warn: list[str] = []
     meta: dict = {}
@@ -671,9 +678,10 @@ def build_result(path: str, title_override: str, author_override: str) -> dict:
         text, head, tail = strip_site_declarations(text)
         text, watermarks = clean_watermarks(text, book_title)
     elif ext in (".txt", ".text"):
-        raw = open(path, "rb").read()
-        enc, enc_note = sniff_encoding(raw)
-        text = normalize_text(raw.decode(enc, errors="replace"))
+        with open(path, "rb") as source:
+            raw = source.read()
+        enc, enc_note = (encoding_override, encoding_override + " (explicit)") if encoding_override else sniff_encoding(raw)
+        text = normalize_text(raw.decode(enc, errors="strict"))
         meta = {"title": "", "creator": "", "language": "zh", "source_encoding": enc_note}
         # 标题在同一行重复两次
         lines = text.split("\n")
@@ -972,6 +980,7 @@ def main() -> int:
     ap.add_argument("--title", default="", help="覆盖书名")
     ap.add_argument("--author", default="", help="覆盖作者")
     ap.add_argument("--selftest", action="store_true", help="运行自检")
+    ap.add_argument("--encoding", default="", help="TXT 编码覆盖，解码失败不静默替换")
     args = ap.parse_args()
 
     if args.selftest:
@@ -987,7 +996,7 @@ def main() -> int:
             rc = 1
             continue
         try:
-            result = build_result(path, args.title, args.author)
+            result = build_result(path, args.title, args.author, args.encoding)
         except Exception as exc:                      # noqa: BLE001
             print(f"[失败] {os.path.basename(path)}：{exc}", file=sys.stderr)
             rc = 1
@@ -996,8 +1005,8 @@ def main() -> int:
         base = re.sub(r'[\\/:*?"<>|]', "_", result["meta"]["title"]) or "output"
         out = os.path.join(args.outdir, base + ".chapters.json")
         os.makedirs(args.outdir, exist_ok=True)
-        with open(out, "w", encoding="utf-8", newline="\n") as fh:
-            json.dump(result, fh, ensure_ascii=False, indent=2)
+        from core_store import write_json
+        write_json(out, result)
 
         m, g = result["meta"], result["integrity"]
         print(f"{m['title']} / {m['creator']}  [{m['source_format']} / {m['source_encoding']}]")
