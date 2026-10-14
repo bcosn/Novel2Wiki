@@ -5,6 +5,10 @@
 
 An AI skill for turning fiction into source-backed encyclopedia entries and local static wiki pages.
 
+## 演示视频
+
+[观看 Novel2Wiki 演示视频](assets/novel2wiki-demo.mp4)（57 秒，720p）。
+
 ## 本版修复
 
 - **界面**：默认采用 Vector 2022 风格。左侧可点击目录、正文内信息框、右侧工具与字号/宽度控制；
