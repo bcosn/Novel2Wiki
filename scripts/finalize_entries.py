@@ -3,38 +3,24 @@ from __future__ import annotations
 import json
 from collections import Counter
 from pathlib import Path
-from core_store import digest, file_digest, validate_document, write_json
+from core_store import digest, file_digest, write_json
 from citation_catalog import materialize, CitationErrors
+from draft_format import expand, DraftFormatErrors
+from draft_validation import shape_errors
 from quote_source_check import check as check_quotes
 from check_voice import check as check_voice
 from verify_example import TABLES, table_errors, site_errors
 
 
 def shape(doc):
-    for e in doc["entries"]:
-        if not isinstance(e, dict) or any(not isinstance(e.get(k), str) or not e[k].strip() for k in ("id","name","lead")):
-            raise ValueError("entry requires nonempty id, name and lead")
-        if type(e.get("stub")) is not bool or not isinstance(e.get("reception"), dict) or any(not isinstance(v,str) for v in e["reception"].values()):
-            raise ValueError("entry requires boolean stub and reception text object")
-        for k in ("sections","sources","links","aliases"):
-            if not isinstance(e.get(k, []), list):
-                raise ValueError("invalid entry array: " + k)
-        if "sections" not in e or "sources" not in e or "links" not in e:
-            raise ValueError("missing required entry arrays")
-        if any(not isinstance(s,dict) or not isinstance(s.get("body",""),str) or not isinstance(s.get("heading",""),str) for s in e["sections"]):
-            raise ValueError("sections must contain text bodies and headings")
-        if any(not isinstance(s,dict) or not isinstance(s.get("quote",""),str) for s in e["sources"]):
-            raise ValueError("sources must contain objects with text quotes")
-        if any(not isinstance(v,str) for v in e.get("aliases",[]) + e["links"]):
-            raise ValueError("aliases and links must be strings")
-    validate_document("entries", doc)
-    if len({e["name"] for e in doc["entries"]}) != len(doc["entries"]):
-        raise ValueError("duplicate entry names")
+    issues=shape_errors(doc)
+    if issues:
+        raise ValueError("; ".join(issues))
 
 
 def rules_hash():
     root = Path(__file__).resolve().parent
-    return digest({n:file_digest(root/n) for n in ("finalize_entries.py","citation_catalog.py","core_store.py","quote_source_check.py","check_voice.py","verify_example.py","audit_append.py","render_wiki.py","local_uploads.py")} | {
+    return digest({n:file_digest(root/n) for n in ("finalize_entries.py","draft_format.py","draft_validation.py","citation_catalog.py","core_store.py","quote_source_check.py","check_voice.py","verify_example.py","audit_append.py","render_wiki.py","local_uploads.py")} | {
         "css":file_digest(root.parent/"assets/wiki.css")})
 
 
@@ -70,10 +56,16 @@ def cached(report, signature, files, directory):
 def repair_packet(report, doc, errors):
     ids = {e.get("id") for e in doc["entries"] if isinstance(e,dict) and isinstance(e.get("id"),str)}
     affected = sorted({s.split("/",1)[0] for s in errors if s.split("/",1)[0] in ids})
+    prefixes={s.split("/",1)[0] for s in errors}
+    indexes=[i for i,e in enumerate(doc["entries"],1) if (not isinstance(e,dict) or not isinstance(e.get("id"),str) or not e["id"].strip()) and "entry[%d]" % i in prefixes]
     packet = {"affected_entry_ids":[v[:128] for v in affected[:12]], "affected_entry_count":len(affected),
+              "affected_entry_indexes":indexes[:12],
               "errors":[s[:300] for s in errors[:8]], "entries":[], "omitted_entry_count":max(0,len(affected)-12), "truncated_errors":len(errors)>8}
-    for e in doc["entries"]:
-        if isinstance(e,dict) and e.get("id") in affected[:12]:
+    meta={k:v for k,v in doc.get("meta",{}).items() if isinstance(v,(str,int,bool)) and len(str(v))<=256}
+    if len(json.dumps(meta,ensure_ascii=False))<=1000:
+        packet["meta"]=meta
+    for index,e in enumerate(doc["entries"],1):
+        if isinstance(e,dict) and e.get("id") in affected[:12] or index in indexes[:12]:
             candidate = dict(packet, entries=packet["entries"]+[e])
             if len(json.dumps(candidate,ensure_ascii=False,indent=2))+1<=6000:
                 packet = candidate
@@ -91,7 +83,7 @@ def summary(result, report, directory):
         "error_preview":[s[:160] for s in result.get("errors",[])[:3]]}
 
 
-def finalize(store, work, inputs, directory, report, expected_hash=None, resume=False):
+def finalize(store, work, inputs, directory, report, expected_hash=None, resume=False, update=False, replace=False):
     directory, report = Path(directory).resolve(), Path(report).resolve()
     inputs = [Path(p).resolve() for p in inputs]
     protected = {store.path, *inputs}
@@ -116,6 +108,10 @@ def finalize(store, work, inputs, directory, report, expected_hash=None, resume=
         actual=digest(previous) if previous is not None else None
         if expected_hash is not None and expected_hash!=actual:
             raise ValueError("entry version changed; refresh expected hash")
+        if update and (previous is None or expected_hash is None or resume):
+            raise ValueError("--update requires a committed draft and its --expected-hash; cannot combine with resume")
+        if replace and (update or resume):
+            raise ValueError("--replace cannot combine with --update or resume")
         if resume:
             if batches or previous is None or expected_hash is None:
                 raise ValueError("resume requires a committed draft and its --expected-hash, without batches")
@@ -125,18 +121,64 @@ def finalize(store, work, inputs, directory, report, expected_hash=None, resume=
         for key in ("scope","author"):
             if len({json.dumps(b.get("meta",{}).get(key),sort_keys=True) for b in batches})>1:
                 raise ValueError("batch metadata differs: "+key)
-        doc={"meta":dict(batches[0].get("meta",{})),"entries":[e for b in batches for e in b["entries"]]}
-        doc["meta"].update(book=work,entry_count=len(doc["entries"]))
         chapters=store.get_document(work,"chapters")
         tables={k:store.get_document(work,k) for k in TABLES}
+        if chapters is None or any(v is None for v in tables.values()):
+            raise ValueError("frozen chapters and all eight tables required")
+        normalized=[]
+        for batch in batches:
+            try:
+                value=expand(batch,chapters,work)
+                batch_errors=shape_errors(value,check_links=False)
+                errors.extend(batch_errors)
+                if not batch_errors:
+                    value=materialize(value,chapters)
+                normalized.append(value)
+            except (CitationErrors,DraftFormatErrors) as exc:
+                errors.extend(exc.errors);normalized.append(batch)
+            except (ValueError,TypeError,KeyError) as exc:
+                errors.append(str(exc)[:400]);normalized.append(batch)
+        incoming=[e for b in normalized for e in b["entries"]]
+        # Batches are complete by default for backward compatibility. Partial
+        # changes must explicitly select update; that path never deletes entries.
+        meta=dict((previous if update else normalized[0]).get("meta",{}))
+        if update:
+            for key in ("scope","author"):
+                for batch in normalized:
+                    if not meta.get(key) and batch.get("meta",{}).get(key):
+                        meta[key]=batch["meta"][key]
+                    if key in batch.get("meta",{}) and batch["meta"][key]!=meta.get(key):
+                        errors.append("update metadata differs from committed draft: "+key)
+            pool={e["id"]:e for e in previous["entries"]}
+            seen=set()
+            for e in incoming:
+                if not isinstance(e,dict) or not isinstance(e.get("id"),str):
+                    continue
+                key=e["id"]
+                if key in seen:
+                    errors.append(key+"/id repeated across update batches")
+                seen.add(key)
+                if key in pool and any(e.get(k)!=pool[key].get(k) for k in ("kind","name")):
+                    errors.append(key+"/identity update cannot change kind or name; use an explicit complete replacement")
+                pool[key]=e
+            rows=list(pool.values())
+        else:
+            rows=incoming
+            if previous is not None and not replace and not errors:
+                old_ids={e["id"] for e in previous["entries"]}
+                new_ids={e["id"] for e in rows}
+                if old_ids-new_ids:
+                    raise ValueError("complete draft would remove %d committed entries; use --update for partial edits, or --replace for intentional removal" % len(old_ids-new_ids))
+        doc={"meta":meta,"entries":rows}
+        doc["meta"].update(book=work,entry_count=len(doc["entries"]))
         try:
-            if chapters is None or any(v is None for v in tables.values()):
-                raise ValueError("frozen chapters and all eight tables required")
-            shape(doc)
-            filled=[materialize(b,chapters) for b in batches]
-            doc["entries"]=[e for b in filled for e in b["entries"]]
-            if any("evidence_hash" in b.get("meta",{}) for b in filled):
+            if not errors:
+                errors.extend(shape_errors(doc))
+            if errors:
+                raise ValueError("draft validation failed; repair all reported entry-local errors")
+            if any("evidence_hash" in b.get("meta",{}) for b in normalized):
                 doc["meta"]["evidence_hash"]=digest(chapters)
+            doc=materialize(doc,chapters)
             doc["entries"].sort(key=lambda e:e["id"])
             doc["meta"]["by_kind"]=dict(Counter(e["kind"] for e in doc["entries"]))
             errors.extend(table_errors(tables))
@@ -146,7 +188,8 @@ def finalize(store, work, inputs, directory, report, expected_hash=None, resume=
         except CitationErrors as exc:
             errors.extend(exc.errors)
         except (ValueError,TypeError,KeyError) as exc:
-            errors.append(str(exc)[:400])
+            if not errors:
+                errors.append(str(exc)[:400])
         uploads=upload_state(store,work)
         fingerprint=digest({"entries":doc,"chapters":chapters,"tables":tables,"uploads":uploads,"rules":rules_hash(),"output":str(directory)})
         result={"status":"invalid" if errors else "running","stage":"validation_failed" if errors else "committed","work":work,

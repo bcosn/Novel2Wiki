@@ -68,10 +68,14 @@ def main():
     command.add_argument("--directory", required=True, help="exports into data/ and site/ within this directory")
     command.add_argument("--report", required=True)
     command.add_argument("--expected-hash", help="current entries hash, required when changing an existing draft")
+    mode=command.add_mutually_exclusive_group()
+    mode.add_argument("--update", action="store_true", help="upsert only supplied entries; preserve the remaining committed entries")
+    mode.add_argument("--replace", action="store_true", help="explicitly allow removing committed entries in a complete replacement")
     command = sub.add_parser("prepare-draft")
     command.add_argument("directory")
     command.add_argument("--chapter", type=int, action="append")
     command.add_argument("--max-chars", type=int, default=12000)
+    command.add_argument("--entry", nargs=3, action="append", metavar=("KIND", "ID", "NAME"), help="prepare a compact draft template for 1–3 explicit entries")
     command = sub.add_parser("resume")
     command.add_argument("--directory", required=True)
     command.add_argument("--report", required=True)
@@ -148,10 +152,10 @@ def main():
             result = uploads.remove(store, a.id)
         elif a.action == "finalize":
             from finalize_entries import finalize
-            result = finalize(store, a.work, a.batches, a.directory, a.report, a.expected_hash)
+            result = finalize(store, a.work, a.batches, a.directory, a.report, a.expected_hash, update=a.update, replace=a.replace)
         elif a.action == "prepare-draft":
             from draft_context import prepare
-            result = prepare(store, a.work, a.directory, a.chapter, a.max_chars)
+            result = prepare(store, a.work, a.directory, a.chapter, a.max_chars, a.entry)
         elif a.action == "resume":
             from finalize_entries import finalize
             result = finalize(store, a.work, [], a.directory, a.report, a.expected_hash, resume=True)

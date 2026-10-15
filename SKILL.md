@@ -50,7 +50,8 @@ python scripts/workspace.py --db data/novel2wiki.sqlite --work <书名> prepare-
 ```
 
 超预算时用 --chapter <章节号> 缩小当前批，不能截断后冒充读完全书。
-只读返回的 evidence.json 和 draft-guide.md，按其中简短格式写条目；通常不再读取第五步长规范或实现。
+优先只读返回的 context（draft-context.json），一次取得规范、证据和可选模板；不要再读独立副本重复搬运。同一包不重新抄事实表。
+实验选项：追加 `--entry character e-0001 人物名`（每个对象重复一次，限1–3个），生成compact-v1模板；作者/作品定位句及空字段交给程序。当前真实对照未证实省耗，默认仍用原lead格式。模板空白并非完成稿，不能直接提交。
 保留 meta.evidence_hash，推荐 sources=[]，lead_refs 与 sections[].refs 直接写 evidence_id 字符串，由程序填入 chapter/quote/cite 和本条整数引用编号，避免手抄及编号混用。旧式 sources.evidence_id 与整数 refs 仍兼容。
 旧格式 quote 仍支持，但不得自动用相似句修正。人物说法保持归属，问句不改回答，数量与分割关系不改变，主语切换写清姓名。
 条目按主题组织、第三人称、不按章逐句复述，不为长度补内容；材料少的 stub 可以很短。
@@ -61,8 +62,10 @@ python scripts/workspace.py --db data/novel2wiki.sqlite --work <书名> prepare-
 python scripts/workspace.py --db data/novel2wiki.sqlite --work <书名> finalize <批次文件...> --directory . --report work/finalize-report.json
 ```
 
-修改已有稿传 --expected-hash <prepare-draft 返回的当前条目hash>。这一入口统一校验、入库、导出和渲染，不另调一轮相同脚本。
+首次finalize传入全部待提交批次；修改已有稿的少数条目用 `--update --expected-hash <当前hash>`，按ID合并并保留其余条目。同ID不能暗改name/kind。
+完整替换若会移除旧条目，必须明确加--replace和当前hash；不把单条修复稿当全库替换。这一入口统一校验、入库、导出和渲染，不另调一轮相同脚本。
 校验失败只读返回的 repair_packet，集中修改受影响的本批条目，再重跑 finalize；不要逐条重并全库或打印整章调试。
+返回completed/reused即停止机械检查；不再列目录、重读整份报告或重复跑同一检查。确有语义疑点才核对相应证据。
 相同输入及完整输出返回 reused。输入、规则、上传或文件变化会使复用失效。
 已提交稿的导出/渲染中断，直接恢复，不重新写作：
 

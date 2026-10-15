@@ -17,6 +17,7 @@ import draft_context
 import finalize_entries
 import local_uploads
 import task_protocol
+import draft_format
 
 
 class FlowTests(unittest.TestCase):
@@ -177,6 +178,164 @@ class FlowTests(unittest.TestCase):
         self.assertEqual(result["error_count"],2)
         self.assertEqual(result["affected_entry_ids"],["e-1","e-2"])
         self.assertIsNone(self.store.get_document("书","entries"))
+
+    def two_entries(self):
+        value=copy.deepcopy(self.doc);value["entries"].append(entry("e-2","乙"))
+        write_json(self.batch,value);self.finish()
+        return self.store.get_document("书","entries")
+
+    def test_partial_update_preserves_unaffected_entries_and_stable_ids(self):
+        before=self.two_entries();old_id=self.store.stable_id("书","entries","e-2")
+        value=copy.deepcopy(before);value["entries"]=value["entries"][:1]
+        value["entries"][0]["lead"]="甲在酒店工作。"
+        write_json(self.batch,value)
+        result=self.finish(expected_hash=digest(before),update=True)
+        after=self.store.get_document("书","entries")
+        self.assertEqual(result["status"],"completed")
+        self.assertEqual(after["entries"][1],before["entries"][1])
+        self.assertEqual(self.store.stable_id("书","entries","e-2"),old_id)
+        self.assertEqual(after["entries"][0]["lead"],"甲在酒店工作。")
+
+    def test_partial_update_can_link_to_entries_outside_batch(self):
+        before=self.two_entries();value=copy.deepcopy(before);value["entries"]=value["entries"][:1]
+        value["entries"][0]["links"]=["e-2"];write_json(self.batch,value)
+        self.assertEqual(self.finish(expected_hash=digest(before),update=True)["status"],"completed")
+
+    def test_partial_update_requires_current_hash_and_cannot_rename_identity(self):
+        before=self.two_entries();write_json(self.batch,{"meta":before["meta"],"entries":[before["entries"][0]]})
+        for kw in ({"update":True},{"update":True,"expected_hash":"stale"}):
+            with self.assertRaises(ValueError):self.finish(**kw)
+        value=json.loads(self.batch.read_text(encoding="utf-8"));value["entries"][0]["name"]="改名"
+        write_json(self.batch,value)
+        result=self.finish(expected_hash=digest(before),update=True)
+        self.assertEqual(result["status"],"invalid")
+        self.assertEqual(digest(self.store.get_document("书","entries")),digest(before))
+
+    def test_partial_update_rejects_scope_change_and_duplicate_batches(self):
+        before=self.two_entries();value={"meta":dict(before["meta"],scope="其它范围"),"entries":[before["entries"][0]]}
+        write_json(self.batch,value)
+        self.assertEqual(self.finish(expected_hash=digest(before),update=True)["status"],"invalid")
+        value["meta"]=before["meta"];write_json(self.batch,value)
+        other=self.root/"other.json";write_json(other,value)
+        result=finalize_entries.finalize(self.store,"书",[self.batch,other],self.root,self.report,digest(before),update=True)
+        self.assertEqual(result["status"],"invalid")
+        self.assertEqual(self.store.get_document("书","entries"),before)
+
+    def test_incomplete_replacement_requires_explicit_removal_flag(self):
+        before=self.two_entries();value=copy.deepcopy(before);value["entries"]=value["entries"][:1]
+        write_json(self.batch,value)
+        with self.assertRaisesRegex(ValueError,"would remove"):
+            self.finish(expected_hash=digest(before))
+        self.assertEqual(self.store.get_document("书","entries"),before)
+        self.assertEqual(self.finish(expected_hash=digest(before),replace=True)["entries"],1)
+
+    def compact(self):
+        value=draft_format.template("书","作者","第1章",digest(self.chapters),[("character","e-1","甲")])
+        value["entries"][0].update(lead_facts="甲在酒店工作。",lead_refs=["c1p1"],sections=[])
+        return value
+
+    def test_compact_draft_generates_identity_defaults_and_references(self):
+        value=self.compact();original=copy.deepcopy(value);write_json(self.batch,value)
+        result=self.finish();after=self.store.get_document("书","entries")
+        self.assertEqual(result["status"],"completed")
+        self.assertEqual(value,original)
+        self.assertEqual(after["entries"][0]["lead"],"甲是作者《书》中的人物。甲在酒店工作。")
+        self.assertEqual(after["entries"][0]["sources"][0]["quote"],"甲在酒店工作。")
+        self.assertEqual(after["entries"][0]["reception"],{"in_work":"","user":"","external":""})
+        self.assertNotIn("draft_format",after["meta"])
+        self.assertNotIn("lead_facts",after["entries"][0])
+        with mock.patch("render_wiki.render",side_effect=AssertionError("reuse")):
+            self.assertEqual(self.finish()["status"],"reused")
+
+    def test_compact_update_can_enrich_missing_legacy_author(self):
+        self.finish();before=self.store.get_document("书","entries")
+        self.assertNotIn("author",before["meta"])
+        write_json(self.batch,self.compact())
+        result=self.finish(expected_hash=digest(before),update=True)
+        self.assertEqual(result["status"],"completed")
+        self.assertEqual(self.store.get_document("书","entries")["meta"]["author"],"作者")
+
+    def test_worker_compact_submission_expands_the_same_canonical_format(self):
+        value=self.compact();frozen=self.root/"input.json";write_json(frozen,self.chapters)
+        manifest={"protocol":1,"id":"compact-worker","stage":"draft","inputs":[{"path":str(frozen),"sha256":file_digest(frozen),"offset":0,"length":len(frozen.read_text(encoding="utf-8"))}],"output":str(self.batch),"rules_hash":digest("rules"),"config":{"expected_entries_hash":None}}
+        task_protocol.prepare(self.store,"书",manifest);claim=task_protocol.claim(self.store,"compact-worker")
+        write_json(self.batch,value);task_protocol.submit(self.store,"compact-worker",claim["token"])
+        canonical=self.store.get_document("书","entries")
+        self.assertEqual(canonical["entries"][0]["lead"],"甲是作者《书》中的人物。甲在酒店工作。")
+        self.assertNotIn("draft_format",canonical["meta"])
+
+    def test_compact_draft_rejects_conflicting_metadata_or_lead_and_empty_facts(self):
+        for field,value in (("author","其它作者"),("lead","另一个导语"),("lead_facts","")):
+            draft=self.compact()
+            (draft["meta"] if field=="author" else draft["entries"][0])[field]=value
+            write_json(self.batch,draft)
+            self.assertEqual(self.finish()["status"],"invalid")
+            self.assertIsNone(self.store.get_document("书","entries"))
+
+    def test_compact_format_errors_only_request_bad_entries_and_do_not_ask_for_lead(self):
+        value=self.compact();other=copy.deepcopy(value["entries"][0]);other.update(id="e-2",name="乙")
+        value["entries"].append(other);value["entries"][0]["lead_facts"]=""
+        write_json(self.batch,value);result=self.finish()
+        self.assertEqual(result["affected_entry_ids"],["e-1"])
+        self.assertEqual(result["error_count"],1)
+        packet=json.loads(pathlib.Path(result["repair_packet"]).read_text(encoding="utf-8"))
+        self.assertEqual(packet["meta"]["draft_format"],"compact-v1")
+        self.assertIn("lead_facts",packet["entries"][0])
+        value["entries"][1]["lead_facts"]="";write_json(self.batch,value)
+        self.assertEqual(self.finish()["affected_entry_ids"],["e-1","e-2"])
+
+    def test_null_author_template_and_context_rewrite_protection(self):
+        chapters=copy.deepcopy(self.chapters);chapters["meta"]["creator"]=None
+        self.store.import_documents("书",{"chapters":chapters})
+        directory=self.root/"context"
+        result=draft_context.prepare(self.store,"书",directory,entries=[("character","e-1","甲")])
+        value=json.loads(pathlib.Path(result["draft_template"]).read_text(encoding="utf-8"))
+        value["entries"][0].update(lead_facts="甲在酒店工作。",lead_refs=["c1p1"])
+        write_json(self.batch,value);self.assertEqual(self.finish()["status"],"completed")
+        self.assertTrue(self.store.get_document("书","entries")["entries"][0]["lead"].startswith("甲是《书》中的人物。"))
+        before={p.name:p.read_bytes() for p in directory.iterdir()}
+        with self.assertRaisesRegex(ValueError,"compact draft"):
+            draft_context.prepare(self.store,"书",directory)
+        self.assertEqual({p.name:p.read_bytes() for p in directory.iterdir()},before)
+        packet=json.loads(pathlib.Path(result["context"]).read_text(encoding="utf-8"))
+        packet["draft_template"]["entries"][0]["lead_facts"]="在包内编辑的内容"
+        write_json(result["context"],packet)
+        with self.assertRaisesRegex(ValueError,"context differs"):
+            draft_context.prepare(self.store,"书",directory,entries=[("character","e-1","甲")])
+        self.assertEqual(json.loads(pathlib.Path(result["context"]).read_text(encoding="utf-8")),packet)
+
+    def test_missing_id_repair_packet_contains_only_affected_row_by_index(self):
+        value=copy.deepcopy(self.doc);value["entries"][0].pop("id");write_json(self.batch,value)
+        result=self.finish();packet=json.loads(pathlib.Path(result["repair_packet"]).read_text(encoding="utf-8"))
+        self.assertEqual(packet["affected_entry_indexes"],[1])
+        self.assertEqual(len(packet["entries"]),1)
+
+    def test_prepare_template_counts_exact_serialized_files_and_keeps_source(self):
+        result=draft_context.prepare(self.store,"书",self.root/"context",entries=[("character","e-1","甲")])
+        self.assertEqual(result["context_chars"],len(pathlib.Path(result["context"]).read_text(encoding="utf-8")))
+        packet=json.loads(pathlib.Path(result["context"]).read_text(encoding="utf-8"))
+        self.assertEqual(packet["draft_template"],json.loads(pathlib.Path(result["draft_template"]).read_text(encoding="utf-8")))
+        self.assertEqual(json.loads(pathlib.Path(result["evidence"]).read_text(encoding="utf-8"))["paragraphs"],citation_catalog.catalog(self.chapters)["paragraphs"])
+        draft=json.loads(pathlib.Path(result["draft_template"]).read_text(encoding="utf-8"));draft["entries"][0]["lead_facts"]="已写内容"
+        write_json(result["draft_template"],draft)
+        with self.assertRaisesRegex(ValueError,"different draft"):
+            draft_context.prepare(self.store,"书",self.root/"context",entries=[("character","e-1","甲")])
+        self.assertEqual(json.loads(pathlib.Path(result["draft_template"]).read_text(encoding="utf-8")),draft)
+
+    def test_structure_errors_and_citation_errors_across_batches_are_aggregated(self):
+        value=copy.deepcopy(self.doc);value["entries"].append(entry("e-2","乙"))
+        value["entries"][0]["stub"]="false";value["entries"][1]["sections"]="bad"
+        write_json(self.batch,value);result=self.finish()
+        self.assertEqual(result["affected_entry_ids"],["e-1","e-2"])
+        self.assertEqual(result["error_count"],2)
+        batches=[]
+        for i in (1,2):
+            v={"meta":{"book":"书","scope":"第1章","evidence_hash":digest(self.chapters)},"entries":[entry("e-%d" % i,"人%d" % i)]}
+            v["entries"][0]["sources"]=[];v["entries"][0]["lead_refs"]=["missing-%d" % i]
+            p=self.root/("b%d.json" % i);write_json(p,v);batches.append(p)
+        result=finalize_entries.finalize(self.store,"书",batches,self.root,self.report)
+        self.assertEqual(result["affected_entry_ids"],["e-1","e-2"])
+        self.assertEqual(result["error_count"],2)
 
 
 if __name__=="__main__":unittest.main()

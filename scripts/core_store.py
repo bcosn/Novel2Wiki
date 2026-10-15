@@ -28,13 +28,14 @@ def file_digest(path):
 def now():
     return datetime.now(timezone.utc).isoformat()
 
-def write_json(path, value):
+def write_json(path, value, *, compact=False):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(path.name + "." + uuid.uuid4().hex + ".tmp")
     try:
         with temporary.open("w", encoding="utf-8", newline="\n") as f:
-            json.dump(value, f, ensure_ascii=False, indent=2)
+            json.dump(value, f, ensure_ascii=False, indent=None if compact else 2,
+                      separators=(",", ":") if compact else None, allow_nan=False)
             f.write("\n")
             f.flush()
             os.fsync(f.fileno())
