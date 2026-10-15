@@ -60,3 +60,12 @@ python scripts/render_wiki.py 书.entries.json -o 书_wiki --work 书 --unit 章
 可选文风与重合检查只提供线索，不统一要求零命中。
 独立 AI 审查按 [审查配置](审查配置.md) 的作品级参数执行；不为每批、每页、每个提示另起模型。
 默认站点采用 Vector 2022 风格，信息框在正文内；参见风格规范第二节。
+
+
+## 程序证据引用（推荐）
+
+先 workspace prepare-draft，按返回的简短规范和冻结段落写作；无需默认读取全部实现或历史示例。
+meta.evidence_hash 使用证据包给出的版本；sources 可只给 `{"evidence_id":"c1p1"}`，finalize 将其物化为原有 chapter/quote/cite 结构。
+编号只选择来源，不保证正文的事实归属正确。问句、数量、推测和主语仍须核对；不为字数和可选人称提示反复改写。
+
+新稿也可令 sources=[]，在 lead_refs / sections[].refs 中直接写证据 ID 字符串。程序生成本条 sources，并规范化为原有整数 refs；不要把段落号直接当作条目内来源号。

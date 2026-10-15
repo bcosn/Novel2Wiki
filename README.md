@@ -13,6 +13,9 @@ An AI skill for turning fiction into source-backed encyclopedia entries and loca
 - 图片与书评独立导入、关联、更新、删除，数据库渲染入口支持离线展示，重生成不覆盖用户内容。
 - 三份网上作品的 800 字节选用于回归，不是模型训练数据；新测试包含并行提交与强制退出恢复。
 - 专用 DSH headless overlay 精简插件与工具，固定可复用上下文，提供请求审计和用量去重统计。
+- 流程修补：prepare-draft 提供有界证据包；程序复制引文并建立编号，finalize 返回局部修复包、校验完整输出缓存，resume 恢复已提交稿件。
+
+当前开发版通过73项程序测试；整体模型省耗与语义质量尚未验收通过。接口与恢复功能通过不代表事实和风格完全正确。
 
 先运行 `python -m pip install -r requirements-lock.txt`。
 用法：[工作区说明](docs/v0.3-workspace.md) · [看板](docs/v0.3-board.md) · [开发记录](docs/development-notes.md) · [验证结果](docs/v0.3-validation.md)。

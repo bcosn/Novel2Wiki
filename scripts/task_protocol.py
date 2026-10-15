@@ -138,6 +138,9 @@ def submit(store, task_id, token):
             chapters = store.get_document(work, "chapters")
             if chapters is None:
                 raise ValueError("draft submission requires the frozen chapter document")
+            from citation_catalog import materialize
+            validate_document("entries", value)
+            value = materialize(value, chapters)
             from quote_source_check import check as check_quotes
             from check_voice import check as check_voice
             errors, _ = check_quotes(value, chapters)
