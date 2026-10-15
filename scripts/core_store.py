@@ -11,7 +11,7 @@ from pathlib import Path
 from entry_relations import relation_errors
 
 KINDS = {"characters", "places", "objects", "races", "character_timeline",
-         "object_timeline", "interactions", "custom_attributes", "entries", "_pending", "chapters", "_review_state"}
+         "object_timeline", "interactions", "custom_attributes", "entries", "_pending", "chapters", "_review_state", "_entry_plan"}
 
 def canonical(value):
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False)
@@ -59,6 +59,13 @@ def validate_document(kind, value):
             if not isinstance(value.get(field, []), list):
                 raise ValueError("pending fields must be arrays")
         return
+    if kind == "_entry_plan":
+        if (type(value.get("version")) is not int or value["version"] != 1
+                or not isinstance(value.get("work"),str)
+                or not isinstance(value.get("items"),list)
+                or not isinstance(value.get("relations",[]),list)
+                or value.get("plan_hash") != digest({k:v for k,v in value.items() if k!="plan_hash"})):
+            raise ValueError("invalid saved entry plan")
     if not isinstance(value.get(list_key), list):
         raise ValueError("%s requires %s array" % (kind, list_key))
     keys = set()
@@ -92,7 +99,7 @@ def validate_document(kind, value):
                 raise ValueError("invalid timeline end")
 
 def record_key(kind, row):
-    if kind in ("entries", "interactions"):
+    if kind in ("entries", "interactions", "_entry_plan"):
         key = row.get("id")
     elif kind == "chapters":
         # Order is independent of the source chapter label (which may repeat).
@@ -183,6 +190,8 @@ class Store:
 
     def put_document(self, work, kind, value):
         value = json.loads(canonical(value))
+        if kind == "_entry_plan" and value.get("work") != work:
+            raise ValueError("saved entry plan belongs to another work")
         if kind == "chapters":
             # Preserve the interchange document while deriving stable storage identities separately.
             for order, row in enumerate(value.get("chapters", [])):

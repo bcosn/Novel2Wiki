@@ -19,9 +19,17 @@ meta.entry_plan_hash保留editorial.plan_hash。finalize必须带--plan对应计
 
 
 def select(plan, ids):
-    if not ids or not 1<=len(ids)<=3 or len(set(ids))!=len(ids):
+    if (not isinstance(ids,(list,tuple)) or not 1<=len(ids)<=3
+            or any(not isinstance(key,str) or not key.strip() for key in ids)
+            or len(set(ids))!=len(ids)):
         raise ValueError("select 1–3 distinct --plan-entry IDs")
     pool={r["id"]:r for r in plan["items"]}
+    titles={}
+    for item in plan["items"]:
+        if item["disposition"] not in ("standalone","stub"):continue
+        if item["name"] in titles:
+            raise ValueError("independent page titles conflict; disambiguate before drafting: "+item["name"])
+        titles[item["name"]]=item["id"]
     rows=[]
     for key in ids:
         if key not in pool:

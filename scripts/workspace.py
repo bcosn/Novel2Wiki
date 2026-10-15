@@ -91,6 +91,7 @@ def main():
     command = sub.add_parser("plan-entries")
     command.add_argument("file", help="write the complete metadata-only editorial plan")
     command.add_argument("--decisions", help="explicit dispositions, depth and evidence-backed topics")
+    command.add_argument("--base-plan", help="recover a pre-upgrade plan, including unpublished event/concept candidates")
     command.add_argument("--chapter", type=int, action="append")
     command = sub.add_parser("inspect-plan")
     command.add_argument("file")
@@ -181,7 +182,7 @@ def main():
             target=Path(a.file).resolve()
             if target==store.path or a.decisions and target==Path(a.decisions).resolve():
                 raise ValueError("plan output cannot overwrite the database or decisions")
-            planned=build(store,a.work,a.chapter,load(a.decisions) if a.decisions else None)
+            planned=build(store,a.work,a.chapter,load(a.decisions) if a.decisions else None,load(a.base_plan) if a.base_plan else None)
             write_json(target,planned)
             result={"status":"planned","plan":str(target),"plan_hash":planned["plan_hash"],**inspect(planned)}
         elif a.action == "prepare-plan":

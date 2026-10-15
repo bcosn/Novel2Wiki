@@ -2,6 +2,7 @@
 from __future__ import annotations
 import json
 import copy
+from bisect import bisect_left
 from pathlib import Path
 
 from citation_catalog import catalog
@@ -26,6 +27,7 @@ decisions={items:[{kind,name,reason,importance?,disposition?,depth?,evidence_ids
 decisions.json顶层只允许items和可选relations。按decision_template填判断，不把本包的version/work/scope/hash/batch等元数据复制进决策文件；空reason/证据/主题只是待填位置。
 不改关系时省略relations以继承正式关系；显式relations:[]会清空关系，显式列表是完整替换，须累计保留其它已确认关系。旧关系来源无法确认时须重审，不默默重绑。
 同一计划分包判断时累积决策文件，下一包带上已有决策；不覆盖前一包结论。预算不足缩小范围，不截断冒充全书完成。
+时间线只给出与本包选中章节相交的有效区间。结束章超出本包末章时，范围视图的to_chapter为null，仅表示本包范围内未结束；不据此推断全书状态，也不用本包首章补写未知开始章。
 """
 
 
@@ -37,6 +39,23 @@ def _mentions(value, names):
     if isinstance(value, list):
         return any(_mentions(v, names) for v in value)
     return False
+
+
+def _timeline_view(row, selected, first_chapters):
+    """Project a recorded state interval without exposing later changes."""
+    start, end = row.get("from_chapter"), row.get("to_chapter")
+    if start is None:
+        # Null denotes first appearance, whose chapter must come from the base
+        # table. An absent chapter remains unknown rather than becoming 1.
+        first = first_chapters.get(row.get("name"))
+        start = first if type(first) is int and first > 0 else None
+    position = 0 if start is None else bisect_left(selected, start)
+    if position == len(selected) or end is not None and selected[position] > end:
+        return None
+    view = copy.deepcopy(row)
+    if end is not None and end > selected[-1]:
+        view["to_chapter"] = None
+    return view
 
 
 def prepare(store, work, plan_path, directory, candidates=None, tables=None, selected=None, max_chars=12000, evidence_ids=None):
@@ -87,11 +106,22 @@ def prepare(store, work, plan_path, directory, candidates=None, tables=None, sel
         row["candidate_evidence_omitted"]=len(refs)-len(row["evidence_ids"])
         candidate_rows.append(row)
     scoped=set(scope)
+    points=sorted(scoped)
+    timeline_bases={"character_timeline":"characters","object_timeline":"objects"}
     selected_facts={}
     for key,doc in facts.items():
-        rows=[row for row in doc["items"] if (key in tables or _mentions(row,names))
-              and (type(row.get("chapter")) is not int or row["chapter"] in scoped)
-              and (type(row.get("first_chapter")) is not int or row["first_chapter"]<=max(scoped))]
+        rows=[]
+        base=timeline_bases.get(key)
+        starts={r["name"]:r.get("first_chapter") for r in facts[base]["items"]} if base else {}
+        for row in doc["items"]:
+            if (not (key in tables or _mentions(row,names))
+                    or type(row.get("chapter")) is int and row["chapter"] not in scoped
+                    or type(row.get("first_chapter")) is int and row["first_chapter"]>points[-1]):
+                continue
+            if base:
+                row=_timeline_view(row,points,starts)
+                if row is None:continue
+            rows.append(row)
         if not rows and key not in tables:continue
         item={"items":rows}
         if key=="custom_attributes":

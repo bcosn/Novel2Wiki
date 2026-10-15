@@ -94,6 +94,91 @@ class PlanContextTests(unittest.TestCase):
             self.prepare(tables=["custom_attributes"], selected=[11])
         self.assertFalse((self.root / "context").exists())
 
+    def test_character_timeline_excludes_future_changes_and_hides_future_end(self):
+        timeline = {"meta": {"scope": "第2、7、11章"}, "items": [
+            {"name": "甲", "field": "identity", "from_chapter": None, "to_chapter": 6,
+             "from": "未出现", "to": "旅客", "note": "首次以旅客身份出现。"},
+            {"name": "甲", "field": "identity", "from_chapter": 7, "to_chapter": 10,
+             "from": "旅客", "to": "向导", "note": "第7章成为向导。"},
+            {"name": "甲", "field": "identity", "from_chapter": 11, "to_chapter": None,
+             "from": "向导", "to": "港主", "note": "第11章才发生的变化。"},
+        ]}
+        self.store.import_documents("测试书", {"character_timeline": timeline})
+        self.rebuild_plan()
+        packet = self.packet(self.prepare(candidates=[self.ids["甲"]], selected=[7]))
+        rows = packet["facts"]["character_timeline"]["items"]
+        self.assertEqual(len(rows), 1)
+        self.assertEqual((rows[0]["from_chapter"], rows[0]["from"], rows[0]["to"]),
+                         (7, "旅客", "向导"))
+        self.assertIsNone(rows[0]["to_chapter"])
+        self.assertNotIn("港主", json.dumps(packet, ensure_ascii=False))
+        self.assertEqual(self.store.get_document("测试书", "character_timeline"), timeline)
+
+    def test_nonconsecutive_chapters_do_not_include_intervals_only_inside_the_gap(self):
+        timeline = {"meta": {"scope": "第2、7、11章"}, "items": [
+            {"name": "甲", "field": "identity", "from_chapter": None, "to_chapter": 6,
+             "from": "未出现", "to": "旅客", "note": "第2章的记录。"},
+            {"name": "甲", "field": "identity", "from_chapter": 7, "to_chapter": 10,
+             "from": "旅客", "to": "向导", "note": "仅在未选中间区间有效。"},
+            {"name": "甲", "field": "identity", "from_chapter": 11, "to_chapter": None,
+             "from": "向导", "to": "港主", "note": "第11章的记录。"},
+        ]}
+        self.store.import_documents("测试书", {"character_timeline": timeline})
+        self.rebuild_plan()
+        packet = self.packet(self.prepare(tables=["character_timeline"], selected=[2, 11]))
+        rows = packet["facts"]["character_timeline"]["items"]
+        self.assertEqual([row["from_chapter"] for row in rows], [None, 11])
+        self.assertEqual(rows[0]["to_chapter"], 6)
+        self.assertEqual([p["chapter"] for p in packet["evidence"]["paragraphs"]], [2, 11])
+        self.assertNotIn("仅在未选中间区间有效", json.dumps(packet, ensure_ascii=False))
+        self.assertEqual(self.store.get_document("测试书", "character_timeline"), timeline)
+
+    def test_object_timeline_preserves_an_already_started_state_without_future_end(self):
+        objects = {"meta": {"scope": "第2、7、11章"}, "items": [
+            {"name": "铜匙", "first_chapter": 2}]}
+        timeline = {"meta": {"scope": "第2、7、11章"}, "items": [
+            {"name": "铜匙", "field": "owner", "from_chapter": 2, "to_chapter": 10,
+             "from": "未出现", "to": "甲", "note": "铜匙归甲持有。"},
+            {"name": "铜匙", "field": "owner", "from_chapter": 11, "to_chapter": None,
+             "from": "甲", "to": "乙", "note": "第11章才转交。"},
+        ]}
+        self.store.import_documents("测试书", {"objects": objects, "object_timeline": timeline})
+        self.rebuild_plan()
+        packet = self.packet(self.prepare(tables=["object_timeline"], selected=[7]))
+        rows = packet["facts"]["object_timeline"]["items"]
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]["from_chapter"], 2)
+        self.assertEqual(rows[0]["to"], "甲")
+        self.assertIsNone(rows[0]["to_chapter"])
+        self.assertEqual(self.store.get_document("测试书", "object_timeline"), timeline)
+
+    def test_null_timeline_start_uses_only_an_explicit_first_appearance(self):
+        characters = copy.deepcopy(self.tables["characters"])
+        characters["items"][1]["first_chapter"] = 11
+        timeline = {"meta": {"scope": "第2、7、11章"}, "items": [
+            {"name": "乙", "field": "identity", "from_chapter": None, "to_chapter": None,
+             "from": "未出现", "to": "旅客", "note": "首次出现于第11章。"}]}
+        self.store.import_documents("测试书", {"characters": characters, "character_timeline": timeline})
+        self.rebuild_plan()
+        packet = self.packet(self.prepare(tables=["character_timeline"], selected=[7]))
+        self.assertEqual(packet["facts"]["character_timeline"]["items"], [])
+        packet = self.packet(self.prepare(name="later", tables=["character_timeline"], selected=[11]))
+        self.assertIsNone(packet["facts"]["character_timeline"]["items"][0]["from_chapter"])
+
+    def test_unknown_first_appearance_is_not_replaced_with_a_guessed_chapter(self):
+        characters = copy.deepcopy(self.tables["characters"])
+        del characters["items"][0]["first_chapter"]
+        timeline = {"meta": {"scope": "第2、7、11章"}, "items": [
+            {"name": "甲", "field": "identity", "from_chapter": None, "to_chapter": 10,
+             "from": "未出现", "to": "旅客", "note": "原记录未给出首次出现章。"}]}
+        self.store.import_documents("测试书", {"characters": characters, "character_timeline": timeline})
+        self.rebuild_plan()
+        packet = self.packet(self.prepare(tables=["character_timeline"], selected=[7]))
+        row = packet["facts"]["character_timeline"]["items"][0]
+        self.assertIsNone(row["from_chapter"])
+        self.assertIsNone(row["to_chapter"])
+        self.assertEqual(self.store.get_document("测试书", "character_timeline"), timeline)
+
     def test_empty_and_invalid_explicit_scopes_are_rejected_without_writes(self):
         for selected in ([], (), [True], [0], [-1]):
             with self.subTest(selected=selected):

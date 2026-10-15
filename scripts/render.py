@@ -17,6 +17,7 @@ import json
 import os
 import re
 import sys
+from urllib.parse import quote
 from entry_relations import published_relations, published_refs
 
 for _s in (sys.stdout, sys.stderr):
@@ -34,6 +35,11 @@ KIND_LABEL = {
     "concept": "设定",
 }
 KIND_ORDER = ["character", "place", "object", "event", "race", "concept"]
+
+def local_component(value):
+    """Encode a raw fragment once, retaining readable non-ASCII IRI text."""
+    return "".join(quote(char, safe="") if ord(char) < 128 or char.isspace() else char
+                   for char in str(value))
 
 CSS = """
 :root{--bg:#fbfaf7;--fg:#23201c;--muted:#6b6459;--line:#e3ded4;--accent:#8a5a2b;--card:#fff}
@@ -117,7 +123,7 @@ def linkify(text: str, link_map: dict, self_id: str, min_len: int = 1,
             else:
                 if once is not None:
                     once.add(tid)
-                out.append('<a href="#%s">%s</a>' % (html.escape(tid), html.escape(name)))
+                out.append('<a href="#%s">%s</a>' % (html.escape(local_component(tid)), html.escape(name)))
             pos = m.end()
     out.append(html.escape(text[pos:]))
     return "".join(out)
@@ -142,6 +148,16 @@ def render(doc: dict, title: str) -> str:
     meta = doc.get("meta", {})
     link_map = build_link_map(entries)
     by_id = {e["id"]: e for e in entries}
+    source_anchors, used_anchors = {}, set(by_id)
+    for entry in entries:
+        for number, _ in enumerate(entry.get("sources") or [], 1):
+            base = entry["id"] + "-ref%d" % number
+            candidate, suffix = base, 2
+            while candidate in used_anchors:
+                candidate = base + "-%d" % suffix
+                suffix += 1
+            source_anchors[entry["id"], number] = candidate
+            used_anchors.add(candidate)
 
     groups: dict[str, list] = {}
     for e in entries:
@@ -173,7 +189,7 @@ def render(doc: dict, title: str) -> str:
         parts.append("<h2>%s</h2><ul>" % KIND_LABEL.get(kind, kind))
         for e in sorted(groups[kind], key=lambda x: x["name"]):
             parts.append('<li><a href="#%s">%s</a></li>'
-                         % (html.escape(e["id"]), html.escape(e["name"])))
+                         % (html.escape(local_component(e["id"])), html.escape(e["name"])))
         parts.append("</ul>")
     parts.append("</div></nav>")
 
@@ -232,15 +248,15 @@ def render(doc: dict, title: str) -> str:
             if relations:
                 parts.append('<div class="rel"><h3>条目关系</h3><ul>%s</ul></div>' % "".join(
                     '<li>%s：<a href="#%s">%s</a>%s</li>' % (
-                        html.escape(relation["label"]), html.escape(target["id"], quote=True), html.escape(target["name"]),
-                        '<sup>%s</sup>' % "".join('<a href="#%s-ref%d">[%d]</a>' % (eid, ref, ref)
+                        html.escape(relation["label"]), html.escape(local_component(target["id"]), quote=True), html.escape(target["name"]),
+                        '<sup>%s</sup>' % "".join('<a href="#%s">[%d]</a>' % (html.escape(local_component(source_anchors[e["id"], ref])), ref)
                             for ref in published_refs(relation, len(e.get("sources") or [])))
                         if published_refs(relation, len(e.get("sources") or [])) else "")
                     for relation, target in relations))
             rel = [by_id[r] for r in (e.get("links") or []) if r in by_id and r != e["id"]]
             if rel:
                 parts.append('<div class="rel">关联 %s</div>' % " ".join(
-                    '<a href="#%s">%s</a>' % (html.escape(r["id"]), html.escape(r["name"]))
+                    '<a href="#%s">%s</a>' % (html.escape(local_component(r["id"])), html.escape(r["name"]))
                     for r in rel))
 
             # 考据
@@ -248,8 +264,8 @@ def render(doc: dict, title: str) -> str:
             if src:
                 parts.append('<div class="sources"><h3>考据</h3><ol>')
                 for ref, s in enumerate(src, 1):
-                    parts.append('<li id="%s-ref%d"><span class="ch">第%s章</span>%s</li>'
-                                 % (eid, ref, html.escape(str(s.get("chapter", "?"))),
+                    parts.append('<li id="%s"><span class="ch">第%s章</span>%s</li>'
+                                 % (html.escape(source_anchors[e["id"], ref]), html.escape(str(s.get("chapter", "?"))),
                                     html.escape(str(s.get("quote", "")))))
                 parts.append("</ol></div>")
 

@@ -77,6 +77,10 @@ def prepare(store, work, directory, selected=None, max_chars=12000, entries=None
             planned=json.loads(plan_path.read_text(encoding="utf-8"))
             validate(planned,store,work)
             editorial=select(planned,plan_entries)
+            existing_titles={r["name"]:r["id"] for r in (previous or {}).get("entries",[])}
+            for row in editorial["articles"]:
+                if row["name"] in existing_titles and existing_titles[row["name"]]!=row["id"]:
+                    raise ValueError("page title conflicts with a retained published entry; disambiguate before drafting: "+row["name"])
             available={r["id"] for r in value["paragraphs"]}
             needed={v for r in editorial["articles"] for v in r["evidence_ids"]}
             needed|={v for r in editorial["articles"] for t in r["topics"] for v in t["evidence_ids"]}

@@ -49,6 +49,9 @@ def _load(store, work):
         chapters = store.get_document(work, "chapters")
         tables = {key: store.get_document(work, key) for key in TABLES}
         entries = store.get_document(work, "entries") or {"entries": []}
+        saved_plan = store.get_document(work, "_entry_plan")
+        history = ({row[0] for row in connection.execute("SELECT record_key FROM records WHERE work_id=? AND kind='entries'",(work,))}
+                   if connection is not None else {row.get("id") for row in entries["entries"]})
         if not isinstance(chapters, dict):
             raise ValueError("frozen chapters required")
         for key, document in tables.items():
@@ -56,7 +59,7 @@ def _load(store, work):
                 raise ValueError("complete structured tables required: " + key)
         if not isinstance(entries, dict) or not isinstance(entries.get("entries"), list):
             raise ValueError("invalid current entries")
-        result = chapters, tables, entries
+        result = chapters, tables, entries, saved_plan, history
     except BaseException:
         if own_transaction:
             connection.execute("ROLLBACK")
@@ -292,12 +295,41 @@ def _committed_relations(entries, chapters):
     return relations
 
 
-def build(store, work, selected=None, decisions=None):
+def _restore_items(saved, items, work, source_hash, removed):
+    if saved is None:
+        return items
+    if (not isinstance(saved,dict) or saved.get("version")!=1 or saved.get("work")!=work
+            or not isinstance(saved.get("items"),list)
+            or saved.get("plan_hash")!=digest({k:v for k,v in saved.items() if k!="plan_hash"})):
+        raise ValueError("invalid saved entry plan; provide a valid --base-plan")
+    if saved.get("source_hash")!=source_hash:
+        return items
+    by_key={(r["kind"],r["name"]):r for r in items}
+    for row in saved["items"]:
+        key=row["kind"],row["name"]
+        if row["id"] in removed:
+            if key in by_key:
+                by_key[key].update(disposition="review",depth="none",reason="已有页面被明确删除，保留候选待重新确认。",topics=[],merge_target=None)
+            continue
+        if key in by_key:
+            if row["id"]==by_key[key]["id"]:by_key[key]=copy.deepcopy(row)
+        elif row["kind"] in EXPLICIT_KINDS:
+            by_key[key]=copy.deepcopy(row)
+    return list(by_key.values())
+
+
+def build(store, work, selected=None, decisions=None, base_plan=None):
     """Build a complete plan, applying only bounded explicit editorial decisions."""
-    chapters, tables, entries = _load(store, work)
+    chapters, tables, entries, stored_plan, history = _load(store, work)
     indices, paragraphs = _selection(chapters, selected)
     items = _base_items(work, tables, entries, paragraphs)
     base_items = copy.deepcopy(items)
+    source_hash=digest({"chapters":chapters,"tables":tables})
+    saved_plan=base_plan if base_plan is not None else stored_plan
+    if base_plan is not None and (not isinstance(base_plan,dict) or base_plan.get("source_hash")!=source_hash):
+        raise ValueError("base plan source_hash is stale; review its decisions against current sources")
+    published={e["id"] for e in entries["entries"]}
+    items=_restore_items(saved_plan,items,work,source_hash,history-published)
     by_key = {(row["kind"], row["name"]): row for row in items}
     relations = []
     if decisions is not None:
@@ -350,10 +382,22 @@ def build(store, work, selected=None, decisions=None):
                 row["importance_source"] = "decision"
     if decisions is None or "relations" not in decisions:
         relations = _committed_relations(entries, chapters)
+        if saved_plan is not None and saved_plan.get("source_hash")==source_hash:
+            committed={canonical(edge):edge for edge in relations}
+            ordered=[];seen=set()
+            for edge in saved_plan.get("relations",[]):
+                key=canonical(edge)
+                if edge["source"] not in history or key in committed:
+                    ordered.append(copy.deepcopy(edge));seen.add(key)
+            ordered.extend(edge for key,edge in committed.items() if key not in seen)
+            relations=ordered
+        ids={row["id"] for row in items}
+        if any(edge["source"] not in ids or edge["target"] not in ids for edge in relations):
+            raise ValueError("unpublished relation candidates need the original plan; use --base-plan or explicit items/relations decisions")
     _validate_items(items, base_items, work, paragraphs)
     _validate_relations(relations, items, paragraphs)
     plan = {"version": 1, "work": work, "scope": _scope(chapters, indices),
-            "source_hash": digest({"chapters": chapters, "tables": tables}),
+            "source_hash": source_hash,
             "selected_chapters": indices, "items": items, "relations": relations}
     plan["plan_hash"] = digest(plan)
     return plan
@@ -372,7 +416,7 @@ def validate(plan, store, work):
         raise ValueError("plan is not valid JSON") from None
     if plan["plan_hash"] != actual_hash:
         raise ValueError("plan_hash mismatch")
-    chapters, tables, entries = _load(store, work)
+    chapters, tables, entries, _, _ = _load(store, work)
     if plan["source_hash"] != digest({"chapters": chapters, "tables": tables}):
         raise ValueError("source_hash is stale; rebuild the plan against current sources")
     indices, paragraphs = _selection(chapters, plan["selected_chapters"])

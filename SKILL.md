@@ -55,6 +55,7 @@ python scripts/workspace.py --db data/novel2wiki.sqlite --work <书名> prepare-
 ```
 
 inspect-plan分页只看短清单；prepare-plan返回的context含当前事实与原文，按其guide判断。需看动态属性时显式加--table custom_attributes；不预设境界、血统或品阶名称与顺序，不凭出现次数或旧importance决定重要性。不能确认则review。
+计划随带--plan的有效定稿保存在SQLite，重建保留尚未发布的公共页候选与判断，不复活已明确删除的页和关系；来源过期先复核。旧工作区只有外部计划时，plan-entries可加--base-plan原计划路径恢复。写作前同名冲突须先消歧，不先写完再改标题。
 每个候选保留standalone/stub/merge/table_only/review去向。main/major有据才展开，minor可短写，关键作用可升级；不按等级凑字数或小节数。合并内容不等于同一实体，不把次要人物变成目标aliases或假重定向。
 种族沿用race；根据原文判断值得公共介绍的体系/类别可显式新增concept（设定）页，优先一张体系总览，有独立材料才拆分各值。所属、层级、参与关系需在relations里分别提供证据；不自动推断反向关系、最高等级或当前成员。具体格式见docs/entry-planning.md。
 独立页先写有据topics；仅导语的页用stub。topics含id/heading/focus/evidence_ids，明确主题且未另给导语证据时，程序将候选证据收窄为主题引用并集。短页、并入对象须明确选择本批证据，不能带上全书所有姓名命中。

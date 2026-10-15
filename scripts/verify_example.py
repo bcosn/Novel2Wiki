@@ -94,20 +94,41 @@ def site_errors(site):
         for resource in page.resources:
             if resource.startswith(("http:", "https:", "//")):
                 errors.append("%s 引用了外部资源" % path.name)
-            elif resource and not (site / unquote(urlsplit(resource).path)).is_file():
-                errors.append("%s 资源不存在: %s" % (path.name, resource))
+            elif resource:
+                try:
+                    exists = (site / unquote(urlsplit(resource).path)).is_file()
+                except (OSError, ValueError):
+                    errors.append("%s 资源路径无效: %s" % (path.name, resource))
+                else:
+                    if not exists:
+                        errors.append("%s 资源不存在: %s" % (path.name, resource))
     for filename, page in parsed.items():
         for href in page.links:
-            parts = urlsplit(href)
+            try:
+                parts = urlsplit(href)
+            except ValueError:
+                errors.append("%s 本地链接格式无效: %s" % (filename, href))
+                continue
             if parts.scheme or parts.netloc:
                 continue  # External citations are links, not automatic resource requests.
             target = unquote(parts.path) or filename
-            if not target.endswith(".html"):
+            try:
+                target_path = (site / target).resolve()
+                exists = target_path.is_file()
+            except (OSError, ValueError):
+                errors.append("%s 本地链接路径无效: %s" % (filename, href))
                 continue
-            if target not in parsed:
+            if not target_path.is_relative_to(site.resolve()):
+                errors.append("%s 本地链接越出站点: %s" % (filename, href))
+            elif not exists:
                 errors.append("%s 链接文件不存在: %s" % (filename, href))
-            elif parts.fragment and unquote(parts.fragment) not in parsed[target].ids:
-                errors.append("%s 锚点不存在: %s" % (filename, href))
+            elif parts.fragment:
+                target_page = parsed.get(target)
+                if target_page is None and target_path.suffix.lower() in {".html", ".htm"}:
+                    target_page = PageLinks()
+                    target_page.feed(target_path.read_text(encoding="utf-8"))
+                if target_page is not None and unquote(parts.fragment) not in target_page.ids:
+                    errors.append("%s 锚点不存在: %s" % (filename, href))
     return errors
 
 def main():

@@ -9,6 +9,7 @@ import os
 import re
 import sys
 from pathlib import Path
+from urllib.parse import quote
 from entry_relations import published_relations, published_refs
 
 for stream in (sys.stdout, sys.stderr):
@@ -23,6 +24,11 @@ UNIT = {"unit": "回", "infobox": "回目"}
 TITLE_BY_ID = {}
 CSS_SRC = Path(__file__).resolve().parent.parent / "assets" / "wiki.css"
 ESC = html.escape
+
+def local_component(value):
+    """Encode a raw filename once, retaining readable non-ASCII IRI text."""
+    return "".join(quote(char, safe="") if ord(char) < 128 or char.isspace() else char
+                   for char in str(value))
 
 def chapter_label(n):
     return "第%s%s" % (n, UNIT["unit"])
@@ -67,7 +73,7 @@ def linkify(text, link_map, self_name, min_len=2, once=None):
             else:
                 if once is not None:
                     once.add(target)
-                out.append('<a href="%s">%s</a>' % (ESC(target, quote=True), ESC(name)))
+                out.append('<a href="%s">%s</a>' % (ESC(local_component(target), quote=True), ESC(name)))
             pos = match.end()
     out.append(ESC(text[pos:]))
     return "".join(out)
@@ -212,13 +218,13 @@ def entry_page(e, link_map, work, site, additions=None, entry_by_id=None):
     if relations:
         body.append('<h2 id="relations">条目关系</h2><ul>%s</ul>' % "".join(
             '<li>%s：<a href="%s">%s</a>%s</li>' % (
-                ESC(relation["label"]), ESC(link_map[target["name"]], quote=True), ESC(target["name"]),
+                ESC(relation["label"]), ESC(local_component(link_map[target["name"]]), quote=True), ESC(target["name"]),
                 refs_mark(published_refs(relation, len(sources)))) for relation, target in relations))
     related = [TITLE_BY_ID.get(i) for i in e.get("links") or []]
     related = [t for t in related if t in link_map and t != name]
     if e.get("links"):
         body.append('<h2 id="related">相关条目</h2><ul>%s</ul>' % "".join(
-            '<li><a href="%s">%s</a></li>' % (ESC(link_map[t], quote=True), ESC(t)) for t in related))
+            '<li><a href="%s">%s</a></li>' % (ESC(local_component(link_map[t]), quote=True), ESC(t)) for t in related))
     if e.get("note"):
         body.append('<div class="note">%s</div>' % link_urls(str(e["note"])))
     body.append(additions_html(additions))
@@ -240,7 +246,7 @@ def index_page(entries, work, site, meta, link_map, home_note="", additions=None
             continue
         toc.append('<li><a href="#category-%s">%s</a></li>' % (kind, KIND_LABEL[kind]))
         body.append('<section class="category"><h3 id="category-%s">%s</h3><ul>%s</ul></section>' % (
-            kind, KIND_LABEL[kind], "".join('<li><a href="%s">%s</a></li>' % (ESC(link_map[e["name"]], quote=True), ESC(e["name"])) for e in items)))
+            kind, KIND_LABEL[kind], "".join('<li><a href="%s">%s</a></li>' % (ESC(local_component(link_map[e["name"]]), quote=True), ESC(e["name"])) for e in items)))
     body.append("</div>" + additions_html(additions) + "</article>")
     toc.append("</ul>")
     return page(site, work, work, "".join(toc), "\n".join(body))

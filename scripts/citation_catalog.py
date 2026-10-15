@@ -14,6 +14,11 @@ class CitationErrors(ValueError):
 def catalog(chapters, selected=None):
     if not isinstance(chapters, dict) or not chapters.get("chapters"):
         raise ValueError("frozen chapters required")
+    if selected is not None:
+        if (not isinstance(selected,(list,tuple,set)) or not selected
+                or any(type(n) is not int or n<1 for n in selected)):
+            raise ValueError("selected chapters must be nonempty positive indices")
+        selected=set(selected)
     ids, rows = set(), []
     for order, chapter in enumerate(chapters["chapters"], 1):
         index = chapter.get("index")
@@ -23,13 +28,13 @@ def catalog(chapters, selected=None):
         content = chapter.get("content")
         if not isinstance(content, str):
             raise ValueError("chapter content must be text")
-        if selected and index not in selected:
+        if selected is not None and index not in selected:
             continue
         for paragraph, text in enumerate(re.split(r"\n\s*\n", content), 1):
             if text.strip():
                 rows.append({"id": "c%dp%d" % (order, paragraph), "chapter": index,
                              "paragraph": paragraph, "text": text.strip()})
-    if selected and set(selected) - ids:
+    if selected is not None and selected - ids:
         raise ValueError("selected chapter does not exist")
     return {"version": 1, "evidence_hash": digest(chapters), "paragraphs": rows}
 

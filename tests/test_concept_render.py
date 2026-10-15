@@ -3,6 +3,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from urllib.parse import unquote, urlsplit
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from core_store import Store, validate_document
@@ -11,6 +12,7 @@ from draft_validation import shape_errors
 import render as single_render
 import render_wiki
 import review_plan
+from verify_example import PageLinks, site_errors
 
 
 def entry(eid="e-person", name="某人", kind="character"):
@@ -95,10 +97,105 @@ class ConceptRenderTests(unittest.TestCase):
         person["relations"] = [relation(concept["id"], '所属<&"品阶', [1, 99])]
         page = single_render.render({"entries": [person, concept]}, "书")
         self.assertIn('<h2>设定</h2>', page)
-        self.assertIn('所属&lt;&amp;&quot;品阶：<a href="#e-&quot;concept">暮潮级</a>', page)
+        self.assertIn('所属&lt;&amp;&quot;品阶：<a href="#e-%22concept">暮潮级</a>', page)
         self.assertIn('href="#e-person-ref1">[1]</a>', page)
         self.assertIn('<li id="e-person-ref1">', page)
         self.assertNotIn('href="#e-person-ref99"', page)
+
+    def test_multi_page_local_urls_resolve_reserved_characters_and_unicode_once(self):
+        names = ["设定#一", "设定%20一", "设定 一", "暮潮é级", "中文品阶", "设定&一"]
+        for name in names:
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as temporary:
+                person, concept = entry(), entry("e-concept", name, "concept")
+                person["lead"] += "记载涉及" + name + "。"
+                person["relations"] = [relation(refs=[1])]
+                person["links"] = [concept["id"]]
+                mapping = render_wiki.render({"entries": [person, concept]}, temporary)
+                filename = mapping[name]
+                self.assertEqual(filename, render_wiki.slug(name))
+                self.assertTrue((Path(temporary) / filename).is_file())
+                expected_href = render_wiki.local_component(filename)
+                self.assertEqual(unquote(urlsplit(expected_href).path), filename)
+                self.assertEqual(urlsplit(expected_href).fragment, "")
+                index, article = PageLinks(), PageLinks()
+                index.feed((Path(temporary) / "index.html").read_text(encoding="utf-8"))
+                article.feed((Path(temporary) / mapping[person["name"]]).read_text(encoding="utf-8"))
+                self.assertIn(expected_href, index.links)
+                # Prose auto-link, explicit relationship, and related-entry link.
+                self.assertEqual(article.links.count(expected_href), 3)
+                self.assertEqual(site_errors(Path(temporary)), [])
+                if "%20" in name:
+                    self.assertIn("%2520", expected_href)
+                if name == "中文品阶":
+                    self.assertEqual(expected_href, "中文品阶.html")
+
+    def test_single_page_encoded_fragments_match_raw_ids_and_source_ids(self):
+        for identity in ("e#一", "e%20一", "e 一", "eé一", "e?一", "中文编号"):
+            with self.subTest(identity=identity):
+                person, concept = entry("p#%20 空格"), entry(identity, "暮潮级", "concept")
+                person["lead"] += "记载涉及暮潮级。"
+                person["relations"] = [relation(identity, refs=[1])]
+                person["links"] = [identity]
+                page = single_render.render({"entries": [person, concept]}, "书")
+                parsed = PageLinks()
+                parsed.feed(page)
+                self.assertIn(identity, parsed.ids)
+                self.assertIn(person["id"] + "-ref1", parsed.ids)
+                target_href = "#" + single_render.local_component(identity)
+                self.assertEqual(parsed.links.count(target_href), 4)
+                self.assertIn("#" + single_render.local_component(person["id"] + "-ref1"), parsed.links)
+                for href in parsed.links:
+                    parts = urlsplit(href)
+                    if not parts.scheme and not parts.netloc:
+                        self.assertEqual(parts.path, "")
+                        self.assertIn(unquote(parts.fragment), parsed.ids)
+                if "%20" in identity:
+                    self.assertIn("%2520", target_href)
+
+    def test_site_check_reports_missing_non_html_paths_and_invalid_local_anchors(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            render_wiki.render({"entries": [entry()]}, root)
+            home = root / "index.html"
+            original = home.read_text(encoding="utf-8")
+            for href in ("missing#part.html", "missing.bin", "index.html#absent%23anchor", "#absent%20anchor",
+                         "invalid%00.html", "../out.html", "//["):
+                with self.subTest(href=href):
+                    home.write_text(original + '<a href="%s">broken</a>' % href, encoding="utf-8")
+                    self.assertTrue(any(href in error for error in site_errors(root)))
+            home.write_text(original + '<img src="invalid%00.png">', encoding="utf-8")
+            self.assertTrue(any("invalid%00.png" in error for error in site_errors(root)))
+
+    def test_single_page_source_anchor_avoids_real_entry_ids(self):
+        person = entry("e-person")
+        concept = entry("e-person-ref1", "暮潮级", "concept")
+        other = entry("e-person-ref1-2", "雾纹级", "concept")
+        person["relations"] = [relation(concept["id"], refs=[1])]
+        page = single_render.render({"entries": [person, concept, other]}, "书")
+        parsed = PageLinks()
+        parsed.feed(page)
+        self.assertEqual(len(parsed.ids), len(set(parsed.ids)))
+        self.assertIn('href="#e-person-ref1">暮潮级</a>', page)
+        self.assertIn('href="#e-person-ref1-3">[1]</a>', page)
+        self.assertIn('<li id="e-person-ref1-3">', page)
+        for href in parsed.links:
+            self.assertIn(unquote(urlsplit(href).fragment), parsed.ids)
+
+    def test_encoded_filename_collision_cleanup_retains_only_current_pages(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            first = entry("a", "潮#纹:一", "concept")
+            second = entry("b", "潮#纹?一", "concept")
+            person = entry("p", "某人")
+            person["relations"] = [relation("b", refs=[1])]
+            mapping = render_wiki.render({"entries": [first, second, person]}, root)
+            old_name = mapping[second["name"]]
+            self.assertTrue(old_name.endswith("-2.html"))
+            mapping = render_wiki.render({"entries": [second, person]}, root)
+            self.assertNotEqual(mapping[second["name"]], old_name)
+            self.assertFalse((root / old_name).exists())
+            self.assertTrue((root / mapping[second["name"]]).is_file())
+            self.assertEqual(site_errors(root), [])
 
     def test_review_packet_includes_explicit_concept_relations(self):
         concept = entry("e-concept", "暮潮级", "concept")

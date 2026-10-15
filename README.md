@@ -18,7 +18,8 @@ An AI skill for turning fiction into source-backed encyclopedia entries and loca
 
 新增可选[条目规划](docs/entry-planning.md)：先按原文判断重要性、去向与主题，再写正文；种族和设定可建公共页，有据关系连接人物、事件与类别，不预设属性名、品阶或成员。
 
-当前开发版通过159项程序测试；整体模型省耗与语义质量尚未验收通过。接口与恢复功能通过不代表事实和风格完全正确。
+当前开发版通过180项程序测试；整体模型省耗与语义质量尚未验收通过。接口与恢复功能通过不代表事实和风格完全正确。
+本轮调试修复时间范围泄漏、未发布页计划恢复、特殊标题链接、锚点碰撞及同名预检，见[调试日志](docs/v0.3-debug-log.md)。
 写作提示词已做两轮跨作品小样本工程与匿名分项核对，新候选仍有事实错误，默认保留legacy；quality-v2为显式实验选项，见[提示词与质量验收](docs/prompt-quality.md)。
 
 先运行 `python -m pip install -r requirements-lock.txt`。

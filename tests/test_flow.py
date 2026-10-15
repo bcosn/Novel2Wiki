@@ -22,6 +22,7 @@ import draft_format
 
 class FlowTests(unittest.TestCase):
     def setUp(self):
+        (ROOT/".validation").mkdir(exist_ok=True)
         self.temp=tempfile.TemporaryDirectory(dir=ROOT/".validation",prefix="flow-")
         self.root=pathlib.Path(self.temp.name).resolve()
         self.store=Store(self.root/"state.sqlite")

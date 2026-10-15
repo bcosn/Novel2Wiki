@@ -228,6 +228,11 @@ def finalize(store, work, inputs, directory, report, expected_hash=None, resume=
         if not errors:
             if previous is not None and expected_hash is None and actual!=digest(doc):
                 raise ValueError("changed draft requires --expected-hash from workspace status")
+            if planned is not None and store.get_document(work,"_entry_plan")!=planned:
+                # Metadata is saved once in SQLite, atomically with the prose.
+                # It includes identities and decisions for pages not published
+                # yet, without copying novel text into entries or agent messages.
+                store.put_document(work,"_entry_plan",planned)
             files=output_paths(directory,work,doc,uploads)
             if actual==digest(doc) and cached(report,fingerprint,files,directory):
                 result.update(status="reused",stage="completed")
