@@ -71,12 +71,31 @@ def main():
     mode=command.add_mutually_exclusive_group()
     mode.add_argument("--update", action="store_true", help="upsert only supplied entries; preserve the remaining committed entries")
     mode.add_argument("--replace", action="store_true", help="explicitly allow removing committed entries in a complete replacement")
+    command.add_argument("--plan", help="validate this draft against its editorial entry plan")
     command = sub.add_parser("prepare-draft")
     command.add_argument("directory")
     command.add_argument("--chapter", type=int, action="append")
     command.add_argument("--max-chars", type=int, default=12000)
     command.add_argument("--entry", nargs=3, action="append", metavar=("KIND", "ID", "NAME"), help="prepare a compact draft template for 1–3 explicit entries")
     command.add_argument("--prompt-profile", choices=("legacy","quality-v2"), default="legacy", help="quality-v2 is an explicit experimental writing prompt; legacy remains the default")
+    command.add_argument("--plan", help="frozen editorial entry plan")
+    command.add_argument("--plan-entry", action="append", help="select 1–3 planned page IDs")
+    command = sub.add_parser("prepare-plan")
+    command.add_argument("directory")
+    command.add_argument("--plan", required=True)
+    command.add_argument("--candidate", action="append", help="up to 6 candidate IDs for evidence-based editorial judgement")
+    command.add_argument("--evidence-id", action="append", help="explicit paragraph IDs for a long chapter; partial selection is declared")
+    command.add_argument("--table", action="append", choices=["characters","places","objects","races","character_timeline","object_timeline","interactions","custom_attributes"])
+    command.add_argument("--chapter", type=int, action="append")
+    command.add_argument("--max-chars", type=int, default=12000)
+    command = sub.add_parser("plan-entries")
+    command.add_argument("file", help="write the complete metadata-only editorial plan")
+    command.add_argument("--decisions", help="explicit dispositions, depth and evidence-backed topics")
+    command.add_argument("--chapter", type=int, action="append")
+    command = sub.add_parser("inspect-plan")
+    command.add_argument("file")
+    command.add_argument("--offset", type=int, default=0)
+    command.add_argument("--limit", type=int, default=8)
     command = sub.add_parser("resume")
     command.add_argument("--directory", required=True)
     command.add_argument("--report", required=True)
@@ -153,10 +172,25 @@ def main():
             result = uploads.remove(store, a.id)
         elif a.action == "finalize":
             from finalize_entries import finalize
-            result = finalize(store, a.work, a.batches, a.directory, a.report, a.expected_hash, update=a.update, replace=a.replace)
+            result = finalize(store, a.work, a.batches, a.directory, a.report, a.expected_hash, update=a.update, replace=a.replace, plan=a.plan)
         elif a.action == "prepare-draft":
             from draft_context import prepare
-            result = prepare(store, a.work, a.directory, a.chapter, a.max_chars, a.entry, a.prompt_profile)
+            result = prepare(store, a.work, a.directory, a.chapter, a.max_chars, a.entry, a.prompt_profile, a.plan, a.plan_entry)
+        elif a.action == "plan-entries":
+            from entry_plan import build,inspect
+            target=Path(a.file).resolve()
+            if target==store.path or a.decisions and target==Path(a.decisions).resolve():
+                raise ValueError("plan output cannot overwrite the database or decisions")
+            planned=build(store,a.work,a.chapter,load(a.decisions) if a.decisions else None)
+            write_json(target,planned)
+            result={"status":"planned","plan":str(target),"plan_hash":planned["plan_hash"],**inspect(planned)}
+        elif a.action == "prepare-plan":
+            from plan_context import prepare
+            result=prepare(store,a.work,a.plan,a.directory,a.candidate,a.table,a.chapter,a.max_chars,a.evidence_id)
+        elif a.action == "inspect-plan":
+            from entry_plan import validate,inspect
+            planned=load(a.file);validate(planned,store,a.work)
+            result=inspect(planned,a.offset,a.limit)
         elif a.action == "resume":
             from finalize_entries import finalize
             result = finalize(store, a.work, [], a.directory, a.report, a.expected_hash, resume=True)

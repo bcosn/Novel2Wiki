@@ -20,6 +20,7 @@ import json
 import os
 import sys
 from collections import Counter
+from entry_relations import relation_errors
 
 for _s in (sys.stdout, sys.stderr):
     try:
@@ -27,7 +28,7 @@ for _s in (sys.stdout, sys.stderr):
     except (AttributeError, ValueError):
         pass
 
-KINDS = {"character", "place", "object", "event", "race"}
+KINDS = {"character", "place", "object", "event", "race", "concept"}
 REQUIRED = ("id", "kind", "name", "lead", "sections", "sources", "links", "stub")
 
 
@@ -68,6 +69,8 @@ def main() -> int:
                 errors.append("%s 缺字段 %s" % (eid, k))
         if e.get("kind") not in KINDS:
             errors.append("%s 的 kind 非法：%r" % (eid, e.get("kind")))
+        if "relations" in e:
+            errors.extend(relation_errors(e["relations"], eid))
         if not str(e.get("lead", "")).strip():
             errors.append("%s 的 lead 为空" % eid)
         for l in e.get("links") or []:

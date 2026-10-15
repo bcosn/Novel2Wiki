@@ -9,6 +9,7 @@ import os
 import re
 import sys
 from pathlib import Path
+from entry_relations import published_relations, published_refs
 
 for stream in (sys.stdout, sys.stderr):
     try:
@@ -16,7 +17,7 @@ for stream in (sys.stdout, sys.stderr):
     except (AttributeError, ValueError):
         pass
 
-KIND_LABEL = {"character": "人物", "place": "地点", "object": "物品", "event": "事件", "race": "种族"}
+KIND_LABEL = {"character": "人物", "place": "地点", "object": "物品", "event": "事件", "race": "种族", "concept": "设定"}
 KIND_ORDER = list(KIND_LABEL)
 UNIT = {"unit": "回", "infobox": "回目"}
 TITLE_BY_ID = {}
@@ -147,12 +148,14 @@ def additions_html(additions):
         parts.append('</section>')
     return "\n".join(parts)
 
-def entry_page(e, link_map, work, site, additions=None):
+def entry_page(e, link_map, work, site, additions=None, entry_by_id=None):
     name = e["name"]
     kind = KIND_LABEL.get(e.get("kind"), "条目")
     once = set()
     sources = e.get("sources") or []
     sections = e.get("sections") or []
+    entry_by_id = entry_by_id or {eid: {"id": eid, "name": title} for eid, title in TITLE_BY_ID.items()}
+    relations = published_relations(e, entry_by_id)
     toc = ['<ul><li><a href="#firstHeading">序言</a></li>']
     for n, s in enumerate(sections, 1):
         if s.get("heading"):
@@ -162,6 +165,8 @@ def entry_page(e, link_map, work, site, additions=None):
         toc.append('<li><a href="#reception">评价</a></li>')
     if sources:
         toc.append('<li><a href="#refs-open">参考资料</a></li>')
+    if relations:
+        toc.append('<li><a href="#relations">条目关系</a></li>')
     if e.get("links"):
         toc.append('<li><a href="#related">相关条目</a></li>')
     toc.append("</ul>")
@@ -204,6 +209,11 @@ def entry_page(e, link_map, work, site, additions=None):
                 n, ESC(str(s.get("cite") or chapter_label(s.get("chapter", "?")))), ESC(str(s.get("quote", ""))),
                 '<p class="source-note">%s</p>' % ESC(str(s["note"])) if s.get("note") else ""))
         body.append("</ol></section>")
+    if relations:
+        body.append('<h2 id="relations">条目关系</h2><ul>%s</ul>' % "".join(
+            '<li>%s：<a href="%s">%s</a>%s</li>' % (
+                ESC(relation["label"]), ESC(link_map[target["name"]], quote=True), ESC(target["name"]),
+                refs_mark(published_refs(relation, len(sources)))) for relation, target in relations))
     related = [TITLE_BY_ID.get(i) for i in e.get("links") or []]
     related = [t for t in related if t in link_map and t != name]
     if e.get("links"):
@@ -253,6 +263,7 @@ def render(doc, out, site="小说维基", work="", unit="回", home_note="", ove
     UNIT.update(unit=unit, infobox="回目" if unit == "回" else "章节")
     TITLE_BY_ID = {e["id"]: e["name"] for e in entries}
     mapping = filenames(entries)
+    entry_by_id = {e["id"]: e for e in entries}
     link_map = dict(mapping)
     for e in entries:
         for alias in e.get("aliases") or []:
@@ -261,7 +272,7 @@ def render(doc, out, site="小说维基", work="", unit="回", home_note="", ove
     work = work or meta.get("book") or "未命名"
     overlay = overlay or {}
     pages = {"index.html": index_page(entries, work, site, meta, link_map, home_note, overlay.get("work"))}
-    pages.update({mapping[e["name"]]: entry_page(e, link_map, work, site, overlay.get("entries", {}).get(e["id"])) for e in entries})
+    pages.update({mapping[e["name"]]: entry_page(e, link_map, work, site, overlay.get("entries", {}).get(e["id"]), entry_by_id) for e in entries})
     css = load_css()
     out = Path(out).resolve()
     out.mkdir(parents=True, exist_ok=True)

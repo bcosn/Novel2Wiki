@@ -61,6 +61,8 @@ def check(doc, chapters=None, min_quote=2):
         fields = [("lead", e.get("lead", ""), e.get("lead_refs") or [])]
         fields.extend(("sections[%d]" % n, s.get("body", ""), s.get("refs") or [])
                       for n, s in enumerate(e.get("sections") or [], 1))
+        fields.extend(("relations[%d]" % n, r.get("label", ""), r.get("refs") or [])
+                      for n, r in enumerate(e.get("relations") or [], 1))
         used = set()
         for tag, text, refs in fields:
             if not isinstance(refs, list):
@@ -82,6 +84,10 @@ def check(doc, chapters=None, min_quote=2):
                 total += 1
                 if not any(quote_in_source(quote, sources[n-1].get("quote", "")) for n in valid):
                     errors.append("%s/%s 的引文「%s」不在本节 refs 对应的任一 source 内" % (eid, tag, quote))
+        for relation in e.get("relations") or []:
+            actual={sources[n-1].get("evidence_id") for n in relation.get("refs",[]) if type(n) is int and 1<=n<=len(sources)}
+            if actual!=set(relation.get("evidence_ids",[])):
+                errors.append("%s/relations 引用与声明的证据ID不一致" % eid)
         # Reception is legacy prose; explicit reception_refs are supported, while
         # older entries may match quotes against their individual sources.
         for key, text in (e.get("reception") or {}).items():

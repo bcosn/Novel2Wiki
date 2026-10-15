@@ -7,6 +7,7 @@ from core_store import digest, file_digest, write_json
 from citation_catalog import materialize, CitationErrors
 from draft_format import expand, DraftFormatErrors
 from draft_validation import shape_errors
+from structure_entries import apply as apply_structure,check as check_structure,status as plan_status,sync_relations,StructureErrors
 from quote_source_check import check as check_quotes
 from check_voice import check as check_voice
 from verify_example import TABLES, table_errors, site_errors
@@ -20,7 +21,7 @@ def shape(doc):
 
 def rules_hash():
     root = Path(__file__).resolve().parent
-    return digest({n:file_digest(root/n) for n in ("finalize_entries.py","draft_format.py","draft_validation.py","citation_catalog.py","core_store.py","quote_source_check.py","check_voice.py","verify_example.py","audit_append.py","render_wiki.py","local_uploads.py")} | {
+    return digest({n:file_digest(root/n) for n in ("finalize_entries.py","entry_plan.py","entry_relations.py","structure_entries.py","draft_format.py","draft_validation.py","citation_catalog.py","core_store.py","quote_source_check.py","check_voice.py","verify_example.py","audit_append.py","render_wiki.py","local_uploads.py")} | {
         "css":file_digest(root.parent/"assets/wiki.css")})
 
 
@@ -80,13 +81,19 @@ def summary(result, report, directory):
     return {k:result[k] for k in ("status","stage","work","entries","entries_hash","error_count","hint_count")} | {
         "report":str(report), "output":str(directory), "repair_packet":result.get("repair_packet"),
         "affected_entry_ids":[v[:128] for v in result.get("affected_entry_ids",[])[:12]],
-        "error_preview":[s[:160] for s in result.get("errors",[])[:3]]}
+        "error_preview":[s[:160] for s in result.get("errors",[])[:3]]} | ({"entry_plan":result["entry_plan"]} if "entry_plan" in result else {})
 
 
-def finalize(store, work, inputs, directory, report, expected_hash=None, resume=False, update=False, replace=False):
+def finalize(store, work, inputs, directory, report, expected_hash=None, resume=False, update=False, replace=False, plan=None):
     directory, report = Path(directory).resolve(), Path(report).resolve()
     inputs = [Path(p).resolve() for p in inputs]
-    protected = {store.path, *inputs}
+    plan_path=Path(plan).resolve() if plan is not None else None
+    protected = {store.path, *inputs}|({plan_path} if plan_path is not None else set())
+    planned=None
+    if plan_path is not None:
+        if plan_path==store.path or plan_path.stat().st_size>16*1024*1024:
+            raise ValueError("invalid entry plan path or size")
+        planned=json.loads(plan_path.read_text(encoding="utf-8"))
     exports = {directory/"data"/(work+"."+k+".json") for k in TABLES+["chapters","entries"]}
     site = directory/"site"
     if any(p in protected|exports or p==site or site in p.parents for p in (report,report.with_suffix(".repair.json"))) or directory==store.path or exports & protected or any(site==p or site in p.parents for p in protected):
@@ -101,6 +108,8 @@ def finalize(store, work, inputs, directory, report, expected_hash=None, resume=
         if value.get("meta",{}).get("book",work)!=work:
             raise ValueError("batch belongs to another work")
         batches.append(value)
+    if planned is None and not resume and any("entry_plan_hash" in b.get("meta",{}) for b in batches):
+        raise ValueError("planned draft requires finalize --plan; use resume for an already committed snapshot")
     errors,hints=[],[]
     import local_uploads
     with store.transaction():
@@ -125,16 +134,21 @@ def finalize(store, work, inputs, directory, report, expected_hash=None, resume=
         tables={k:store.get_document(work,k) for k in TABLES}
         if chapters is None or any(v is None for v in tables.values()):
             raise ValueError("frozen chapters and all eight tables required")
+        if planned is not None:
+            from entry_plan import validate
+            validate(planned,store,work)
         normalized=[]
         for batch in batches:
             try:
                 value=expand(batch,chapters,work)
+                if planned is not None:value=apply_structure(value,planned)
                 batch_errors=shape_errors(value,check_links=False)
                 errors.extend(batch_errors)
                 if not batch_errors:
                     value=materialize(value,chapters)
+                    if planned is not None:errors.extend(check_structure(value,planned))
                 normalized.append(value)
-            except (CitationErrors,DraftFormatErrors) as exc:
+            except (CitationErrors,DraftFormatErrors,StructureErrors) as exc:
                 errors.extend(exc.errors);normalized.append(batch)
             except (ValueError,TypeError,KeyError) as exc:
                 errors.append(str(exc)[:400]);normalized.append(batch)
@@ -142,6 +156,10 @@ def finalize(store, work, inputs, directory, report, expected_hash=None, resume=
         # Batches are complete by default for backward compatibility. Partial
         # changes must explicitly select update; that path never deletes entries.
         meta=dict((previous if update else normalized[0]).get("meta",{}))
+        if not resume:
+            meta.pop("entry_plan_state",None)
+        if update and planned is None:meta.pop("entry_plan_hash",None)
+        if planned is not None:meta["entry_plan_hash"]=planned["plan_hash"]
         if update:
             for key in ("scope","author"):
                 for batch in normalized:
@@ -171,6 +189,7 @@ def finalize(store, work, inputs, directory, report, expected_hash=None, resume=
                     raise ValueError("complete draft would remove %d committed entries; use --update for partial edits, or --replace for intentional removal" % len(old_ids-new_ids))
         doc={"meta":meta,"entries":rows}
         doc["meta"].update(book=work,entry_count=len(doc["entries"]))
+        if planned is not None:doc=sync_relations(doc,planned)
         try:
             if not errors:
                 errors.extend(shape_errors(doc))
@@ -190,10 +209,22 @@ def finalize(store, work, inputs, directory, report, expected_hash=None, resume=
         except (ValueError,TypeError,KeyError) as exc:
             if not errors:
                 errors.append(str(exc)[:400])
+        coverage=None
+        if planned is not None and not errors:
+            coverage=plan_status(planned,doc)
+            doc["meta"]["entry_plan_state"]={"source_hash":planned["source_hash"],"summary":coverage}
+        elif resume and doc["meta"].get("entry_plan_hash"):
+            state=doc["meta"].get("entry_plan_state",{})
+            if state.get("source_hash")==digest({"chapters":chapters,"tables":tables}):
+                coverage=state.get("summary")
+            if coverage is None:
+                coverage={"plan_hash":doc["meta"]["entry_plan_hash"],"status":"unavailable",
+                          "reason":"plan coverage requires a matching source snapshot and validated plan"}
         uploads=upload_state(store,work)
         fingerprint=digest({"entries":doc,"chapters":chapters,"tables":tables,"uploads":uploads,"rules":rules_hash(),"output":str(directory)})
         result={"status":"invalid" if errors else "running","stage":"validation_failed" if errors else "committed","work":work,
                 "entries":len(doc["entries"]),"entries_hash":digest(doc),"signature":fingerprint,"error_count":len(errors),"hint_count":len(hints),"errors":errors,"hints":hints}
+        if coverage is not None:result["entry_plan"]=coverage
         if not errors:
             if previous is not None and expected_hash is None and actual!=digest(doc):
                 raise ValueError("changed draft requires --expected-hash from workspace status")

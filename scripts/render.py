@@ -17,6 +17,7 @@ import json
 import os
 import re
 import sys
+from entry_relations import published_relations, published_refs
 
 for _s in (sys.stdout, sys.stderr):
     try:
@@ -30,8 +31,9 @@ KIND_LABEL = {
     "object": "物品",
     "event": "事件",
     "race": "种族",
+    "concept": "设定",
 }
-KIND_ORDER = ["character", "place", "object", "event", "race"]
+KIND_ORDER = ["character", "place", "object", "event", "race", "concept"]
 
 CSS = """
 :root{--bg:#fbfaf7;--fg:#23201c;--muted:#6b6459;--line:#e3ded4;--accent:#8a5a2b;--card:#fff}
@@ -226,6 +228,15 @@ def render(doc: dict, title: str) -> str:
                                  % (label, linkify(str(rec[key]), link_map, e["id"])))
 
             # 关联条目
+            relations = published_relations(e, by_id)
+            if relations:
+                parts.append('<div class="rel"><h3>条目关系</h3><ul>%s</ul></div>' % "".join(
+                    '<li>%s：<a href="#%s">%s</a>%s</li>' % (
+                        html.escape(relation["label"]), html.escape(target["id"], quote=True), html.escape(target["name"]),
+                        '<sup>%s</sup>' % "".join('<a href="#%s-ref%d">[%d]</a>' % (eid, ref, ref)
+                            for ref in published_refs(relation, len(e.get("sources") or [])))
+                        if published_refs(relation, len(e.get("sources") or [])) else "")
+                    for relation, target in relations))
             rel = [by_id[r] for r in (e.get("links") or []) if r in by_id and r != e["id"]]
             if rel:
                 parts.append('<div class="rel">关联 %s</div>' % " ".join(
@@ -236,9 +247,9 @@ def render(doc: dict, title: str) -> str:
             src = e.get("sources") or []
             if src:
                 parts.append('<div class="sources"><h3>考据</h3><ol>')
-                for s in src:
-                    parts.append('<li><span class="ch">第%s章</span>%s</li>'
-                                 % (html.escape(str(s.get("chapter", "?"))),
+                for ref, s in enumerate(src, 1):
+                    parts.append('<li id="%s-ref%d"><span class="ch">第%s章</span>%s</li>'
+                                 % (eid, ref, html.escape(str(s.get("chapter", "?"))),
                                     html.escape(str(s.get("quote", "")))))
                 parts.append("</ol></div>")
 

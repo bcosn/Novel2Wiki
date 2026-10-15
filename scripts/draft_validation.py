@@ -1,8 +1,9 @@
 """Aggregate draft shape errors without quoting entry prose."""
 from __future__ import annotations
+from entry_relations import relation_errors
 
 
-KINDS = frozenset({"character", "place", "object", "event", "race"})
+KINDS = frozenset({"character", "place", "object", "event", "race", "concept"})
 
 
 def shape_errors(doc, check_links=True) -> list[str]:
@@ -55,7 +56,7 @@ def shape_errors(doc, check_links=True) -> list[str]:
         if not isinstance(row.get("lead"), str) or not row["lead"].strip():
             errors.append(prefix + "/lead requires nonempty text")
         if not isinstance(row.get("kind"), str) or row["kind"] not in KINDS:
-            errors.append(prefix + "/kind requires character, place, object, event or race")
+            errors.append(prefix + "/kind requires character, place, object, event, race or concept")
         if type(row.get("stub")) is not bool:
             errors.append(prefix + "/stub requires a boolean")
         reception = row.get("reception")
@@ -97,6 +98,8 @@ def shape_errors(doc, check_links=True) -> list[str]:
                     errors.append(label + "/quote requires text")
         if "lead_refs" in row:
             refs_errors(row["lead_refs"], prefix + "/lead_refs")
+        if "relations" in row:
+            errors.extend(relation_errors(row["relations"], prefix))
 
     if check_links:
         for label, target in links:

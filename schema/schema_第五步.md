@@ -7,6 +7,7 @@
 ## 范围与选择
 
 短篇用全文，长篇用用户要求且已读完的范围。正式写作前先确定条目清单与材料分工。
+先用plan-entries保留全量候选，再以prepare-plan的小证据包判断重要性、去向和主题；具体接口见[条目规划](../docs/entry-planning.md)。旧importance与出现次数仅作线索，不是结论。
 优先主要人物、核心地点、关键物品和重要事件；提及一次的背景实体可保留在表中，
 没有足够材料不必单独建页。用户要求全量时遵照用户要求。
 中途样稿只用于校准语气，不先写全库再统一扩写。
@@ -18,7 +19,7 @@
 | 字段 | 说明 |
 | --- | --- |
 | id | 稳定标识，如 e-0001 |
-| kind | character / place / object / event / race |
+| kind | character / place / object / event / race / concept（按原文判断的公共设定） |
 | name | 条目名；无名第一人称角色可用“叙述者”，原称记于说明 |
 | aliases | 可确定的称呼类异名，不收“师兄”“校长”等跨实体泛称 |
 | lead | 作品外第三人称，首句说明作品与身份 |
@@ -28,10 +29,13 @@
 | reception | {in_work, user, external}；无资料留空 |
 | reception_refs | 可选，{in_work: [来源编号]}，作品内评价的出处 |
 | links | 其他条目的 id |
+| relations | 可选，[{target, label, evidence_ids, refs}]，显式有据的方向关系，refs由程序物化 |
 | stub | 材料不足时为 true，不能为了长度编造 |
 | note | 可选，底本、范围等读者需要的说明，不写工序 |
 
 事件可附 chapter、participants、place。所有 participants 必须是明确主体。
+种族、品阶等先判断实际含义再决定公共页，不按属性名、字母、数值预设类别或顺序。优先共同体系总览，有独立材料才拆各值；历史所属保留时点。关系不能当aliases或假重定向。
+使用--plan时保留meta.entry_plan_hash，每节填写topic_id；heading由程序按topics补齐。brief/standard/expanded是信息深度上限，不是字数或小节配额。
 每个正文段的事实需要证据，refs 指向本节使用的 sources，不能借别节的引文通过检查。
 
 sources 可选记录 speaker、perspective、certainty；

@@ -65,7 +65,7 @@ def plan(doc, state, include=()):
     order = list(requested)
     if unseen and unseen[0]["id"] not in order:
         order.append(unseen[0]["id"])
-    for kind in ("character", "event", "place", "object", "race"):
+    for kind in ("character", "event", "place", "object", "race", "concept"):
         candidate = next((e["id"] for e in unseen if e.get("kind") == kind and e["id"] not in order), None)
         if candidate:
             order.append(candidate)
@@ -79,7 +79,7 @@ def plan(doc, state, include=()):
     for eid in order:
         if len(packet["entries"]) >= state["settings"]["sample_size"]:
             break
-        candidate = {k: by_id[eid][k] for k in ("id", "kind", "name", "lead", "lead_refs", "sections", "sources", "reception") if k in by_id[eid]}
+        candidate = {k: by_id[eid][k] for k in ("id", "kind", "name", "lead", "lead_refs", "sections", "sources", "reception", "relations") if k in by_id[eid]}
         attempt = dict(packet, entries=packet["entries"] + [candidate])
         if len(serialized(attempt)) <= limit:
             packet = attempt

@@ -8,6 +8,7 @@ import uuid
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
+from entry_relations import relation_errors
 
 KINDS = {"characters", "places", "objects", "races", "character_timeline",
          "object_timeline", "interactions", "custom_attributes", "entries", "_pending", "chapters", "_review_state"}
@@ -75,8 +76,11 @@ def validate_document(kind, value):
                 raise ValueError("entry IDs and names must be nonempty strings")
             if not isinstance(row.get("links", []), list) or not isinstance(row.get("sections", []), list) or not isinstance(row.get("sources", []), list):
                 raise ValueError("invalid entry arrays")
-            if row.get("kind") not in {"character", "place", "object", "race", "event"}:
+            if row.get("kind") not in {"character", "place", "object", "race", "event", "concept"}:
                 raise ValueError("invalid entry kind")
+            errors = relation_errors(row["relations"], row["id"]) if "relations" in row else []
+            if errors:
+                raise ValueError("; ".join(errors))
             if any(link not in ids for link in row.get("links", [])):
                 raise ValueError("dangling entry link")
     if kind.endswith("timeline"):

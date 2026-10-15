@@ -3,7 +3,7 @@ from __future__ import annotations
 import copy
 
 FORMAT = "compact-v1"
-KINDS = {"character": "人物", "place": "地点", "object": "物品", "event": "事件", "race": "种族"}
+KINDS = {"character": "人物", "place": "地点", "object": "物品", "event": "事件", "race": "种族", "concept": "设定"}
 
 class DraftFormatErrors(ValueError):
     def __init__(self, errors):

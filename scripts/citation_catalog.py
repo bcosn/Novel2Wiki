@@ -41,7 +41,10 @@ def materialize(doc, chapters):
     if declared is not None and declared != frozen_hash:
         raise ValueError("evidence_hash is stale; prepare the current draft context")
     for entry in value.get("entries", []):
-        fields=[(entry,"lead_refs")]+[(s,"refs") for s in entry.get("sections",[])]
+        relations=entry.get("relations",[])
+        for relation in relations:
+            relation.setdefault("refs",copy.deepcopy(relation.get("evidence_ids",[])))
+        fields=[(entry,"lead_refs")]+[(s,"refs") for s in entry.get("sections",[])]+[(r,"refs") for r in relations]
         named=[r for obj,key in fields for r in (obj.get(key,[]) if isinstance(obj.get(key,[]),list) else []) if isinstance(r,str)]
         if not named:
             continue
