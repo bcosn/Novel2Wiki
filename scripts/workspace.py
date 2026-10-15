@@ -76,6 +76,7 @@ def main():
     command.add_argument("--chapter", type=int, action="append")
     command.add_argument("--max-chars", type=int, default=12000)
     command.add_argument("--entry", nargs=3, action="append", metavar=("KIND", "ID", "NAME"), help="prepare a compact draft template for 1–3 explicit entries")
+    command.add_argument("--prompt-profile", choices=("legacy","quality-v2"), default="legacy", help="quality-v2 is an explicit experimental writing prompt; legacy remains the default")
     command = sub.add_parser("resume")
     command.add_argument("--directory", required=True)
     command.add_argument("--report", required=True)
@@ -155,7 +156,7 @@ def main():
             result = finalize(store, a.work, a.batches, a.directory, a.report, a.expected_hash, update=a.update, replace=a.replace)
         elif a.action == "prepare-draft":
             from draft_context import prepare
-            result = prepare(store, a.work, a.directory, a.chapter, a.max_chars, a.entry)
+            result = prepare(store, a.work, a.directory, a.chapter, a.max_chars, a.entry, a.prompt_profile)
         elif a.action == "resume":
             from finalize_entries import finalize
             result = finalize(store, a.work, [], a.directory, a.report, a.expected_hash, resume=True)

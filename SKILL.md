@@ -51,6 +51,8 @@ python scripts/workspace.py --db data/novel2wiki.sqlite --work <书名> prepare-
 
 超预算时用 --chapter <章节号> 缩小当前批，不能截断后冒充读完全书。
 优先只读返回的 context（draft-context.json），一次取得规范、证据和可选模板；不要再读独立副本重复搬运。同一包不重新抄事实表。
+写作规约以事实与归属准确、关键事实覆盖、主题组织、简洁为优先顺序；称呼和细节按当前证据，不凭作品常识补齐。导语概括身份，主题小节展开，详细动作只展开一次。正文和标题都须有据。
+默认保留legacy提示词。新版quality-v2须显式传--prompt-profile quality-v2；它经过小样本调试但仍有事实/归属错误，不默认推广为已验收版本。
 实验选项：追加 `--entry character e-0001 人物名`（每个对象重复一次，限1–3个），生成compact-v1模板；作者/作品定位句及空字段交给程序。当前真实对照未证实省耗，默认仍用原lead格式。模板空白并非完成稿，不能直接提交。
 保留 meta.evidence_hash，推荐 sources=[]，lead_refs 与 sections[].refs 直接写 evidence_id 字符串，由程序填入 chapter/quote/cite 和本条整数引用编号，避免手抄及编号混用。旧式 sources.evidence_id 与整数 refs 仍兼容。
 旧格式 quote 仍支持，但不得自动用相似句修正。人物说法保持归属，问句不改回答，数量与分割关系不改变，主语切换写清姓名。

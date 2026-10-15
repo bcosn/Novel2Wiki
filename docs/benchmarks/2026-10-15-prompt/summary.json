@@ -1,0 +1,843 @@
+{
+  "scope": "two adaptive prompt-only rounds, 3 excerpts per round, one entry per arm",
+  "evaluation": "one auxiliary-agent anonymous-label review per round, checked against excerpts by primary agent; not human ground truth",
+  "tests_passed": 96,
+  "default_profile": "legacy",
+  "overall_quality_gate_passed": false,
+  "corpus_used": false,
+  "rounds": [
+    {
+      "round": "v1",
+      "cases": [
+        {
+          "case": "medicine",
+          "title": "药",
+          "source_chars": 727,
+          "source_hash": "3476dd7e2c3bd36fbd7341cd5b725669af4f445cfb309fe45820751529ac0cd5",
+          "order": [
+            "A",
+            "B"
+          ],
+          "required_facts": [
+            "明确是老栓的女人、小栓的母亲，不自行补全老栓姓名",
+            "与老栓到灶下商量，由华大妈取回老荷叶、老栓重新包装红馒头",
+            "小栓吃完饭时，华大妈叫他坐着、不要到灶下来",
+            "华大妈叫小栓进入里屋，并端上乌黑圆东西",
+            "吃下去病便好的说法归于华大妈，不写成治疗结果",
+            "华大妈劝小栓睡下，便好了仍为她的说法",
+            "小栓咳着睡后，华大妈等其喘气平静才盖夹被"
+          ],
+          "critical_checks": [
+            "不补华老栓、病名、死亡或未来情节",
+            "不补蒸煮烤熟的操作",
+            "不把取荷叶的主语换成老栓或两人",
+            "不混淆吃饭、吃黑东西和之后咳嗽的时序"
+          ],
+          "arms": {
+            "A": {
+              "context": {
+                "context_chars": 2849,
+                "guide_hash": "9da31ccd8e3113b9c510540e3bac359b9f933a2d95808a768ffa377e3b79f6f6",
+                "guide_chars": 1307,
+                "zip_sha256": "a7550f5dd03053f9ae303c8b9e51ea907d09fc79c5b5588bdee3f6d0bc8935a7"
+              },
+              "blind_review": {
+                "fact_score": 1,
+                "coverage": [
+                  false,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true
+                ],
+                "organization": 2,
+                "concision": 1,
+                "issues": [
+                  {
+                    "sentence": "第二章节选中的次要人物",
+                    "type": "unsupported",
+                    "reason": "所引证据只叙述华大妈的行动和亲属关系，不能确定其在作品中的主次地位。"
+                  },
+                  {
+                    "sentence": "华老栓的妻子",
+                    "type": "unsupported_name",
+                    "reason": "证据只称“老栓”，没有提供“华老栓”这一完整称呼；亲属关系本身有据。"
+                  }
+                ],
+                "notes": "除导语的地位判断和补全姓名外，取荷叶、重新包装、两次劝说及盖被的主体和过程基本准确，未把疗效写成事实。第一项覆盖要求同时禁止补全老栓姓名，故记false。正文主要按行动过程分段，第二节先写劝睡，第三节又回到吃后咳嗽和睡下，存在回叙和少量重复。"
+              },
+              "correct_coverage_count": 6,
+              "required_count": 7,
+              "calls": 10,
+              "tokens": {
+                "inputTokens": 6402,
+                "cacheReadTokens": 68224,
+                "cacheWriteTokens": 0,
+                "outputTokens": 2867,
+                "totalTokens": 77493
+              },
+              "known_estimated_cny": 0.019234479999999998,
+              "normalized_off_peak_cny": 0.019234479999999998,
+              "missing_usage": 0,
+              "output_caps": 0,
+              "provider_failures": {},
+              "artifact_completed": true,
+              "prose_chars": 273,
+              "mechanical_errors": [],
+              "first_sentence_has_author_work": true
+            },
+            "B": {
+              "context": {
+                "context_chars": 3543,
+                "guide_hash": "a38471010a6bd1dcdce341dfd0690d5321e4df813bf09bf18be8fcd69972556e",
+                "guide_chars": 1896,
+                "zip_sha256": "7a30edaeb85c43f8d04daabf3cc3f8b3d6767db686a26db354cd8ca7312bbb3e"
+              },
+              "blind_review": {
+                "fact_score": 2,
+                "coverage": [
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true
+                ],
+                "organization": 3,
+                "concision": 2,
+                "issues": [
+                  {
+                    "sentence": "家中临街是店面",
+                    "type": "citation_support",
+                    "reason": "本稿所引c1p1仅说明店面和茶桌，未说明临街；含“临街”的c1p5未被本条引用。"
+                  },
+                  {
+                    "sentence": "随后问“得了么”，得到“得了”的回答",
+                    "type": "attribution",
+                    "reason": "c1p2、c1p3是未标明说话人的独立引语。上下文容许这一推测，但没有直接确认由华大妈提问，稿件将其写成确定归属。"
+                  },
+                  {
+                    "sentence": "小栓吃的时候，她与老栓分立在他两旁",
+                    "type": "time_precision",
+                    "reason": "c1p8先写东西已吃完、面前只剩空盘，再描写父母站在两旁；不能据此确定描写发生于吃的过程中。这是轻微的时点扩展。"
+                  }
+                ],
+                "notes": "七项必要内容均有覆盖，疗效均保留为华大妈的话，未补病名或结局。事实分主要受未标明引语的确定归属影响，另有位置引文缺口和轻微时间精度问题。家人住处、取荷叶、照料小栓形成基本主题，后两节仍保留较多逐步过程；未见不必要的重复细节。"
+              },
+              "correct_coverage_count": 7,
+              "required_count": 7,
+              "calls": 5,
+              "tokens": {
+                "inputTokens": 4351,
+                "cacheReadTokens": 38784,
+                "cacheWriteTokens": 0,
+                "outputTokens": 6630,
+                "totalTokens": 49765
+              },
+              "known_estimated_cny": 0.031646679999999996,
+              "normalized_off_peak_cny": 0.031646679999999996,
+              "missing_usage": 0,
+              "output_caps": 0,
+              "provider_failures": {},
+              "artifact_completed": true,
+              "prose_chars": 351,
+              "mechanical_errors": [],
+              "first_sentence_has_author_work": true
+            }
+          }
+        },
+        {
+          "case": "madman",
+          "title": "狂人日记",
+          "source_chars": 790,
+          "source_hash": "d85c011ecab26b10ab6f2d551ee88a1fb0e7648635fd316db8eaa3df3b2a5cac",
+          "order": [
+            "B",
+            "A"
+          ],
+          "required_facts": [
+            "未具名的第一人称叙述者，正文转为第三人称",
+            "叙述者觉得赵贵翁和路人怕自己、想害自己，保持为他的感受/推断",
+            "叙述者质问议论自己的孩子，孩子跑开",
+            "他想起二十年前踹古久先生流水簿，并推测其与当前敌意有关，保持推测",
+            "叙述者晚上睡不着",
+            "陈老五把他拖回家，书房门被反扣；不把家人装不认识等判断当已证事实",
+            "狼子村食用心肝的事是佃户向大哥转述，不能当叙述者亲见或独立证实"
+          ],
+          "critical_checks": [
+            "不诊断具体精神疾病或杜撰姓名性别",
+            "不把狗看人问句改成真实迫害",
+            "不把谋害猜测/佃户说法客观化",
+            "不补节选之外的结局或全书观点"
+          ],
+          "arms": {
+            "A": {
+              "context": {
+                "context_chars": 2868,
+                "guide_hash": "9da31ccd8e3113b9c510540e3bac359b9f933a2d95808a768ffa377e3b79f6f6",
+                "guide_chars": 1307,
+                "zip_sha256": "a7550f5dd03053f9ae303c8b9e51ea907d09fc79c5b5588bdee3f6d0bc8935a7"
+              },
+              "blind_review": {
+                "fact_score": 1,
+                "coverage": [
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  false,
+                  true
+                ],
+                "organization": 1,
+                "concision": 1,
+                "issues": [
+                  {
+                    "sentence": "他确信赵贵翁、路上的人以至小孩子都在议论他、想害他",
+                    "type": "certainty",
+                    "reason": "c1p2、c1p4对赵贵翁和小孩子使用“似乎怕我，似乎想害我”；“确信”把这些试探性判断统一加强为确定信念。虽然保留了叙述者归属，仍改变了原有确定性。"
+                  },
+                  {
+                    "sentence": "结仇的由来",
+                    "type": "heading_attribution",
+                    "reason": "c1p4是叙述者寻找和推测敌意原因，没有确认当前确有结仇及其由来。正文写了“推测”，标题仍把其当作既成事件。"
+                  },
+                  {
+                    "sentence": "到家后家里的人都装作不认识他，眼色也全同别人一样",
+                    "type": "attribution",
+                    "reason": "c1p8是叙述者对家人态度和意图的判断，稿件直接断言家人在故意假装，没有保留“他认为”等判断归属。"
+                  },
+                  {
+                    "sentence": "那青面獠牙的一伙人",
+                    "type": "attribution",
+                    "reason": "c1p7中的“青面獠牙”属于叙述者的形容和感知；稿件沿用为未加归属的客观人物描写。"
+                  }
+                ],
+                "notes": "质问孩子、踹簿回忆、失眠、拖回家及佃户转述均有覆盖；食用心肝没有被写成叙述者亲见。普通第一人称动作按动作核验，不据此扣分；正常第三人称代词也不单独当作性别断言。正文基本沿证据顺序完整复述，保留大量场景细节和原作措辞；孩子的眼色及敌意推测在相邻两节重复，导语又重述主要迫害判断。"
+              },
+              "correct_coverage_count": 6,
+              "required_count": 7,
+              "calls": 7,
+              "tokens": {
+                "inputTokens": 5345,
+                "cacheReadTokens": 48256,
+                "cacheWriteTokens": 0,
+                "outputTokens": 3177,
+                "totalTokens": 56778
+              },
+              "known_estimated_cny": 0.019018120000000003,
+              "normalized_off_peak_cny": 0.019018120000000003,
+              "missing_usage": 0,
+              "output_caps": 0,
+              "provider_failures": {},
+              "artifact_completed": true,
+              "prose_chars": 783,
+              "mechanical_errors": [],
+              "first_sentence_has_author_work": true
+            },
+            "B": {
+              "context": {
+                "context_chars": 3562,
+                "guide_hash": "a38471010a6bd1dcdce341dfd0690d5321e4df813bf09bf18be8fcd69972556e",
+                "guide_chars": 1896,
+                "zip_sha256": "7a30edaeb85c43f8d04daabf3cc3f8b3d6767db686a26db354cd8ca7312bbb3e"
+              },
+              "blind_review": {
+                "fact_score": 2,
+                "coverage": [
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  false,
+                  true
+                ],
+                "organization": 1,
+                "concision": 1,
+                "issues": [
+                  {
+                    "sentence": "《狂人日记》第一则日记中的第一人称叙述者",
+                    "type": "scope_precision",
+                    "reason": "所引c1p1及材料元数据只标chapter=1，没有提供日记的“则次”。“第一则”是未经材料确认的结构定位；并非把人物身份本身判错。"
+                  },
+                  {
+                    "sentence": "那青面獠牙的一伙人",
+                    "type": "attribution",
+                    "reason": "c1p7中的措辞是叙述者的形容和感知，正文没有保留这一主观归属。"
+                  },
+                  {
+                    "sentence": "回家后家里的人都装作不认识他，眼色也全同别人一样",
+                    "type": "attribution",
+                    "reason": "c1p8只能支持叙述者认为家人在假装、认为其眼色与外人相同，不能独立确认家人的故意行为。"
+                  }
+                ],
+                "notes": "除家人判断被客观化外，主要猜测使用“觉得”“认为”“推测”，佃户消息也明确作为转述。狗看两眼的句子没有被写成真实迫害，故不按迫害事实扣分；普通第一人称动作及正常第三人称代词同样不单独扣分。章节定位另有轻微精度问题。六节几乎逐段跟随证据顺序展开，孩子的神色和疑似敌意在两节重复，缺少对主要身份、关系和经历的取舍。"
+              },
+              "correct_coverage_count": 6,
+              "required_count": 7,
+              "calls": 11,
+              "tokens": {
+                "inputTokens": 5596,
+                "cacheReadTokens": 93696,
+                "cacheWriteTokens": 0,
+                "outputTokens": 7099,
+                "totalTokens": 106391
+              },
+              "known_estimated_cny": 0.035865919999999996,
+              "normalized_off_peak_cny": 0.035865919999999996,
+              "missing_usage": 0,
+              "output_caps": 0,
+              "provider_failures": {},
+              "artifact_completed": true,
+              "prose_chars": 782,
+              "mechanical_errors": [],
+              "first_sentence_has_author_work": false
+            }
+          }
+        },
+        {
+          "case": "kong-narrator",
+          "title": "孔乙己",
+          "source_chars": 503,
+          "source_hash": "ea2039e3d55aab8a40cee430e7754533752aa5a17f1a096aa55dc7f995ec7368",
+          "order": [
+            "A",
+            "B"
+          ],
+          "required_facts": [
+            "未具名的叙述者十二岁起在镇口咸亨酒店当伙计，不把十二岁写为当前年龄",
+            "掌柜认为他样子太傻、怕不能侍候长衫主顾，最初安排外面工作，保持掌柜判断",
+            "短衣顾客监督舀酒/壶底/温酒过程，使羼水很难，不断言叙述者确实羼水",
+            "几天后掌柜认为他干不了，由于介绍人的情面未被辞退，转为专管温酒",
+            "叙述者觉得职务单调无聊，掌柜和顾客态度令其不活泼，保持叙述者感受",
+            "孔乙己到店时可以笑几声，使叙述者至今记得他，不补孔乙己其它经历"
+          ],
+          "critical_checks": [
+            "不杜撰叙述者姓名/性别/当前年龄",
+            "不把掌柜对智力的评价当客观诊断",
+            "不写被辞退或被安排服侍长衫客",
+            "不补孔乙己偷书、挨打、死亡等后文"
+          ],
+          "arms": {
+            "A": {
+              "context": {
+                "context_chars": 2299,
+                "guide_hash": "9da31ccd8e3113b9c510540e3bac359b9f933a2d95808a768ffa377e3b79f6f6",
+                "guide_chars": 1307,
+                "zip_sha256": "a7550f5dd03053f9ae303c8b9e51ea907d09fc79c5b5588bdee3f6d0bc8935a7"
+              },
+              "blind_review": {
+                "fact_score": 3,
+                "coverage": [
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true
+                ],
+                "organization": 4,
+                "concision": 2,
+                "issues": [
+                  {
+                    "sentence": "在鲁镇咸亨酒店当伙计",
+                    "type": "citation_support",
+                    "reason": "本条仅引c1p2、c1p3，不能从这两段确定镇名。“鲁镇”在未被本条引用的c1p1中；属于较小的引文覆盖缺口。"
+                  }
+                ],
+                "notes": "六项必要内容均有覆盖，关键主体、先后、掌柜判断和未被辞退的原因正确。“在监督下羼水也很为难”表达的是操作困难，没有断言叙述者确实羼水。导语概括身份、职责变化及孔乙己的作用，正文分为入职、改职、工作感受与记忆缘由，组织清楚；必要的身份重提和摘要展开不按无谓重复处罚。"
+              },
+              "correct_coverage_count": 6,
+              "required_count": 6,
+              "calls": 7,
+              "tokens": {
+                "inputTokens": 6669,
+                "cacheReadTokens": 50176,
+                "cacheWriteTokens": 0,
+                "outputTokens": 2667,
+                "totalTokens": 59512
+              },
+              "known_estimated_cny": 0.018340520000000003,
+              "normalized_off_peak_cny": 0.018340520000000003,
+              "missing_usage": 0,
+              "output_caps": 0,
+              "provider_failures": {},
+              "artifact_completed": true,
+              "prose_chars": 365,
+              "mechanical_errors": [],
+              "first_sentence_has_author_work": true
+            },
+            "B": {
+              "context": {
+                "context_chars": 2993,
+                "guide_hash": "a38471010a6bd1dcdce341dfd0690d5321e4df813bf09bf18be8fcd69972556e",
+                "guide_chars": 1896,
+                "zip_sha256": "7a30edaeb85c43f8d04daabf3cc3f8b3d6767db686a26db354cd8ca7312bbb3e"
+              },
+              "blind_review": {
+                "fact_score": 2,
+                "coverage": [
+                  true,
+                  true,
+                  false,
+                  true,
+                  true,
+                  true
+                ],
+                "organization": 4,
+                "concision": 1,
+                "issues": [
+                  {
+                    "sentence": "掌柜还要亲眼看着黄酒从坛子里舀出、看壶子底里有没有水、看壶子放进热水里才放心",
+                    "type": "actor",
+                    "reason": "c1p2中“他们”承接外面的短衣主顾，监督舀酒、壶底和温酒过程的是短衣顾客，稿件把执行者换成掌柜。"
+                  },
+                  {
+                    "sentence": "在鲁镇镇口的咸亨酒店当伙计",
+                    "type": "citation_support",
+                    "reason": "本条仅引c1p2、c1p3，其中只称“镇口”，没有镇名。“鲁镇”见c1p1，但本条没有引用该段；这是引文覆盖缺口，而非断言镇名实际错误。"
+                  }
+                ],
+                "notes": "十二岁明确作为开始当伙计的年龄；掌柜的评价、介绍人情面、改管温酒和叙述者感受均有覆盖，没有断言他实际羼水。第三项因监督主体错误而记false。职位职责、感受环境、记忆缘由的分工清楚，导语提供身份和工作摘要。末节“他记得……是因为……所以至今还记得”重复同一结论，故简洁度扣一分；必要身份重复不扣分。"
+              },
+              "correct_coverage_count": 5,
+              "required_count": 6,
+              "calls": 12,
+              "tokens": {
+                "inputTokens": 7846,
+                "cacheReadTokens": 105600,
+                "cacheWriteTokens": 0,
+                "outputTokens": 3883,
+                "totalTokens": 117329
+              },
+              "known_estimated_cny": 0.02549,
+              "normalized_off_peak_cny": 0.02549,
+              "missing_usage": 0,
+              "output_caps": 0,
+              "provider_failures": {},
+              "artifact_completed": true,
+              "prose_chars": 306,
+              "mechanical_errors": [],
+              "first_sentence_has_author_work": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "round": "v2",
+      "cases": [
+        {
+          "case": "medicine",
+          "title": "药",
+          "source_chars": 727,
+          "source_hash": "3476dd7e2c3bd36fbd7341cd5b725669af4f445cfb309fe45820751529ac0cd5",
+          "order": [
+            "B",
+            "A"
+          ],
+          "required_facts": [
+            "明确是老栓的女人、小栓的母亲，不自行补全老栓姓名",
+            "与老栓到灶下商量，由华大妈取回老荷叶、老栓重新包装红馒头",
+            "小栓吃完饭时，华大妈叫他坐着、不要到灶下来",
+            "华大妈叫小栓进入里屋，并端上乌黑圆东西",
+            "吃下去病便好的说法归于华大妈，不写成治疗结果",
+            "华大妈劝小栓睡下，便好了仍为她的说法",
+            "小栓咳着睡后，华大妈等其喘气平静才盖夹被"
+          ],
+          "critical_checks": [
+            "不补华老栓、病名、死亡或未来情节",
+            "不补蒸煮烤熟的操作",
+            "不把取荷叶的主语换成老栓或两人",
+            "不混淆吃饭、吃黑东西和之后咳嗽的时序"
+          ],
+          "arms": {
+            "A": {
+              "context": {
+                "context_chars": 2849,
+                "guide_hash": "9da31ccd8e3113b9c510540e3bac359b9f933a2d95808a768ffa377e3b79f6f6",
+                "guide_chars": 1307,
+                "zip_sha256": "a7550f5dd03053f9ae303c8b9e51ea907d09fc79c5b5588bdee3f6d0bc8935a7"
+              },
+              "blind_review": {
+                "fact_score": 2,
+                "coverage": [
+                  false,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true
+                ],
+                "organization": 1,
+                "concision": 1,
+                "issues": [
+                  {
+                    "sentence": "华老栓的妻子",
+                    "type": "unsupported_name",
+                    "reason": "证据只称“老栓”，没有给出“华老栓”这一完整姓名。正文另写“老栓的女人”不能消除导语中补全姓名的问题。"
+                  },
+                  {
+                    "sentence": "在自家茶馆里操持灶间",
+                    "type": "scope_precision",
+                    "reason": "c1p1、c1p4显示她在这一场景中出入灶下并处理灶间事务；把单次场景概括成未限定时间的日常职责，范围略宽。"
+                  }
+                ],
+                "notes": "事实分主要受补全老栓姓名这一实质问题影响，灶间职责另有轻微概括过宽。第一项覆盖要求明确禁止自行补全姓名，故记false，其余六项均有覆盖。全稿没有把治疗许诺变成痊愈结果，也未新增病名或结局。四节按登场、取荷叶、吃东西、盖被依次展开，主要是情节复述；导语又逐项预述取荷叶、进里屋和盖被，构成部分重复，必要的亲属身份重提不扣分。"
+              },
+              "correct_coverage_count": 6,
+              "required_count": 7,
+              "calls": 6,
+              "tokens": {
+                "inputTokens": 3406,
+                "cacheReadTokens": 33024,
+                "cacheWriteTokens": 0,
+                "outputTokens": 3010,
+                "totalTokens": 39440
+              },
+              "known_estimated_cny": 0.01610648,
+              "normalized_off_peak_cny": 0.01610648,
+              "missing_usage": 0,
+              "output_caps": 0,
+              "provider_failures": {},
+              "artifact_completed": true,
+              "prose_chars": 526,
+              "mechanical_errors": [],
+              "first_sentence_has_author_work": true
+            },
+            "B": {
+              "context": {
+                "context_chars": 3645,
+                "guide_hash": "63703bb2a5593ffc6a6bf91a5206e6c99afbf36a72fc96930684d2b663d6320f",
+                "guide_chars": 1993,
+                "zip_sha256": "7c81c4d1c5841a654c0f201325a40aeae8da2a829bbeaef459a51a62836325e3"
+              },
+              "blind_review": {
+                "fact_score": 1,
+                "coverage": [
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true
+                ],
+                "organization": 2,
+                "concision": 2,
+                "issues": [
+                  {
+                    "sentence": "茶店店主老栓的妻子",
+                    "type": "unsupported_role",
+                    "reason": "所引c1p1、c1p4、c1p10支持老栓与华大妈的家庭关系及店屋场景，没有直接确认老栓的店主身份；不能由回家、茶桌和灶下行动补定经营者角色。"
+                  },
+                  {
+                    "sentence": "她问老栓“得了么”，老栓答“得了”",
+                    "type": "attribution",
+                    "reason": "c1p2、c1p3只有两句独立引语，没有标明说话人。稿件将推测的问答双方写成了确定归属。"
+                  }
+                ],
+                "notes": "七项必要内容均已覆盖，取荷叶和重包馒头的执行者正确，吃饭、吃黑东西及咳着睡下的顺序清楚，两次“便好了”均作为母亲的话。标题“吃药”在本段治疗意图下理解，不据此认定实际疗效。两大节主要顺次复述场景，包含较多小栓及老栓的动作细节，主题取舍有限；未见不必要的重复细节。"
+              },
+              "correct_coverage_count": 7,
+              "required_count": 7,
+              "calls": 17,
+              "tokens": {
+                "inputTokens": 7101,
+                "cacheReadTokens": 162688,
+                "cacheWriteTokens": 0,
+                "outputTokens": 6234,
+                "totalTokens": 176023
+              },
+              "known_estimated_cny": 0.035290760000000004,
+              "normalized_off_peak_cny": 0.035290760000000004,
+              "missing_usage": 0,
+              "output_caps": 0,
+              "provider_failures": {},
+              "artifact_completed": true,
+              "prose_chars": 405,
+              "mechanical_errors": [],
+              "first_sentence_has_author_work": true
+            }
+          }
+        },
+        {
+          "case": "madman",
+          "title": "狂人日记",
+          "source_chars": 790,
+          "source_hash": "d85c011ecab26b10ab6f2d551ee88a1fb0e7648635fd316db8eaa3df3b2a5cac",
+          "order": [
+            "A",
+            "B"
+          ],
+          "required_facts": [
+            "未具名的第一人称叙述者，正文转为第三人称",
+            "叙述者觉得赵贵翁和路人怕自己、想害自己，保持为他的感受/推断",
+            "叙述者质问议论自己的孩子，孩子跑开",
+            "他想起二十年前踹古久先生流水簿，并推测其与当前敌意有关，保持推测",
+            "叙述者晚上睡不着",
+            "陈老五把他拖回家，书房门被反扣；不把家人装不认识等判断当已证事实",
+            "狼子村食用心肝的事是佃户向大哥转述，不能当叙述者亲见或独立证实"
+          ],
+          "critical_checks": [
+            "不诊断具体精神疾病或杜撰姓名性别",
+            "不把狗看人问句改成真实迫害",
+            "不把谋害猜测/佃户说法客观化",
+            "不补节选之外的结局或全书观点"
+          ],
+          "arms": {
+            "A": {
+              "context": {
+                "context_chars": 2868,
+                "guide_hash": "9da31ccd8e3113b9c510540e3bac359b9f933a2d95808a768ffa377e3b79f6f6",
+                "guide_chars": 1307,
+                "zip_sha256": "a7550f5dd03053f9ae303c8b9e51ea907d09fc79c5b5588bdee3f6d0bc8935a7"
+              },
+              "blind_review": {
+                "fact_score": 1,
+                "coverage": [
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  false,
+                  true
+                ],
+                "organization": 1,
+                "concision": 1,
+                "issues": [
+                  {
+                    "sentence": "全篇以第一人称“我”出现的那个人",
+                    "type": "scope",
+                    "reason": "材料只覆盖局部日记节选，能够确认节选中的第一人称身份，不能据此确认“全篇”的叙述范围。"
+                  },
+                  {
+                    "sentence": "否则赵家的狗不会看他两眼",
+                    "type": "logic",
+                    "reason": "c1p1以“何以看我两眼呢”反问，表达叙述者由狗的目光引发的疑虑；稿件改成“否则……不会”的条件断言，增添了原文没有确认的条件关系。这里不是把狗的行为直接判作真实迫害。"
+                  },
+                  {
+                    "sentence": "昨天街上的女人打他儿子",
+                    "type": "reference_ambiguity",
+                    "reason": "c1p7中的“他儿子”承接该女人。正文改为第三人称且一直用“他”指叙述者后，保留这一措辞容易被读成女人打叙述者的儿子；宜明确为该女人的儿子。这按指代问题记录，不直接断言稿件已明确杜撰叙述者的孩子。"
+                  },
+                  {
+                    "sentence": "那青面獠牙的一伙人",
+                    "type": "attribution",
+                    "reason": "c1p7是叙述者的感知和形容，稿件将该措辞作为未加归属的人物描写。"
+                  },
+                  {
+                    "sentence": "家里的人都装作不认识他，眼色也全同别人一样",
+                    "type": "attribution",
+                    "reason": "c1p8只能支持叙述者这样判断家人的意图和眼色；稿件没有保留判断归属，直接确认家人在故意假装。"
+                  }
+                ],
+                "notes": "第一人称来源中的出门、质问、踹簿、失眠及被拖回等普通行动均按原文行动核验，不因第一人称而扣分；正常第三人称代词也不单独判作性别设定。主要推测及佃户转述大体保留，家人意图被客观化使第六项覆盖不成立。六节保留了几乎全部场景细节，虽略调次序，仍以逐步复述为主；孩子的神色和疑似敌意在街上见闻与结冤推测两节重复。导语中的“本条目记述”也削弱百科首段的直接身份说明。"
+              },
+              "correct_coverage_count": 6,
+              "required_count": 7,
+              "calls": 7,
+              "tokens": {
+                "inputTokens": 5203,
+                "cacheReadTokens": 45056,
+                "cacheWriteTokens": 0,
+                "outputTokens": 4958,
+                "totalTokens": 55217
+              },
+              "known_estimated_cny": 0.02593612,
+              "normalized_off_peak_cny": 0.02593612,
+              "missing_usage": 0,
+              "output_caps": 0,
+              "provider_failures": {},
+              "artifact_completed": true,
+              "prose_chars": 814,
+              "mechanical_errors": [],
+              "first_sentence_has_author_work": true
+            },
+            "B": {
+              "context": {
+                "context_chars": 3664,
+                "guide_hash": "63703bb2a5593ffc6a6bf91a5206e6c99afbf36a72fc96930684d2b663d6320f",
+                "guide_chars": 1993,
+                "zip_sha256": "7c81c4d1c5841a654c0f201325a40aeae8da2a829bbeaef459a51a62836325e3"
+              },
+              "blind_review": {
+                "fact_score": 2,
+                "coverage": [
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  false,
+                  true
+                ],
+                "organization": 2,
+                "concision": 1,
+                "issues": [
+                  {
+                    "sentence": "最奇怪的是昨天街上一个女人打他儿子",
+                    "type": "reference_ambiguity",
+                    "reason": "c1p7的孩子属于街上的女人；在全文“他”已指叙述者的现代第三人称转述中，“打他儿子”没有清楚恢复该女人与儿子的关系，存在读成叙述者之子的歧义。此处按指代问题记录。"
+                  },
+                  {
+                    "sentence": "那青面獠牙的一伙人",
+                    "type": "attribution",
+                    "reason": "c1p7中的形容来自叙述者的感知，正文沿用时未标明这一归属。"
+                  },
+                  {
+                    "sentence": "回到家，家里的人都装作不认识他，眼色也同别人一样",
+                    "type": "attribution",
+                    "reason": "c1p8是叙述者对家人意图及眼色的判断；后面的“他觉得宛然是关了一只鸡鸭”只归属比喻，没有追溯限定前面故意假装的断言。"
+                  }
+                ],
+                "notes": "导语和大部分正文以“怀疑”“在他看来”“认为”“推测”保留了迫害猜测的归属，佃户告荒也仍是向大哥转述；未补病名或结局。普通第一人称行动及常用第三人称代词不单独扣分。家人判断客观化是主要实质问题，第六项覆盖因而记false。两节有见闻与推测的分工，但第一节把出门、街上冲突、回家与狼子村消息合成一大段，仍主要复述；孩子神色及疑似敌意又在第二节重提，存在部分重复。"
+              },
+              "correct_coverage_count": 6,
+              "required_count": 7,
+              "calls": 8,
+              "tokens": {
+                "inputTokens": 4567,
+                "cacheReadTokens": 50944,
+                "cacheWriteTokens": 0,
+                "outputTokens": 2648,
+                "totalTokens": 58159
+              },
+              "known_estimated_cny": 0.01617788,
+              "normalized_off_peak_cny": 0.01617788,
+              "missing_usage": 0,
+              "output_caps": 0,
+              "provider_failures": {},
+              "artifact_completed": true,
+              "prose_chars": 809,
+              "mechanical_errors": [],
+              "first_sentence_has_author_work": true
+            }
+          }
+        },
+        {
+          "case": "kong-narrator",
+          "title": "孔乙己",
+          "source_chars": 503,
+          "source_hash": "ea2039e3d55aab8a40cee430e7754533752aa5a17f1a096aa55dc7f995ec7368",
+          "order": [
+            "B",
+            "A"
+          ],
+          "required_facts": [
+            "未具名的叙述者十二岁起在镇口咸亨酒店当伙计，不把十二岁写为当前年龄",
+            "掌柜认为他样子太傻、怕不能侍候长衫主顾，最初安排外面工作，保持掌柜判断",
+            "短衣顾客监督舀酒/壶底/温酒过程，使羼水很难，不断言叙述者确实羼水",
+            "几天后掌柜认为他干不了，由于介绍人的情面未被辞退，转为专管温酒",
+            "叙述者觉得职务单调无聊，掌柜和顾客态度令其不活泼，保持叙述者感受",
+            "孔乙己到店时可以笑几声，使叙述者至今记得他，不补孔乙己其它经历"
+          ],
+          "critical_checks": [
+            "不杜撰叙述者姓名/性别/当前年龄",
+            "不把掌柜对智力的评价当客观诊断",
+            "不写被辞退或被安排服侍长衫客",
+            "不补孔乙己偷书、挨打、死亡等后文"
+          ],
+          "arms": {
+            "A": {
+              "context": {
+                "context_chars": 2299,
+                "guide_hash": "9da31ccd8e3113b9c510540e3bac359b9f933a2d95808a768ffa377e3b79f6f6",
+                "guide_chars": 1307,
+                "zip_sha256": "a7550f5dd03053f9ae303c8b9e51ea907d09fc79c5b5588bdee3f6d0bc8935a7"
+              },
+              "blind_review": {
+                "fact_score": 3,
+                "coverage": [
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true
+                ],
+                "organization": 3,
+                "concision": 2,
+                "issues": [
+                  {
+                    "sentence": "他自述这些往事已是二十多年前的事",
+                    "type": "time_scope",
+                    "reason": "c1p1的“二十多年前”直接修饰四文买酒的旧时场景，并与当前酒价对照。稿件将其笼统扩大为叙述者“这些往事”的时间，未区分酒价背景与十二岁入职等具体经历。按范围轻微不精确记录，未认定其推算了当前年龄。"
+                  }
+                ],
+                "notes": "六项必要内容均覆盖，姓名、年龄起点、监督主体、改职原因和人物判断没有实质误写；有关羼水的句子只说困难，没有确认曾经实施。酒价四文至十文有c1p1支持，鲁镇定位也有该段引文。导语的时间概括存在小幅范围扩展。职务与处境两节基本清楚，但在叙述者处境之后以“此外”接入通用酒价背景，主题略松；未见不必要的重复细节，职务的简短标签与感受原因的展开不作机械重复扣分。"
+              },
+              "correct_coverage_count": 6,
+              "required_count": 6,
+              "calls": 7,
+              "tokens": {
+                "inputTokens": 2745,
+                "cacheReadTokens": 37376,
+                "cacheWriteTokens": 0,
+                "outputTokens": 2137,
+                "totalTokens": 42258
+              },
+              "known_estimated_cny": 0.012040519999999999,
+              "normalized_off_peak_cny": 0.012040519999999999,
+              "missing_usage": 0,
+              "output_caps": 0,
+              "provider_failures": {},
+              "artifact_completed": true,
+              "prose_chars": 354,
+              "mechanical_errors": [],
+              "first_sentence_has_author_work": true
+            },
+            "B": {
+              "context": {
+                "context_chars": 3095,
+                "guide_hash": "63703bb2a5593ffc6a6bf91a5206e6c99afbf36a72fc96930684d2b663d6320f",
+                "guide_chars": 1993,
+                "zip_sha256": "7c81c4d1c5841a654c0f201325a40aeae8da2a829bbeaef459a51a62836325e3"
+              },
+              "blind_review": {
+                "fact_score": 4,
+                "coverage": [
+                  true,
+                  true,
+                  true,
+                  true,
+                  true,
+                  true
+                ],
+                "organization": 4,
+                "concision": 2,
+                "issues": [],
+                "notes": "六项必要内容均覆盖。十二岁是入职起点，掌柜评价明确归于掌柜，监督主体是短衣顾客，羼水困难没有被写成确实羼水；未被辞退、改管温酒及叙述者感受均有引文支持。工作经历与孔乙己相关记忆的主题分工清楚，后者的酒店气氛作为记忆缘由的背景也有作用。导语与正文重提入职身份是必要定位，不按无谓重复扣分。未发现新增姓名、性别、当前年龄或后文经历。"
+              },
+              "correct_coverage_count": 6,
+              "required_count": 6,
+              "calls": 9,
+              "tokens": {
+                "inputTokens": 5032,
+                "cacheReadTokens": 87936,
+                "cacheWriteTokens": 0,
+                "outputTokens": 8646,
+                "totalTokens": 101614
+              },
+              "known_estimated_cny": 0.041374720000000004,
+              "normalized_off_peak_cny": 0.041374720000000004,
+              "missing_usage": 0,
+              "output_caps": 0,
+              "provider_failures": {},
+              "artifact_completed": true,
+              "prose_chars": 307,
+              "mechanical_errors": [],
+              "first_sentence_has_author_work": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

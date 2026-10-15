@@ -51,6 +51,21 @@ class FlowTests(unittest.TestCase):
         target=self.root/"context"
         with self.assertRaises(ValueError):draft_context.prepare(self.store,"书",target)
         self.assertFalse(target.exists())
+    def test_prompt_profiles_keep_identical_frozen_evidence_and_distinct_trace(self):
+        old=draft_context.prepare(self.store,"书",self.root/"old-context")
+        new=draft_context.prepare(self.store,"书",self.root/"quality-context",prompt_profile="quality-v2")
+        a=json.loads(pathlib.Path(old["context"]).read_text(encoding="utf-8"));b=json.loads(pathlib.Path(new["context"]).read_text(encoding="utf-8"))
+        self.assertEqual(a["evidence"],b["evidence"])
+        self.assertEqual(a["prompt_hash"],digest(draft_context.PROFILES["legacy"][1]))
+        self.assertEqual(b["prompt_hash"],digest(draft_context.GUIDE))
+        self.assertNotEqual(a["prompt_hash"],b["prompt_hash"])
+        self.assertEqual(old["prompt_profile"],"legacy")
+        self.assertEqual(new["prompt_profile"],"quality-v2")
+    def test_unknown_prompt_profile_does_not_create_context(self):
+        target=self.root/"bad-profile"
+        with self.assertRaisesRegex(ValueError,"unknown prompt"):
+            draft_context.prepare(self.store,"书",target,prompt_profile="unknown")
+        self.assertFalse(target.exists())
     def test_reference_is_copied_exactly_and_draft_is_not_mutated(self):
         value=copy.deepcopy(self.doc);value["meta"]["evidence_hash"]=digest(self.chapters)
         value["entries"][0]["sources"]=[{"evidence_id":"c1p1"}]
