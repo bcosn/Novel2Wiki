@@ -1,0 +1,148 @@
+{
+  "scope": "two adaptive 727-character, one-entry draft-stage paired trials; no corpus; not full-story savings",
+  "tests_passed": 94,
+  "overall_cost_gate_passed": false,
+  "corpus_used": false,
+  "rounds": [
+    {
+      "round": 4,
+      "order": [
+        "A",
+        "B"
+      ],
+      "requested_source_cap": 3,
+      "arms": {
+        "A": {
+          "calls": 7,
+          "tokens": {
+            "inputTokens": 4770,
+            "cacheReadTokens": 36608,
+            "cacheWriteTokens": 0,
+            "outputTokens": 1689,
+            "totalTokens": 43067
+          },
+          "estimated_cny": 0.01225816,
+          "cache_read_ratio": 0.8847213495094012,
+          "output_caps": 0,
+          "missing_usage": 0,
+          "read_calls": 3,
+          "prose_chars": 361,
+          "sources": 9,
+          "artifact_completed": true,
+          "sqlite_export_matches": true,
+          "mechanical_error_count": 0,
+          "first_sentence_has_work_and_author": true,
+          "manual_notes": [
+            "Both arms exceeded the trial source cap; outputs remain plot retelling."
+          ]
+        },
+        "B": {
+          "calls": 8,
+          "tokens": {
+            "inputTokens": 4219,
+            "cacheReadTokens": 40832,
+            "cacheWriteTokens": 0,
+            "outputTokens": 1875,
+            "totalTokens": 46926
+          },
+          "estimated_cny": 0.01253564,
+          "cache_read_ratio": 0.9063505804532641,
+          "output_caps": 0,
+          "missing_usage": 0,
+          "read_calls": 4,
+          "prose_chars": 355,
+          "sources": 7,
+          "artifact_completed": true,
+          "sqlite_export_matches": true,
+          "mechanical_error_count": 0,
+          "first_sentence_has_work_and_author": true,
+          "manual_notes": [
+            "Both arms exceeded the trial source cap; outputs remain plot retelling.",
+            "Expanded 老栓 to unattested 华老栓.",
+            "First section moves cough after meal; source orders the described chest-pressing cough after the black bun."
+          ]
+        }
+      },
+      "known_cost_change": 0.022636349990536875
+    },
+    {
+      "round": 5,
+      "order": [
+        "B",
+        "A"
+      ],
+      "requested_source_cap": null,
+      "arms": {
+        "A": {
+          "calls": 7,
+          "tokens": {
+            "inputTokens": 3820,
+            "cacheReadTokens": 37632,
+            "cacheWriteTokens": 0,
+            "outputTokens": 1744,
+            "totalTokens": 43196
+          },
+          "estimated_cny": 0.011548639999999999,
+          "cache_read_ratio": 0.9078452185660523,
+          "output_caps": 0,
+          "missing_usage": 0,
+          "read_calls": 2,
+          "prose_chars": 386,
+          "sources": 8,
+          "artifact_completed": true,
+          "sqlite_export_matches": true,
+          "mechanical_error_count": 0,
+          "first_sentence_has_work_and_author": true,
+          "manual_notes": [
+            "Unsupported steaming in the lead."
+          ]
+        },
+        "B": {
+          "calls": 7,
+          "tokens": {
+            "inputTokens": 4609,
+            "cacheReadTokens": 43520,
+            "cacheWriteTokens": 0,
+            "outputTokens": 2468,
+            "totalTokens": 50597
+          },
+          "estimated_cny": 0.015351400000000001,
+          "cache_read_ratio": 0.9042365309896321,
+          "output_caps": 0,
+          "missing_usage": 0,
+          "read_calls": 1,
+          "prose_chars": 533,
+          "sources": 7,
+          "artifact_completed": true,
+          "sqlite_export_matches": true,
+          "mechanical_error_count": 0,
+          "first_sentence_has_work_and_author": true,
+          "manual_notes": [
+            "Expanded 老栓 to unattested 华老栓.",
+            "Lead repeats plot actions already covered in sections; prose becomes longer."
+          ]
+        }
+      },
+      "known_cost_change": 0.3292820626498014
+    }
+  ],
+  "offline_replay": {
+    "new_model_calls": 0,
+    "candidate_full_context": {
+      "context_chars": 10033,
+      "chapter_count": 4,
+      "paragraph_count": 70,
+      "all_paragraphs_unchanged": true
+    },
+    "resume": "completed",
+    "reused": "reused",
+    "update": "completed",
+    "entry_count_before": 24,
+    "entry_count_after": 24,
+    "unchanged_other_entries": true,
+    "partial_input_chars": 2326,
+    "whole_snapshot_chars": 53768,
+    "rebuild": "completed",
+    "page_restored": true
+  }
+}

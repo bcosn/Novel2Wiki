@@ -8,6 +8,7 @@ import json
 import os
 import re
 import sys
+import sqlite3
 from pathlib import Path
 
 PROFILES = {"economy": 0, "balanced": 1, "strict": 2}
@@ -51,7 +52,7 @@ def plan(doc, state, include=()):
     by_id = {e["id"]: e for e in entries}
     if len(by_id) != len(entries):
         raise ValueError("条目 id 重复")
-    reviewed = {eid: sig for h in state["history"] for eid, sig in h["entry_signatures"].items()}
+    reviewed = {eid: sig for h in state["history"] if h.get("status", "completed") == "completed" for eid, sig in h["entry_signatures"].items()}
     issues = state["history"][-1]["issues"] if state["history"] else []
     affected = list(dict.fromkeys(i["entry_id"] for i in issues if i["kind"] in CONTENT_KINDS and i["entry_id"] in by_id))
     requested = list(dict.fromkeys(list(include) + affected))
@@ -64,7 +65,7 @@ def plan(doc, state, include=()):
     order = list(requested)
     if unseen and unseen[0]["id"] not in order:
         order.append(unseen[0]["id"])
-    for kind in ("character", "event", "place", "object", "race"):
+    for kind in ("character", "event", "place", "object", "race", "concept"):
         candidate = next((e["id"] for e in unseen if e.get("kind") == kind and e["id"] not in order), None)
         if candidate:
             order.append(candidate)
@@ -78,7 +79,7 @@ def plan(doc, state, include=()):
     for eid in order:
         if len(packet["entries"]) >= state["settings"]["sample_size"]:
             break
-        candidate = {k: by_id[eid][k] for k in ("id", "kind", "name", "lead", "lead_refs", "sections", "sources", "reception") if k in by_id[eid]}
+        candidate = {k: by_id[eid][k] for k in ("id", "kind", "name", "lead", "lead_refs", "sections", "sources", "reception", "relations") if k in by_id[eid]}
         attempt = dict(packet, entries=packet["entries"] + [candidate])
         if len(serialized(attempt)) <= limit:
             packet = attempt
@@ -111,7 +112,7 @@ def operate(args):
             if getattr(args, key) is not None and getattr(args, key) != state["settings"][key]:
                 raise ValueError("已有台账的 %s 不可由续跑命令更改" % key)
     else:
-        if args.claim or args.record_result:
+        if args.claim or args.record_result or getattr(args, "record_failure", None):
             raise ValueError("先生成审查包和台账")
         mode = args.mode or "balanced"
         state = {"version": 1, "work": work, "settings": {"mode": mode,
@@ -137,14 +138,26 @@ def operate(args):
         state["calls"] += 1
         save(state_path, state)
         return {"status": "claimed", "calls": state["calls"], "max_reviews": settings["max_reviews"]}
-    if args.record_result:
+    if args.record_result or getattr(args, "record_failure", None):
         if not pending or pending["status"] != "claimed":
             raise ValueError("只能记录已领取审查包的结果")
-        result = json.loads(Path(args.record_result).read_text(encoding="utf-8"))
+        failure = getattr(args, "record_failure", None)
+        result = ({"status": "model_failed", "failure_reason": failure,
+                   "issues": [], "needs_followup": False} if failure is not None
+                  else json.loads(Path(args.record_result).read_text(encoding="utf-8")))
+        outcome = result.get("status", "completed")
+        if outcome not in ("completed", "model_failed"):
+            raise ValueError("审查结果 status 必须是 completed 或 model_failed")
         ids = {e["id"] for e in pending["packet"]["entries"]}
         issues = result.get("issues")
         if not isinstance(issues, list) or type(result.get("needs_followup")) is not bool:
             raise ValueError("result 需要 issues 数组和 needs_followup 布尔")
+        if outcome == "model_failed":
+            reason = result.get("failure_reason")
+            if not isinstance(reason, str) or not reason.strip() or len(reason) > 500:
+                raise ValueError("失败结果需要 1-500 字符 failure_reason")
+            if issues or result["needs_followup"]:
+                raise ValueError("失败审查没有内容结论，不能附带 issues 或 needs_followup")
         for issue in issues:
             if not isinstance(issue, dict) or issue.get("entry_id") not in ids or issue.get("kind") not in CONTENT_KINDS | {"style"}:
                 raise ValueError("issue 的条目不在样本中，或 kind 无效")
@@ -152,10 +165,11 @@ def operate(args):
                 raise ValueError("issue 需要 sentence 与 fix")
         followup = result["needs_followup"] and any(i["kind"] in CONTENT_KINDS for i in issues)
         state["history"].append({"entry_signatures": pending["entry_signatures"],
-            "issues": issues, "needs_followup": followup})
+            "issues": issues, "needs_followup": followup, "status": outcome,
+            **({"failure_reason": result["failure_reason"]} if outcome == "model_failed" else {})})
         state["pending"] = None
         save(state_path, state)
-        return {"status": "recorded", "calls": state["calls"], "needs_followup": followup}
+        return {"status": "recorded", "calls": state["calls"], "needs_followup": followup, "review_status": outcome}
     if not out_path:
         raise ValueError("生成审查包需要 -o")
     if pending:
@@ -166,12 +180,16 @@ def operate(args):
             return {"status": "reused", "calls": state["calls"], "packet_chars": len(serialized(pending["packet"]))}
         state["pending"] = None
     reason = None
-    if state["calls"] >= settings["max_reviews"]:
+    if state["history"] and state["history"][-1].get("status") == "model_failed":
+        reason = "上一轮审查失败，没有内容结论；已领取额度不退还，不自动重试"
+    elif state["calls"] >= settings["max_reviews"]:
         reason = "已达到作品级审查上限"
     elif state["history"] and not state["history"][-1]["needs_followup"]:
         reason = "上一轮无需要复查的内容问题"
     if reason:
         packet = {"status": "stop", "work": work, "reason": reason, "calls": state["calls"]}
+        if state["history"]:
+            packet["review_status"] = state["history"][-1].get("status", "completed")
         save(out_path, packet)
         save(state_path, state)
         return packet
@@ -187,6 +205,40 @@ def operate(args):
             "packet_chars": len(serialized(packet)), "calls": state["calls"], "max_reviews": settings["max_reviews"],
             "omitted_candidates": state.get("omitted_candidates", [])}
 
+def operate_sqlite(args):
+    """Reuse existing review policy, commit the ledger transactionally."""
+    import copy
+    import tempfile
+    from core_store import Store, write_json
+    entries_path = Path(args.entries).resolve()
+    state_path = Path(args.state).resolve()
+    out_path = Path(args.out).resolve() if args.out else None
+    if state_path == entries_path or out_path in (entries_path, state_path):
+        raise ValueError("entries、state 与 packet 必须使用不同路径")
+    doc = json.loads(entries_path.read_text(encoding="utf-8"))
+    work = (doc.get("meta") or {}).get("book") or entries_path.stem
+    state_path.parent.mkdir(parents=True, exist_ok=True)
+    with Store(getattr(args, "db", None) or state_path.parent / "novel2wiki.sqlite") as store:
+        with tempfile.TemporaryDirectory(prefix="review-", dir=state_path.parent) as temporary:
+            stage = Path(temporary)
+            with store.transaction():
+                state = store.get_document(work, "_review_state")
+                if state is None and state_path.exists():
+                    state = json.loads(state_path.read_text(encoding="utf-8"))
+                if state is not None:
+                    write_json(stage / "state.json", state)
+                call_args = copy.copy(args)
+                call_args.state = str(stage / "state.json")
+                call_args.out = str(stage / "packet.json") if out_path else None
+                result = operate(call_args)
+                state = json.loads((stage / "state.json").read_text(encoding="utf-8"))
+                store.put_document(work, "_review_state", state)
+            # Export after the canonical commit. A failed export must never reset the quota.
+            write_json(state_path, state)
+            if out_path and (stage / "packet.json").exists():
+                write_json(out_path, json.loads((stage / "packet.json").read_text(encoding="utf-8")))
+    return result
+
 def main():
     try:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -195,6 +247,7 @@ def main():
     ap = argparse.ArgumentParser(description="作品级 AI 审查参数、限量上下文与调用台账")
     ap.add_argument("entries")
     ap.add_argument("--state", required=True)
+    ap.add_argument("--db", help="默认 state 所在目录/novel2wiki.sqlite，台账以数据库为准")
     ap.add_argument("-o", "--out")
     ap.add_argument("--mode", choices=PROFILES)
     ap.add_argument("--max-reviews", type=int)
@@ -204,24 +257,14 @@ def main():
     actions = ap.add_mutually_exclusive_group()
     actions.add_argument("--claim", action="store_true")
     actions.add_argument("--record-result")
+    actions.add_argument("--record-failure", metavar="REASON", help="记录审查失败，保留已领取次数，不伪装成无问题结论")
     args = ap.parse_args()
-    state_path = Path(args.state).resolve()
-    state_path.parent.mkdir(parents=True, exist_ok=True)
-    lock = state_path.with_name(state_path.name + ".lock")
     try:
-        descriptor = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-    except FileExistsError:
-        print("台账正在使用，稍后重试；不要并行领取审查", file=sys.stderr)
-        return 1
-    try:
-        os.close(descriptor)
-        print(serialized(operate(args)).strip())
+        print(serialized(operate_sqlite(args)).strip())
         return 0
-    except (ValueError, OSError, KeyError, TypeError) as exc:
+    except (ValueError, OSError, KeyError, TypeError, sqlite3.Error) as exc:
         print("审查计划失败: %s" % exc, file=sys.stderr)
         return 1
-    finally:
-        lock.unlink()
 
 if __name__ == "__main__":
     sys.exit(main())

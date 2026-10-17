@@ -68,37 +68,29 @@ def merge_list(base_items, new_items, key):
     return base_items, added, skipped
 
 
-def main() -> int:
-    ap = argparse.ArgumentParser(description="合并第四步追加产物")
-    ap.add_argument("append")
-    ap.add_argument("--base-dir", required=True)
-    ap.add_argument("--to-scope", default="", help="合并后的 scope，如「第1-20回」")
-    ap.add_argument("--prefix", default="红楼梦", help="文件名前缀，如「红楼梦」")
-    args = ap.parse_args()
-
-    doc = load(args.append)
-    prefix = args.prefix
+def prepare_append(doc, prefix, to_scope, read_document, batch_name):
+    """Pure merge preparation; storage owns the commit boundary."""
     report = []
     prepared = []
 
     def path(kind):
-        return os.path.join(args.base_dir, "%s.%s" % (prefix, TABLES[kind]))
+        return kind
 
     # ---- 四表 ----
     for kind in ("characters", "places", "objects", "races"):
         p = path(kind)
-        base = load(p, {"meta": {}, "items": []})
+        base = read_document(p, {"meta": {}, "items": []})
         base["items"], added, skipped = merge_list(
             base["items"], doc.get("new_entities", {}).get(kind, []), lambda i: i["name"])
-        if args.to_scope:
-            base["meta"]["scope"] = args.to_scope
+        if to_scope:
+            base["meta"]["scope"] = to_scope
         prepared.append((p, base))
         report.append(("新实体 %s" % kind, added, skipped))
 
     # ---- 时间线 ----
     for grp, kind in (("characters", "character_timeline"), ("objects", "object_timeline")):
         p = path(kind)
-        base = load(p, {"meta": {}, "items": []})
+        base = read_document(p, {"meta": {}, "items": []})
         base["items"], added, skipped = merge_list(
             base["items"], doc.get("new_timeline", {}).get(grp, []),
             lambda i: (i["name"], i["field"], i.get("track") or "", i.get("from_chapter")))
@@ -123,24 +115,24 @@ def main() -> int:
                     it["to_chapter"] = close
             if not matched:
                 raise ValueError("range_advance 找不到对应旧时间线: %s/%s" % (ra["name"], ra["field"]))
-        if args.to_scope:
-            base["meta"]["scope"] = args.to_scope
+        if to_scope:
+            base["meta"]["scope"] = to_scope
         prepared.append((p, base))
         report.append(("新时间线 %s" % kind, added, skipped))
 
     # ---- 互动 ----
     p = path("interactions")
-    base = load(p, {"meta": {}, "items": []})
+    base = read_document(p, {"meta": {}, "items": []})
     base["items"], added, skipped = merge_list(
         base["items"], doc.get("new_interactions", []), lambda i: i["id"])
-    if args.to_scope:
-        base["meta"]["scope"] = args.to_scope
+    if to_scope:
+        base["meta"]["scope"] = to_scope
     prepared.append((p, base))
     report.append(("新互动", added, skipped))
 
     # ---- 动态属性 ----
     p = path("custom_attributes")
-    base = load(p, {"meta": {}, "attribute_defs": [], "items": []})
+    base = read_document(p, {"meta": {}, "attribute_defs": [], "items": []})
     na = doc.get("new_attributes", {})
     have = {d["name"] for d in base.get("attribute_defs", [])}
     for d in na.get("attribute_defs", []):
@@ -150,22 +142,22 @@ def main() -> int:
     base["items"], added, skipped = merge_list(
         base.get("items", []), na.get("items", []),
         lambda i: (i["name"], i["target_kind"], i["target"], i.get("chapter")))
-    if args.to_scope:
-        base["meta"]["scope"] = args.to_scope
+    if to_scope:
+        base["meta"]["scope"] = to_scope
     prepared.append((p, base))
     report.append(("新动态属性", added, skipped))
 
     # ---- 待人工处理：corrections / unresolved 只登记，不应用 ----
     pending = {
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "from": os.path.basename(args.append),
+        "from": batch_name,
         "note": "corrections 需人工复核后才可应用；unresolved 尚未定论。两者都不自动改数据。",
         "corrections": doc.get("corrections", []),
         "unresolved": doc.get("unresolved", []),
         "conflicts": doc.get("conflicts", []),
     }
-    pp = os.path.join(args.base_dir, "%s._pending.json" % prefix)
-    previous = load(pp, {})
+    pp = "_pending"
+    previous = read_document(pp, {})
     for field in ("corrections", "unresolved", "conflicts"):
         merged = []
         fingerprints = set()
@@ -178,16 +170,57 @@ def main() -> int:
     pending["batches"] = list(dict.fromkeys(previous.get("batches", [])
         + ([previous["from"]] if previous.get("from") else []) + [pending["from"]]))
     prepared.append((pp, pending))
-    # Validate all tables before any writes; conflicting keys must not partly advance scope.
-    for target, value in prepared:
-        save(target, value)
+    return dict(prepared), report
 
-    print("合并完成：%s → %s" % (os.path.basename(args.append), args.base_dir))
-    for name, added, skipped in report:
-        print("  %-22s 新增 %3d  跳过重复 %2d" % (name, added, skipped))
-    print("  待人工处理（corrections %d / unresolved %d / conflicts %d）→ %s"
-          % (len(pending["corrections"]), len(pending["unresolved"]),
-             len(pending["conflicts"]), os.path.basename(pp)))
+
+def apply_append(store, prefix, doc, batch_id, to_scope="", base_documents=None, in_transaction=False):
+    from core_store import canonical, digest, now
+    from contextlib import nullcontext
+    signature = digest({"append": doc, "scope": to_scope})
+    with nullcontext() if in_transaction else store.transaction():
+        store.ensure_work(prefix)
+        previous = store.connection.execute("SELECT hash FROM batches WHERE work_id=? AND id=?", (prefix, batch_id)).fetchone()
+        if previous:
+            if previous[0] != signature:
+                raise ValueError("同一批次 ID 内容变化；请明确创建新批次或修订")
+            return {"status": "reused", "batch_id": batch_id, "documents": 0}
+        for kind, value in (base_documents or {}).items():
+            if store.get_document(prefix, kind) is None:
+                store.put_document(prefix, kind, value)
+        docs, report = prepare_append(doc, prefix, to_scope,
+            lambda kind, default: store.get_document(prefix, kind, default), batch_id)
+        for kind, value in docs.items():
+            store.put_document(prefix, kind, value)
+        store.connection.execute("INSERT INTO batches VALUES(?,?,?,?)", (prefix, batch_id, signature, now()))
+    return {"status": "committed", "batch_id": batch_id, "documents": len(docs),
+            "added": sum(row[1] for row in report), "duplicates": sum(row[2] for row in report)}
+
+
+def main() -> int:
+    from pathlib import Path
+    from core_store import Store, digest
+    ap = argparse.ArgumentParser(description="SQLite 事务提交追加数据；JSON 为可重建导出")
+    ap.add_argument("append")
+    ap.add_argument("--base-dir", required=True)
+    ap.add_argument("--prefix", default="红楼梦")
+    ap.add_argument("--to-scope", default="")
+    ap.add_argument("--db", help="默认 base-dir/novel2wiki.sqlite")
+    ap.add_argument("--batch-id", help="工作任务 ID；未指定时按内容寻址")
+    ap.add_argument("--no-export", action="store_true", help="仅提交，之后可统一导出")
+    args = ap.parse_args()
+    doc = load(args.append)
+    base = Path(args.base_dir)
+    imported = {}
+    for kind in list(TABLES) + ["_pending"]:
+        path = base / (args.prefix + "." + kind + ".json")
+        if path.exists():
+            imported[kind] = load(path)
+    with Store(args.db or base / "novel2wiki.sqlite") as store:
+        result = apply_append(store, args.prefix, doc,
+            args.batch_id or "append-" + digest({"append": doc, "scope": args.to_scope}), args.to_scope, imported)
+        if not args.no_export:
+            result["export"] = store.export_documents(args.prefix, base)
+    print(json.dumps(result, ensure_ascii=False))
     return 0
 
 

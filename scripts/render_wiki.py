@@ -9,6 +9,8 @@ import os
 import re
 import sys
 from pathlib import Path
+from urllib.parse import quote
+from entry_relations import published_relations, published_refs
 
 for stream in (sys.stdout, sys.stderr):
     try:
@@ -16,12 +18,17 @@ for stream in (sys.stdout, sys.stderr):
     except (AttributeError, ValueError):
         pass
 
-KIND_LABEL = {"character": "人物", "place": "地点", "object": "物品", "event": "事件", "race": "种族"}
+KIND_LABEL = {"character": "人物", "place": "地点", "object": "物品", "event": "事件", "race": "种族", "concept": "设定"}
 KIND_ORDER = list(KIND_LABEL)
 UNIT = {"unit": "回", "infobox": "回目"}
 TITLE_BY_ID = {}
 CSS_SRC = Path(__file__).resolve().parent.parent / "assets" / "wiki.css"
 ESC = html.escape
+
+def local_component(value):
+    """Encode a raw filename once, retaining readable non-ASCII IRI text."""
+    return "".join(quote(char, safe="") if ord(char) < 128 or char.isspace() else char
+                   for char in str(value))
 
 def chapter_label(n):
     return "第%s%s" % (n, UNIT["unit"])
@@ -66,7 +73,7 @@ def linkify(text, link_map, self_name, min_len=2, once=None):
             else:
                 if once is not None:
                     once.add(target)
-                out.append('<a href="%s">%s</a>' % (ESC(target, quote=True), ESC(name)))
+                out.append('<a href="%s">%s</a>' % (ESC(local_component(target), quote=True), ESC(name)))
             pos = match.end()
     out.append(ESC(text[pos:]))
     return "".join(out)
@@ -104,7 +111,7 @@ def page(site, work, name, toc, article):
     return """<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="generator" content="Novel2Wiki v0.2fix">
+<meta name="generator" content="Novel2Wiki v0.3">
 <title>%s - %s</title><link rel="stylesheet" href="assets/wiki.css">
 </head><body>
 <a class="skip-link" href="#content">跳至内容</a>
@@ -123,12 +130,38 @@ def page(site, work, name, toc, article):
 <footer class="site-footer">本站整理《%s》的作品内容。引用范围与原文出处见各条目参考资料。</footer>
 </body></html>""" % (ESC(name), ESC(site), ESC(site), ESC(work), toc, ESC(name), toc, article, tools(), ESC(work))
 
-def entry_page(e, link_map, work, site):
+def additions_html(additions):
+    additions = additions or {}
+    parts = []
+    if additions.get("images"):
+        parts.append('<section class="user-gallery"><h2 id="user-images">图片</h2>')
+        for image in additions["images"]:
+            parts.append('<figure><img loading="lazy" src="%s" alt="%s"><figcaption>%s%s</figcaption></figure>' % (
+                ESC(image["url"], quote=True), ESC(image.get("caption", ""), quote=True), ESC(image.get("caption", "")),
+                '<span class="upload-source"> 来源：%s</span>' % link_urls(image["source"]) if image.get("source") else ""))
+        parts.append('</section>')
+    if additions.get("reviews"):
+        parts.append('<section class="user-reviews"><h2 id="user-reviews">用户书评</h2>')
+        for review in additions["reviews"]:
+            parts.append('<article class="user-review"><h3>%s</h3><p class="review-meta">%s</p>' % (
+                ESC(review.get("title") or "书评"), ESC(" · ".join(x for x in [review.get("author"), review.get("date")] if x))))
+            for para in review["body"].split("\n\n"):
+                if para.strip():
+                    parts.append('<p>%s</p>' % ESC(para.strip()))
+            if review.get("source"):
+                parts.append('<p class="upload-source">来源：%s</p>' % link_urls(review["source"]))
+            parts.append('</article>')
+        parts.append('</section>')
+    return "\n".join(parts)
+
+def entry_page(e, link_map, work, site, additions=None, entry_by_id=None):
     name = e["name"]
     kind = KIND_LABEL.get(e.get("kind"), "条目")
     once = set()
     sources = e.get("sources") or []
     sections = e.get("sections") or []
+    entry_by_id = entry_by_id or {eid: {"id": eid, "name": title} for eid, title in TITLE_BY_ID.items()}
+    relations = published_relations(e, entry_by_id)
     toc = ['<ul><li><a href="#firstHeading">序言</a></li>']
     for n, s in enumerate(sections, 1):
         if s.get("heading"):
@@ -138,6 +171,8 @@ def entry_page(e, link_map, work, site):
         toc.append('<li><a href="#reception">评价</a></li>')
     if sources:
         toc.append('<li><a href="#refs-open">参考资料</a></li>')
+    if relations:
+        toc.append('<li><a href="#relations">条目关系</a></li>')
     if e.get("links"):
         toc.append('<li><a href="#related">相关条目</a></li>')
     toc.append("</ul>")
@@ -180,17 +215,23 @@ def entry_page(e, link_map, work, site):
                 n, ESC(str(s.get("cite") or chapter_label(s.get("chapter", "?")))), ESC(str(s.get("quote", ""))),
                 '<p class="source-note">%s</p>' % ESC(str(s["note"])) if s.get("note") else ""))
         body.append("</ol></section>")
+    if relations:
+        body.append('<h2 id="relations">条目关系</h2><ul>%s</ul>' % "".join(
+            '<li>%s：<a href="%s">%s</a>%s</li>' % (
+                ESC(relation["label"]), ESC(local_component(link_map[target["name"]]), quote=True), ESC(target["name"]),
+                refs_mark(published_refs(relation, len(sources)))) for relation, target in relations))
     related = [TITLE_BY_ID.get(i) for i in e.get("links") or []]
     related = [t for t in related if t in link_map and t != name]
     if e.get("links"):
         body.append('<h2 id="related">相关条目</h2><ul>%s</ul>' % "".join(
-            '<li><a href="%s">%s</a></li>' % (ESC(link_map[t], quote=True), ESC(t)) for t in related))
+            '<li><a href="%s">%s</a></li>' % (ESC(local_component(link_map[t]), quote=True), ESC(t)) for t in related))
     if e.get("note"):
         body.append('<div class="note">%s</div>' % link_urls(str(e["note"])))
+    body.append(additions_html(additions))
     body.append("</article>")
     return page(site, work, name, "".join(toc), "\n".join(body))
 
-def index_page(entries, work, site, meta, link_map, home_note=""):
+def index_page(entries, work, site, meta, link_map, home_note="", additions=None):
     intro = "《%s》%s。本页收录%s范围内的%d条百科条目。" % (
         work, "，%s著" % meta["author"] if meta.get("author") else "",
         meta.get("scope", "已整理"), len(entries))
@@ -205,12 +246,12 @@ def index_page(entries, work, site, meta, link_map, home_note=""):
             continue
         toc.append('<li><a href="#category-%s">%s</a></li>' % (kind, KIND_LABEL[kind]))
         body.append('<section class="category"><h3 id="category-%s">%s</h3><ul>%s</ul></section>' % (
-            kind, KIND_LABEL[kind], "".join('<li><a href="%s">%s</a></li>' % (ESC(link_map[e["name"]], quote=True), ESC(e["name"])) for e in items)))
-    body.append("</div></article>")
+            kind, KIND_LABEL[kind], "".join('<li><a href="%s">%s</a></li>' % (ESC(local_component(link_map[e["name"]]), quote=True), ESC(e["name"])) for e in items)))
+    body.append("</div>" + additions_html(additions) + "</article>")
     toc.append("</ul>")
     return page(site, work, work, "".join(toc), "\n".join(body))
 
-def render(doc, out, site="小说维基", work="", unit="回", home_note=""):
+def render(doc, out, site="小说维基", work="", unit="回", home_note="", overlay=None):
     global TITLE_BY_ID
     entries = doc.get("entries") or []
     if not entries:
@@ -228,14 +269,16 @@ def render(doc, out, site="小说维基", work="", unit="回", home_note=""):
     UNIT.update(unit=unit, infobox="回目" if unit == "回" else "章节")
     TITLE_BY_ID = {e["id"]: e["name"] for e in entries}
     mapping = filenames(entries)
+    entry_by_id = {e["id"]: e for e in entries}
     link_map = dict(mapping)
     for e in entries:
         for alias in e.get("aliases") or []:
             link_map.setdefault(alias, mapping[e["name"]])
     meta = doc.get("meta") or {}
     work = work or meta.get("book") or "未命名"
-    pages = {"index.html": index_page(entries, work, site, meta, link_map, home_note)}
-    pages.update({mapping[e["name"]]: entry_page(e, link_map, work, site) for e in entries})
+    overlay = overlay or {}
+    pages = {"index.html": index_page(entries, work, site, meta, link_map, home_note, overlay.get("work"))}
+    pages.update({mapping[e["name"]]: entry_page(e, link_map, work, site, overlay.get("entries", {}).get(e["id"]), entry_by_id) for e in entries})
     css = load_css()
     out = Path(out).resolve()
     out.mkdir(parents=True, exist_ok=True)

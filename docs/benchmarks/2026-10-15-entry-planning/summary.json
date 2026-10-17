@@ -1,0 +1,449 @@
+{
+  "date": "2026-10-15",
+  "model": "deepseek-official/deepseek-flash",
+  "reasoning": "high",
+  "max_output_tokens": 8192,
+  "scope": "One 727-character frozen excerpt, two character pages; two adaptive versions, four drafts total. Not statistical replication.",
+  "baseline": "b4262e0; both arms quality-v2 writing guide; B includes model planning costs",
+  "generation_subagents": 0,
+  "generation_independent_reviews": 0,
+  "corpus_used": false,
+  "evaluation": "Anonymous labels reviewed by a development agent, then root source check. Not a human blind review or accuracy estimate. R&D and posthoc review excluded from generation meter.",
+  "cost_basis": {
+    "currency": "CNY",
+    "per_million_offpeak": {
+      "uncached_input": 1,
+      "cached_input": 0.02,
+      "output": 4
+    },
+    "test_peak_multiplier": 2,
+    "actual_bill": false
+  },
+  "final_followups_not_model_retested": [
+    "Decision JSON template/explicit allowed top-level keys",
+    "Default inherited relation graph and stale-source protection",
+    "Generic identity/topic/title guidance",
+    "Atomic context writes"
+  ],
+  "rounds": [
+    {
+      "version": "v1",
+      "source_chars": 727,
+      "source_hash": "3476dd7e2c3bd36fbd7341cd5b725669af4f445cfb309fe45820751529ac0cd5",
+      "required_facts": [
+        "明确是老栓的女人、小栓的母亲，不自行补全老栓姓名",
+        "与老栓到灶下商量，由华大妈取回老荷叶、老栓重新包装红馒头",
+        "小栓吃完饭时，华大妈叫他坐着、不要到灶下来",
+        "华大妈叫小栓进入里屋，并端上乌黑圆东西",
+        "吃下去病便好的说法归于华大妈，不写成治疗结果",
+        "华大妈劝小栓睡下，便好了仍为她的说法",
+        "小栓咳着睡后，华大妈等其喘气平静才盖夹被",
+        "驼背五少爷常到茶馆，早来晚去",
+        "他闻香询问点心/炒米粥，无人回答，老栓泡茶；不把问句写成确实吃了的食物"
+      ],
+      "arms": {
+        "A": {
+          "zip_sha256": "367c11c25c088faff050dcaafd852d78b1f0973ddb7ecf648a8e692207834258",
+          "initial_context_chars": 3675,
+          "status": "completed",
+          "errors": 0,
+          "hints": 0,
+          "body_chars": {
+            "驼背五少爷": 108,
+            "华大妈": 253
+          },
+          "metrics": {
+            "arm": "A",
+            "output_cap_calls": 0,
+            "reasoning_efforts": [
+              "high"
+            ],
+            "max_output_caps": [
+              8192
+            ],
+            "model_calls_with_usage": 8,
+            "agent_calls": 8,
+            "title_calls": 0,
+            "failed_calls": 0,
+            "missing_usage_calls": 0,
+            "unfinished_calls": 0,
+            "tokens": {
+              "inputTokens": 5475,
+              "cacheReadTokens": 58752,
+              "cacheWriteTokens": 0,
+              "outputTokens": 7061,
+              "totalTokens": 71288
+            },
+            "token_sum_delta": 0,
+            "estimated_cny": 0.06978808,
+            "normalized_off_peak_cny": 0.03489404,
+            "cache_read_ratio": 0.9147554766686907,
+            "tool_calls": 8,
+            "session_files": 1,
+            "partial_files": 0,
+            "session_model_calls": 8,
+            "session_failed_attempts": 0,
+            "session_missing_usage_events": 0,
+            "session_tokens": {
+              "inputTokens": 5475,
+              "cacheReadTokens": 58752,
+              "cacheWriteTokens": 0,
+              "outputTokens": 7061,
+              "totalTokens": 71288
+            },
+            "agent_meter_minus_session_tokens": {
+              "inputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "outputTokens": 0,
+              "totalTokens": 0
+            },
+            "first_tool_count": 11,
+            "first_tool_schema_chars": 9089,
+            "request_context_chars_sum": 199433
+          },
+          "coverage_counts": {
+            "完整": 9
+          },
+          "review": {
+            "facts": [
+              "完整",
+              "完整",
+              "完整",
+              "完整",
+              "完整",
+              "完整",
+              "完整",
+              "完整",
+              "完整"
+            ],
+            "incomplete": {},
+            "issues": [
+              "第三项的“不要到跟前来”依同段灶下上下文可以定位，因此计完整；但“跟前”偏向人物附近，建议改为不要到灶下来，避免缩窄原来的地点限制。",
+              "“让小栓坐下”较原文“小栓坐了”增加明确使令；同句“中间放好一条凳”也不宜进一步断定安放者。宜保留坐下事实，不增补动作归属。",
+              "两次“便好了”均明确归于华大妈，没有写成疗效结果；未见明显主体互换或主要时序错误。"
+            ],
+            "organization": "本包中覆盖最完整，华大妈的材料按处理食物、端食、劝睡照料分组，驼背五少爷虽短仍保留辨识行动。三个标题仍偏动作记录，但没有为了短写丢失关键事实。完整覆盖不等于无条件放行，仍应修正让坐等额外细化。"
+          }
+        },
+        "B": {
+          "zip_sha256": "9b459f1f887d7152da024ed3137c6a2e3f96c951340bf1beeb6c1535ec081dad",
+          "initial_context_chars": 3820,
+          "status": "completed",
+          "errors": 0,
+          "hints": 0,
+          "body_chars": {
+            "驼背五少爷": 36,
+            "华大妈": 280
+          },
+          "metrics": {
+            "arm": "B",
+            "output_cap_calls": 0,
+            "reasoning_efforts": [
+              "high"
+            ],
+            "max_output_caps": [
+              8192
+            ],
+            "model_calls_with_usage": 15,
+            "agent_calls": 15,
+            "title_calls": 0,
+            "failed_calls": 0,
+            "missing_usage_calls": 0,
+            "unfinished_calls": 0,
+            "tokens": {
+              "inputTokens": 16663,
+              "cacheReadTokens": 217600,
+              "cacheWriteTokens": 0,
+              "outputTokens": 6723,
+              "totalTokens": 240986
+            },
+            "token_sum_delta": 0,
+            "estimated_cny": 0.09581400000000001,
+            "normalized_off_peak_cny": 0.047907000000000005,
+            "cache_read_ratio": 0.9288705429367847,
+            "tool_calls": 18,
+            "session_files": 1,
+            "partial_files": 0,
+            "session_model_calls": 15,
+            "session_failed_attempts": 0,
+            "session_missing_usage_events": 0,
+            "session_tokens": {
+              "inputTokens": 16663,
+              "cacheReadTokens": 217600,
+              "cacheWriteTokens": 0,
+              "outputTokens": 6723,
+              "totalTokens": 240986
+            },
+            "agent_meter_minus_session_tokens": {
+              "inputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "outputTokens": 0,
+              "totalTokens": 0
+            },
+            "first_tool_count": 11,
+            "first_tool_schema_chars": 9089,
+            "request_context_chars_sum": 691959
+          },
+          "coverage_counts": {
+            "部分": 1,
+            "完整": 7,
+            "缺失": 1
+          },
+          "review": {
+            "facts": [
+              "部分",
+              "完整",
+              "完整",
+              "完整",
+              "完整",
+              "完整",
+              "完整",
+              "完整",
+              "缺失"
+            ],
+            "incomplete": {
+              "1": "写明小栓母亲，未写明老栓的女人；没有擅补老栓姓名。",
+              "9": "驼背五少爷仅剩日常出入习惯，闻香、两次询问、无人回答及老栓泡茶均未保留。"
+            },
+            "issues": [
+              "标题“持老荷叶包馒头与灶下料理”在华大妈页中容易直接把包馒头动作归给她；正文实际明确由老栓重新包装，标题应同步区分主体。",
+              "没有把吃下去或睡下后的“便好了”写成实际治疗结果，两次说法均归于华大妈。未发现主要时序倒置。"
+            ],
+            "organization": "华大妈的照料过程较完整，但标题多为较长的动作串。驼背五少爷被压缩到只有一般习惯，丢掉该段最有辨识度的具体行动；stub标记不能替代保留这些行动。华大妈正文还保留父母眼光等叙事细节，主次之间存在材料分配失衡。"
+          },
+          "entry_plan": {
+            "plan_hash": "14bda26a5290b0949264273442d6b8f0d7f0f0e00674d8ce8c081bfd22577040",
+            "planned_pages": 2,
+            "present_pages": 2,
+            "missing_page_count": 0,
+            "missing_page_ids": [],
+            "unresolved_count": 0,
+            "unresolved_ids": [],
+            "unverified_page_count": 0,
+            "unverified_page_ids": [],
+            "retained_outside_plan_count": 0,
+            "table_only_count": 2,
+            "merge_count": 0,
+            "mechanical_coverage_complete": true
+          }
+        }
+      },
+      "estimated_cost_change_percent": 37.292786963045856
+    },
+    {
+      "version": "v2",
+      "source_chars": 727,
+      "source_hash": "3476dd7e2c3bd36fbd7341cd5b725669af4f445cfb309fe45820751529ac0cd5",
+      "required_facts": [
+        "明确是老栓的女人、小栓的母亲，不自行补全老栓姓名",
+        "与老栓到灶下商量，由华大妈取回老荷叶、老栓重新包装红馒头",
+        "小栓吃完饭时，华大妈叫他坐着、不要到灶下来",
+        "华大妈叫小栓进入里屋，并端上乌黑圆东西",
+        "吃下去病便好的说法归于华大妈，不写成治疗结果",
+        "华大妈劝小栓睡下，便好了仍为她的说法",
+        "小栓咳着睡后，华大妈等其喘气平静才盖夹被",
+        "驼背五少爷常到茶馆，早来晚去",
+        "他闻香询问点心/炒米粥，无人回答，老栓泡茶；不把问句写成确实吃了的食物"
+      ],
+      "arms": {
+        "A": {
+          "zip_sha256": "367c11c25c088faff050dcaafd852d78b1f0973ddb7ecf648a8e692207834258",
+          "initial_context_chars": 3675,
+          "status": "completed",
+          "errors": 0,
+          "hints": 0,
+          "body_chars": {
+            "驼背五少爷": 94,
+            "华大妈": 222
+          },
+          "metrics": {
+            "arm": "A",
+            "output_cap_calls": 0,
+            "reasoning_efforts": [
+              "high"
+            ],
+            "max_output_caps": [
+              8192
+            ],
+            "model_calls_with_usage": 14,
+            "agent_calls": 14,
+            "title_calls": 0,
+            "failed_calls": 0,
+            "missing_usage_calls": 0,
+            "unfinished_calls": 0,
+            "tokens": {
+              "inputTokens": 10394,
+              "cacheReadTokens": 149888,
+              "cacheWriteTokens": 0,
+              "outputTokens": 5358,
+              "totalTokens": 165640
+            },
+            "token_sum_delta": 0,
+            "estimated_cny": 0.06964751999999999,
+            "normalized_off_peak_cny": 0.034823759999999995,
+            "cache_read_ratio": 0.9351517949613806,
+            "tool_calls": 16,
+            "session_files": 1,
+            "partial_files": 0,
+            "session_model_calls": 14,
+            "session_failed_attempts": 0,
+            "session_missing_usage_events": 0,
+            "session_tokens": {
+              "inputTokens": 10394,
+              "cacheReadTokens": 149888,
+              "cacheWriteTokens": 0,
+              "outputTokens": 5358,
+              "totalTokens": 165640
+            },
+            "agent_meter_minus_session_tokens": {
+              "inputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "outputTokens": 0,
+              "totalTokens": 0
+            },
+            "first_tool_count": 11,
+            "first_tool_schema_chars": 9089,
+            "request_context_chars_sum": 488877
+          },
+          "coverage_counts": {
+            "完整": 6,
+            "部分": 3
+          },
+          "review": {
+            "facts": [
+              "完整",
+              "部分",
+              "完整",
+              "完整",
+              "完整",
+              "部分",
+              "完整",
+              "完整",
+              "部分"
+            ],
+            "incomplete": {
+              "2": "保留共同到灶下商量及华大妈取荷叶，缺少老栓用荷叶重新包装红馒头。标题中的“包馒头”不能补足正文的动作与主体。",
+              "6": "“依她的话咳着睡下”间接保留遵从劝睡，但未交代劝睡时再次说“便好了”；不能用前面吃下去的疗效说法替代。",
+              "9": "询问点心及炒米粥、无人答应、老栓泡茶及问句性质均保留，但没有交代闻到香味。"
+            },
+            "issues": [
+              "标题“照料小栓吃药与睡下”把乌黑食物直接分类为药；本包原文只明确馒头及华大妈认为它能治病，标题应保留这种归属或直接称食物、馒头。没有据此宣称实际治愈。",
+              "“取荷叶与包馒头”的标题提到包装，正文却未说明包装者和包装动作，容易模糊华大妈与老栓的分工。",
+              "“让他坐在放好的条凳上”较原文“小栓坐了”多了一层让坐的明确因果，保守写法可仅陈述小栓坐下。"
+            ],
+            "organization": "两个条目都保留了具体行动，但华大妈页在汗、神态等开场细节上用笔，同时漏掉包装分工和第二次疗效说法。两节总体可读，标题承诺的内容与正文覆盖不完全一致。驼背五少爷无需扩写，补上闻香即可。"
+          }
+        },
+        "B": {
+          "zip_sha256": "0524dcbb875b11e70df0478851196331d18af6c92359d04465cb84024dc24cdf",
+          "initial_context_chars": 5522,
+          "status": "completed",
+          "errors": 0,
+          "hints": 0,
+          "body_chars": {
+            "驼背五少爷": 88,
+            "华大妈": 250
+          },
+          "metrics": {
+            "arm": "B",
+            "output_cap_calls": 0,
+            "reasoning_efforts": [
+              "high"
+            ],
+            "max_output_caps": [
+              8192
+            ],
+            "model_calls_with_usage": 18,
+            "agent_calls": 18,
+            "title_calls": 0,
+            "failed_calls": 0,
+            "missing_usage_calls": 0,
+            "unfinished_calls": 0,
+            "tokens": {
+              "inputTokens": 19889,
+              "cacheReadTokens": 314240,
+              "cacheWriteTokens": 0,
+              "outputTokens": 6830,
+              "totalTokens": 340959
+            },
+            "token_sum_delta": 0,
+            "estimated_cny": 0.10698760000000002,
+            "normalized_off_peak_cny": 0.05349380000000001,
+            "cache_read_ratio": 0.9404750859697901,
+            "tool_calls": 22,
+            "session_files": 1,
+            "partial_files": 0,
+            "session_model_calls": 18,
+            "session_failed_attempts": 0,
+            "session_missing_usage_events": 0,
+            "session_tokens": {
+              "inputTokens": 19889,
+              "cacheReadTokens": 314240,
+              "cacheWriteTokens": 0,
+              "outputTokens": 6830,
+              "totalTokens": 340959
+            },
+            "agent_meter_minus_session_tokens": {
+              "inputTokens": 0,
+              "cacheReadTokens": 0,
+              "cacheWriteTokens": 0,
+              "outputTokens": 0,
+              "totalTokens": 0
+            },
+            "first_tool_count": 11,
+            "first_tool_schema_chars": 9089,
+            "request_context_chars_sum": 989846
+          },
+          "coverage_counts": {
+            "完整": 7,
+            "部分": 2
+          },
+          "review": {
+            "facts": [
+              "完整",
+              "完整",
+              "完整",
+              "完整",
+              "完整",
+              "部分",
+              "完整",
+              "完整",
+              "部分"
+            ],
+            "incomplete": {
+              "6": "明确写出嘱咐睡一会，但漏掉这次劝睡附带的“便好了”说法。",
+              "9": "常客习惯、询问点心和炒米粥、无人回答及老栓泡茶均保留；没有保留闻香。"
+            },
+            "issues": [
+              "标题“叫小栓进屋服药”直接把所吃东西认定为药，应改称食物或馒头，或明确这是人物的治病意图。正文未宣称治疗成功。",
+              "“在中间放好一条凳让他坐下”把凳子的安放及让坐明确归给华大妈；原文只交代屋中放好凳子、小栓坐了，动作主体和使令关系被补足。",
+              "“取老荷叶与包馒头”的正文已明确包装者是老栓，事实归属可辨；标题仍可改为更能体现两人分工的表述。"
+            ],
+            "organization": "驼背五少爷用短首段承载习惯和具体行动，基本合适，但“此时”缺少独立条目中的时间锚点。“身份与在场”重复首段母子身份；这部分篇幅可用于补齐劝睡时的疗效说法。末节标题仅称进屋服药，正文却还承担劝睡和盖被，标题与组织重心不符。"
+          },
+          "entry_plan": {
+            "plan_hash": "20104c3c224da1f94e3ee5165d5399f9ca31d65af76d386ca9a32d17cc17f84e",
+            "planned_pages": 2,
+            "present_pages": 2,
+            "missing_page_count": 0,
+            "missing_page_ids": [],
+            "unresolved_count": 0,
+            "unresolved_ids": [],
+            "unverified_page_count": 0,
+            "unverified_page_ids": [],
+            "retained_outside_plan_count": 0,
+            "table_only_count": 2,
+            "merge_count": 0,
+            "mechanical_coverage_complete": true
+          }
+        }
+      },
+      "estimated_cost_change_percent": 53.612935535967445
+    }
+  ],
+  "total_known_generation_cny": 0.3422372,
+  "total_normalized_offpeak_cny": 0.1711186
+}

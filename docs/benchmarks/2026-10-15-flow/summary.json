@@ -1,0 +1,113 @@
+{
+  "scope": "draft-stage only",
+  "corpus_used": false,
+  "tests_passed": 73,
+  "full_story_cost_gate_passed": false,
+  "rounds": [
+    {
+      "round": 1,
+      "arms": {
+        "A": {
+          "artifact_completed": true,
+          "requests": 22,
+          "calls_with_usage": 22,
+          "missing_usage_calls": 0,
+          "provider_failures": {},
+          "output_cap_calls": 0,
+          "known_usage_estimated_cny": 0.1310376,
+          "prose_chars": 574,
+          "source_read_calls": 5,
+          "example_lookups": 3,
+          "finalize_calls": 1,
+          "sqlite_export_matches": true
+        },
+        "B": {
+          "artifact_completed": true,
+          "requests": 20,
+          "calls_with_usage": 20,
+          "missing_usage_calls": 0,
+          "provider_failures": {},
+          "output_cap_calls": 1,
+          "known_usage_estimated_cny": 0.17816664000000001,
+          "prose_chars": 595,
+          "source_read_calls": 0,
+          "example_lookups": 0,
+          "finalize_calls": 3,
+          "sqlite_export_matches": true
+        }
+      }
+    },
+    {
+      "round": 2,
+      "arms": {
+        "A": {
+          "artifact_completed": true,
+          "requests": 33,
+          "calls_with_usage": 30,
+          "missing_usage_calls": 3,
+          "provider_failures": {
+            "503/SERVER": 3
+          },
+          "output_cap_calls": 0,
+          "known_usage_estimated_cny": 0.18669999999999995,
+          "prose_chars": 763,
+          "source_read_calls": 0,
+          "example_lookups": 1,
+          "finalize_calls": 3,
+          "sqlite_export_matches": true
+        },
+        "B": {
+          "artifact_completed": true,
+          "requests": 19,
+          "calls_with_usage": 19,
+          "missing_usage_calls": 0,
+          "provider_failures": {},
+          "output_cap_calls": 0,
+          "known_usage_estimated_cny": 0.12096592,
+          "prose_chars": 733,
+          "source_read_calls": 0,
+          "example_lookups": 2,
+          "finalize_calls": 2,
+          "sqlite_export_matches": true
+        }
+      }
+    },
+    {
+      "round": 3,
+      "arms": {
+        "A": {
+          "artifact_completed": false,
+          "requests": 15,
+          "calls_with_usage": 12,
+          "missing_usage_calls": 3,
+          "provider_failures": {
+            "503/SERVER": 3
+          },
+          "output_cap_calls": 2,
+          "known_usage_estimated_cny": 0.22000416,
+          "prose_chars": null,
+          "source_read_calls": null,
+          "example_lookups": null,
+          "finalize_calls": null,
+          "sqlite_export_matches": null
+        },
+        "B": {
+          "artifact_completed": true,
+          "requests": 21,
+          "calls_with_usage": 17,
+          "missing_usage_calls": 4,
+          "provider_failures": {
+            "503/SERVER": 4
+          },
+          "output_cap_calls": 1,
+          "known_usage_estimated_cny": 0.23399055999999996,
+          "prose_chars": 498,
+          "source_read_calls": 0,
+          "example_lookups": 0,
+          "finalize_calls": 3,
+          "sqlite_export_matches": true
+        }
+      }
+    }
+  ]
+}

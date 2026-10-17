@@ -1,3 +1,12 @@
 .validation/
 __pycache__/
 *.pyc
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+uploads/
+sources/
+*.egg-info/
+build/
+dist/
+.novel2wiki/
